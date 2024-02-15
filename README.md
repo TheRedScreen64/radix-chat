@@ -1,1 +1,1 @@
-<h1>QuantumLink</h1>
+<h1><HyperSwiftQuantumLink</h1>
