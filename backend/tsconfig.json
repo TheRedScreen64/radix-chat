@@ -1,0 +1,12 @@
+{
+   "compilerOptions": {
+      "sourceMap": true,
+      "outDir": "dist",
+      "strict": true,
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true
+   },
+   "include": ["src/**/*"]
+}

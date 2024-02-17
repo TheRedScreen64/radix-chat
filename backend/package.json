@@ -1,0 +1,36 @@
+{
+   "name": "radix-chat-backend",
+   "version": "1.0.0",
+   "description": "Rest API and Websocket for Radix Chat",
+   "main": "index.js",
+   "type": "module",
+   "scripts": {
+      "start": "node ./dist/index.js",
+      "dev": "nodemon",
+      "build": "tsc"
+   },
+   "keywords": [],
+   "author": "TheRedScreen",
+   "license": "ISC",
+   "devDependencies": {
+      "@types/cookie-parser": "^1.4.6",
+      "@types/cors": "^2.8.17",
+      "@types/express": "^4.17.21",
+      "@types/node": "^20.11.19",
+      "nodemon": "^3.0.3",
+      "prisma": "^5.9.1",
+      "tsx": "^4.7.1",
+      "typescript": "^5.3.3"
+   },
+   "dependencies": {
+      "@lucia-auth/adapter-prisma": "^4.0.0",
+      "@prisma/client": "5.9.1",
+      "cookie-parser": "^1.4.6",
+      "cors": "^2.8.5",
+      "dotenv": "^16.4.4",
+      "express": "^4.18.2",
+      "lucia": "^3.0.1",
+      "oslo": "^1.1.1",
+      "zod": "^3.22.4"
+   }
+}

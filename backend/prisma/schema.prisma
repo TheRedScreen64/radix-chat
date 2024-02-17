@@ -1,0 +1,35 @@
+generator client {
+   provider = "prisma-client-js"
+}
+
+datasource db {
+   provider = "postgresql"
+   url      = env("DATABASE_URL")
+}
+
+// Auth
+model User {
+   id             String    @id
+   email          String    @unique
+   username       String
+   hashedPassword String
+   sessions       Session[]
+   messages       Message[]
+}
+
+model Session {
+   id        String   @id
+   userId    String
+   expiresAt DateTime
+   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+// Chat
+model Message {
+   id        Int      @id @default(autoincrement())
+   postedAt  DateTime @default(now())
+   updatedAt DateTime @updatedAt
+   content   String   @db.VarChar(500)
+   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+   userId    String
+}
