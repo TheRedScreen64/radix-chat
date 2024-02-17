@@ -8,7 +8,7 @@ import { formatPrismaError } from "../../lib/utils.js";
 
 export const signupRouter = express.Router();
 
-signupRouter.post("/signup", async (req, res) => {
+signupRouter.post("/auth/signup", async (req, res) => {
    if (!req.body) {
       return res.status(400).json({ error: { message: "No input provided" } });
    }
@@ -46,5 +46,5 @@ signupRouter.post("/signup", async (req, res) => {
 
    const session = await lucia.createSession(userId, {});
    const sessionCookie = lucia.createSessionCookie(session.id);
-   return res.appendHeader("Set-Cookie", sessionCookie.serialize()).status(200).send("Success");
+   return res.appendHeader("Set-Cookie", sessionCookie.serialize()).status(201).send("Success");
 });
