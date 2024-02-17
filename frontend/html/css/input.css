@@ -1,0 +1,153 @@
+.input-wrap {
+    display: grid;
+    text-align: left;
+    grid-auto-flow: column;
+  }
+  
+  .input-a-right {
+    justify-self: flex-end;
+    margin-right: 5px;
+  }
+  
+  .input-a-left {
+    justify-self: flex-start;
+    margin-left: 5px;
+  }
+
+.checkbox {
+    display: block;
+    position: relative;
+    padding-left: 27px;
+    /* margin-bottom: 12px; */
+    cursor: pointer;
+    /* font-size: 18px; */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border: 2px solid SECONDARY_BG;
+    background: PRIMARY_BG_1;
+    margin-top: 3px;
+    border-radius: 3px;
+
+    transition: all 0.2s;
+  }
+
+  .checkbox:hover input ~ .checkmark {
+    background: SECONDARY_BG;
+  }
+
+  .checkbox input:checked ~ .checkmark {
+    color: PRIMARY_BG_1;
+    background: SECONDARY_BG;
+  }
+
+  .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkbox .checkmark:after {
+    left: 8px;
+    top: 5px;
+    width: 3px;
+    height: 7px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+
+input[type]:not([type="checkbox"]) {
+    padding: 10px;
+    margin: 5px;
+    color: FONT_COLOR;
+    border: 2px solid SECONDARY_BG;
+    background: PRIMARY_BG_1;
+    border-radius: 5px;
+    font-size: 15px;
+  
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    transition: all 0.3s;
+  }
+  
+  input[type]:not([type="checkbox"])::after {
+    content: "\0062";
+  }
+
+  input::-ms-reveal {
+    display: none;
+  }
+  
+  input::placeholder {
+    color: FONT_COLOR;
+  }
+  
+  input[type]:not([type="checkbox"]):focus, input[type]:not([type="checkbox"]):hover {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 20px PRIMARY_BG_1; /* Add a subtle shadow on focus */
+  
+    color: PRIMARY_BG_1;
+    border: 2px solid SECONDARY_BG;
+    background: SECONDARY_BG;
+  }
+  
+  input:focus::placeholder, input:hover::placeholder {
+    color: PRIMARY_BG_1;
+  }
+  
+  input[type="file"]:hover {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px PRIMARY_BUTTON_BG; /* Add a subtle shadow on focus */
+  }
+  
+  input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  input:checked ~ input[type="checkbox"]::after {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  input[type="checkbox"]::after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }

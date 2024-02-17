@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Radix Chat - Login</title>
+    <style>
+.msg-wrap {
+  display: flex;
+}
+.msg-steve {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+}
+.msg-sender {
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  user-select: none;
+}
+.msg-content {
+  line-height: 20px;
+  font-size: 15px;
+}
+@keyframes pop-in {
+  0% {
+    margin-right: -295px;
+  }
+  25% {
+    margin-right: 10px;
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+msg {
+  padding: 5px;
+  border-radius: 5px 0px 5px 5px;
+  background: #A54657;
+  margin-right: 10px;
+  animation-name: pop-in;
+  animation-duration: 1s;
+}
+.msg-title {
+    justify-self: flex-end;
+    font-size: 12px;
+    margin-right: 5px;
+    user-select: none;
+}
+body,
+html {
+  background: #E4DFDA;
+  background-size: cover;
+  color: #0D1317;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: "Changa", sans-serif, "Noto Color Emoji", 'Twemoji', 'Apple Color Emoji';
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+footer {
+ text-align: center;
+ display: block;
+}
+.content-wrap {
+  display: block;
+  align-self: center;
+  margin: 40px;
+}
+logo {
+  font-family: "Major Mono Display", monospace;
+  font-weight: 400;
+  font-style: normal;
+  display: inline;
+  user-select: none;
+}
+.flex-wrap {
+  display: flex;
+}
+.grid-wrap {
+ display: grid;
+    grid-auto-flow: column;
+}
+.align-center {
+ text-align: center;
+ align-items: center;
+}
+a {
+  text-decoration: none;
+  color: #A54657;
+}
+.grid {
+  display: grid;
+}
+.margin-top {
+ margin-top: 20px;
+}
+.margin-bottom {
+ margin-bottom: 20px;
+}
+.sep-left {
+ background-color: black;
+    height: 2px;
+ margin-left: 5px;
+}
+.sep {
+ background-color: black;
+    height: 2px;
+}
+.sep-right {
+ background-color: black;
+    height: 2px;
+ margin-right: 5px;
+}
+.input-wrap {
+    display: grid;
+    text-align: left;
+    grid-auto-flow: column;
+  }
+  .input-a-right {
+    justify-self: flex-end;
+    margin-right: 5px;
+  }
+  .input-a-left {
+    justify-self: flex-start;
+    margin-left: 5px;
+  }
+.checkbox {
+    display: block;
+    position: relative;
+    padding-left: 27px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  .checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border: 2px solid #252627;
+    background: #E4DFDA;
+    margin-top: 3px;
+    border-radius: 3px;
+    transition: all 0.2s;
+  }
+  .checkbox:hover input ~ .checkmark {
+    background: #252627;
+  }
+  .checkbox input:checked ~ .checkmark {
+    color: #E4DFDA;
+    background: #252627;
+  }
+  .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  .checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  .checkbox .checkmark:after {
+    left: 8px;
+    top: 5px;
+    width: 3px;
+    height: 7px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+input[type]:not([type="checkbox"]) {
+    padding: 10px;
+    margin: 5px;
+    color: #0D1317;
+    border: 2px solid #252627;
+    background: #E4DFDA;
+    border-radius: 5px;
+    font-size: 15px;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    transition: all 0.3s;
+  }
+  input[type]:not([type="checkbox"])::after {
+    content: "\0062";
+  }
+  input::-ms-reveal {
+    display: none;
+  }
+  input::placeholder {
+    color: #0D1317;
+  }
+  input[type]:not([type="checkbox"]):focus, input[type]:not([type="checkbox"]):hover {
+    outline: none;
+    box-shadow: 0 0 20px #E4DFDA;
+    color: #E4DFDA;
+    border: 2px solid #252627;
+    background: #252627;
+  }
+  input:focus::placeholder, input:hover::placeholder {
+    color: #E4DFDA;
+  }
+  input[type="file"]:hover {
+    outline: none;
+    box-shadow: 0 0 5px #A54657;
+  }
+  input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  input:checked ~ input[type="checkbox"]::after {
+    display: block;
+  }
+  input[type="checkbox"]::after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+button {
+  padding: 10px;
+  margin: 5px;
+  color: #0D1317;
+  border: 2px solid #252627;
+  background: #E4DFDA;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 120px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  min-width: 130px;
+  font-style: normal;
+}
+button svg {
+ display: inline;
+    margin-bottom: -2px;
+    margin-right: 1px;
+    width: 14px;
+    height: 14px;
+}
+button:hover {
+  outline: none;
+  box-shadow: 0 0 20px #E4DFDA;
+  color: #E4DFDA;
+  border: 2px solid #252627;
+  background: #252627;
+}
+.file-input-wrap {
+  position: relative;
+  overflow: hidden;
+}
+input[type="file"] {
+  position: absolute;
+  font-size: 10px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: -1;
+}
+.file-input-wrap label {
+  display: block;
+  background-color: #fff;
+  color: #F2EFE9;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 14px;
+  margin: 5px;
+  transition: all 0.2s;
+}
+.file-input-wrap label:hover {
+  outline: none;
+  box-shadow: 0 0 5px #A54657;
+}
+.login-container {
+  background-color: #fff;
+  height: 80%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: fit-content;
+}
+@media only screen and (min-width: 500px) {
+  .login-wrap {
+    display: flex;
+  }
+  .login-radix-logo {
+    writing-mode: tb-rl;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+  }
+  .logo-wrap {
+    border-radius: 5px 0px 0px 5px;
+    border: 2px solid #fff;
+    display: grid;
+  }
+}
+@media only screen and (max-width: 499px) {
+  .login-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+  .login-radix-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+  }
+  .logo-wrap {
+    border-radius: 5px 5px 0px 0px;
+    border: 2px solid #fff;
+    display: grid;
+  }
+}
+@media only screen and (max-width: 390px) {
+  body {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+}
+@media only screen and (min-width: 1100px) {
+  body {
+    transform-origin: center;
+    transform: scale(1.2);
+    width: 82.6%;
+    height: 80%;
+  }
+}
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Changa:wght@200&family=Dosis:wght@200..800&family=Major+Mono+Display&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    <div class="msg-wrap msg-steve">
+        <msg class="msg-content">
+            <div class="grid-wrap">
+                <span class="msg-title">Steve ■ Now</span>
+            </div>
+            Hey Boss &#x1F44b <br>
+            Please sign in to continue.
+        </msg>
+        <img class="msg-sender" src="/static/images/steve_profile.jpeg">
+    </div>
+    <div class="login-wrap">
+        <div class="logo-wrap">
+            <h1 class="login-radix-logo">
+                <logo>RAdiX cHAt</logo>
+            </h1>
+        </div>
+        <div class="login-container">
+            <div class="content-wrap">
+                <h1 style="margin-left: 5px;">
+                    <logo>LOGIN</logo>
+                </h1>
+                <div class="input-wrap">
+                    <input type="email" id="email" placeholder="Your Mail Address" autocomplete="email">
+                </div>
+                <div class="input-wrap">
+                    <input type="password" id="password" placeholder="Your Password" autocomplete="new-password">
+                </div>
+                <div class="input-wrap">
+                    <label class="checkbox input-a-left">Remember me
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <a href="/reset-password" class="input-a-right">Forgot Password?</a>
+                </div>
+                <div class="input-wrap margin-top ">
+                    <button>Login</button>
+                    <button><strong>Sign Up</strong></button>
+                </div>
+                <div class="grid-wrap align-center margin-top margin-bottom">
+                    <span class="sep-left"></span>
+                    <span class="sep"></span>
+                    <span style="user-select: none;">OR</span>
+                    <span class="sep"></span>
+                    <span class="sep-right"></span>
+                </div>
+                <div class="input-wrap margin-top ">
+                    <button>
+                        <strong>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-google" viewBox="0 0 16 16">
+                                <path
+                                    d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
+                            </svg>
+                            Use Google
+                        </strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+</script>
+</html>
