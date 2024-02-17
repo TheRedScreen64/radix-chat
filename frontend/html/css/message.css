@@ -1,0 +1,70 @@
+.msg-wrap {
+  display: flex;
+}
+
+.msg-steve {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+}
+
+.msg-sender {
+  /* profile picture */
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  user-select: none;
+}
+
+.msg-content {
+  line-height: 20px;
+  font-size: 15px;
+}
+
+@keyframes pop-in {
+  0% {
+    margin-right: -295px;
+  }
+  25% {
+    margin-right: 10px;
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+msg {
+  padding: 5px;
+  border-radius: 5px 0px 5px 5px;
+  background: PRIMARY_BUTTON_BG;
+  margin-right: 10px;
+  animation-name: pop-in;
+  animation-duration: 1s;
+}
+
+.msg-title {
+    justify-self: flex-end;
+    font-size: 12px;
+    margin-right: 5px;
+    user-select: none;
+}
+
+/*msg::after {
+    width: 0px;
+    content: '';
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-left: 14px solid #fff;
+    border-bottom: 0px solid transparent;
+    display: block;
+    position: absolute;
+    right: 56px;
+    top: 0;
+    margin-left: 0px;
+  }*/
