@@ -4,7 +4,7 @@ import { prisma } from "../../lib/prisma.js";
 
 export const existsRouter = express.Router();
 
-existsRouter.post("/auth/exists", async (req, res) => {
+existsRouter.post("/user/exists", async (req, res) => {
    if (!req.body) {
       return res.status(400).json({ error: { message: "No input provided" } });
    }

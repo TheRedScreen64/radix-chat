@@ -7,6 +7,7 @@ import { logoutRouter } from "./routes/auth/logout.js";
 import { signupRouter } from "./routes/auth/signup.js";
 import { mainRouter } from "./routes/index.js";
 import { existsRouter } from "./routes/user/exists.js";
+import { userInfoRouter } from "./routes/user/info.js";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ app.use(async (req, res, next) => {
    return next();
 });
 
-app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter);
+app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter, userInfoRouter);
 
 app.listen(PORT, () => {
    console.log(`Listening on port ${PORT}`);
