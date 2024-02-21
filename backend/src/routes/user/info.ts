@@ -17,6 +17,7 @@ userInfoRouter.get("/user/info", async (_, res) => {
          email: true,
          name: true,
          username: true,
+         avatarUrl: true,
       },
    });
 
