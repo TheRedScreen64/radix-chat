@@ -1,9 +1,9 @@
 import express from "express";
-import { Argon2id } from "oslo/password";
-import { lucia } from "../../lib/auth.js";
 import { generateId } from "lucia";
-import { prisma } from "../../lib/prisma.js";
+import { Argon2id } from "oslo/password";
 import { z } from "zod";
+import { lucia } from "../../lib/auth.js";
+import { prisma } from "../../lib/prisma.js";
 import { formatPrismaError } from "../../lib/utils.js";
 
 export const signupRouter = express.Router();
@@ -16,7 +16,9 @@ signupRouter.post("/auth/signup", async (req, res) => {
    const schema = z.object({
       email: z.string().email(),
       username: z.string().min(3).max(30),
+      name: z.string().min(1).max(50),
       password: z.string().min(6).max(255),
+      persistent: z.boolean(),
    });
 
    const parsed = schema.safeParse(req.body);
@@ -24,7 +26,7 @@ signupRouter.post("/auth/signup", async (req, res) => {
       const validationErrors = parsed.error.flatten().fieldErrors;
       return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
    }
-   const { email, username, password } = parsed.data;
+   const { email, username, name, password, persistent } = parsed.data;
 
    const userId = generateId(15);
    const hashedPassword = await new Argon2id().hash(password);
@@ -35,6 +37,7 @@ signupRouter.post("/auth/signup", async (req, res) => {
             id: userId,
             email,
             username,
+            name,
             hashedPassword,
          },
       });
@@ -46,5 +49,9 @@ signupRouter.post("/auth/signup", async (req, res) => {
 
    const session = await lucia.createSession(userId, {});
    const sessionCookie = lucia.createSessionCookie(session.id);
-   return res.appendHeader("Set-Cookie", sessionCookie.serialize()).status(201).send("Success");
+   if (persistent == true) {
+      return res.cookie(sessionCookie.name, sessionCookie.value, { maxAge: 7776000000 }).status(200).send("Success");
+   } else {
+      return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send("Success");
+   }
 });

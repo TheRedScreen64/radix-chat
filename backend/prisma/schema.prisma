@@ -11,7 +11,8 @@ datasource db {
 model User {
    id             String    @id
    email          String    @unique
-   username       String
+   username       String    @unique
+   name           String
    hashedPassword String
    sessions       Session[]
    messages       Message[]

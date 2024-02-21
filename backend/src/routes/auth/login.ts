@@ -1,7 +1,7 @@
 import express from "express";
 import { Argon2id } from "oslo/password";
-import { lucia } from "../../lib/auth.js";
 import { z } from "zod";
+import { lucia } from "../../lib/auth.js";
 import { prisma } from "../../lib/prisma.js";
 
 export const loginRouter = express.Router();
@@ -14,6 +14,7 @@ loginRouter.post("/auth/login", async (req, res) => {
    const schema = z.object({
       email: z.string().email(),
       password: z.string(),
+      persistent: z.boolean(),
    });
 
    const parsed = schema.safeParse(req.body);
@@ -21,7 +22,7 @@ loginRouter.post("/auth/login", async (req, res) => {
       const validationErrors = parsed.error.flatten().fieldErrors;
       return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
    }
-   const { email, password } = parsed.data;
+   const { email, password, persistent } = parsed.data;
 
    const existingUser = await prisma.user.findUnique({
       where: {
@@ -39,5 +40,9 @@ loginRouter.post("/auth/login", async (req, res) => {
 
    const session = await lucia.createSession(existingUser.id, {});
    const sessionCookie = lucia.createSessionCookie(session.id);
-   return res.appendHeader("Set-Cookie", sessionCookie.serialize()).status(200).send("Success");
+   if (persistent == true) {
+      return res.cookie(sessionCookie.name, sessionCookie.value, { maxAge: 7776000000 }).status(200).send("Success");
+   } else {
+      return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send("Success");
+   }
 });

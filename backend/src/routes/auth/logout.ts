@@ -10,5 +10,5 @@ logoutRouter.post("/auth/logout", async (req, res) => {
 
    await lucia.invalidateSession(res.locals.session.id);
    const sessionCookie = lucia.createBlankSessionCookie();
-   return res.appendHeader("Set-Cookie", sessionCookie.serialize()).status(200).send("Success");
+   return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send("Success");
 });

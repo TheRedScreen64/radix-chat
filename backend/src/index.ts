@@ -1,12 +1,12 @@
-import express from "express";
-import * as dotenv from "dotenv";
-import cors from "cors";
-import { lucia } from "./lib/auth.js";
-import { mainRouter } from "./routes/index.js";
-import { loginRouter } from "./routes/login/route.js";
-import { signupRouter } from "./routes/signup/route.js";
-import { logoutRouter } from "./routes/logout/index.js";
 import cookieParser from "cookie-parser";
+import * as dotenv from "dotenv";
+import express from "express";
+import { lucia } from "./lib/auth.js";
+import { existsRouter } from "./routes/auth/exists.js";
+import { loginRouter } from "./routes/auth/login.js";
+import { logoutRouter } from "./routes/auth/logout.js";
+import { signupRouter } from "./routes/auth/signup.js";
+import { mainRouter } from "./routes/index.js";
 
 dotenv.config();
 
@@ -37,7 +37,7 @@ app.use(async (req, res, next) => {
    return next();
 });
 
-app.use(mainRouter, loginRouter, logoutRouter, signupRouter);
+app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter);
 
 app.listen(PORT, () => {
    console.log(`Listening on port ${PORT}`);
