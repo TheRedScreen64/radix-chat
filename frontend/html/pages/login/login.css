@@ -8,6 +8,24 @@
   flex-direction: column;
   justify-content: center;
   height: fit-content;
+  max-width: 360px;
+}
+
+.login-cont-align {
+  margin-left: 5px;
+}
+
+.logo-wrap {
+  border: 2px solid PRIMARY_BG_2;
+  display: grid;
+}
+
+.login-radix-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px;
+  justify-self: center;
 }
 
 /* "responsive styles" */
@@ -18,16 +36,11 @@
 
   .login-radix-logo {
     writing-mode: tb-rl;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 30px;
+    min-height: 100%;
   }
 
   .logo-wrap {
     border-radius: 5px 0px 0px 5px;
-    border: 2px solid PRIMARY_BG_2;
-    display: grid;
   }
 }
 
@@ -38,16 +51,11 @@
   }
 
   .login-radix-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 30px;
+    writing-mode: horizontal-tb;
   }
 
   .logo-wrap {
     border-radius: 5px 5px 0px 0px;
-    border: 2px solid PRIMARY_BG_2;
-    display: grid;
   }
 }
 
@@ -56,13 +64,14 @@
     align-items: flex-end;
     justify-content: flex-end;
   }
-}
 
-@media only screen and (min-width: 1100px) {
-  body {
-    transform-origin: center;
-    transform: scale(1.2);
-    width: 82.6%;
-    height: 80%;
+  .login-container {
+    min-width: 100%;
+  }
+
+  .login-wrap {
+    min-width: 100%;
   }
 }
+
+

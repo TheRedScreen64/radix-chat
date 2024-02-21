@@ -46,7 +46,7 @@ void radix_launchApplication(void)
     sleep(2);
 
     /* display projects page */
-    radix_gtk_uri((struct gtepr1){LOGIN_URI, 1010, 690, null, FALSE});
+    radix_gtk_uri((struct gtepr1){LOGIN_URI, 1010, 690, null, TRUE});
 
     atexit(&radix_onExit); /* setup destructor */
 }

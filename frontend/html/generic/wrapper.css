@@ -1,0 +1,176 @@
+#include "../colortheme.h" #include "message.css"
+
+body,
+html {
+  background: PRIMARY_BG_1;
+  background-size: cover;
+  color: FONT_COLOR;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+
+  font-family: "Changa", sans-serif, "Noto Color Emoji", "Twemoji",
+    "Apple Color Emoji";
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+
+footer {
+  text-align: center;
+  display: block;
+}
+
+.content-wrap {
+  display: block;
+  align-self: center;
+  margin: 40px;
+}
+
+logo {
+  font-family: "Major Mono Display", monospace;
+  font-weight: 400;
+  font-style: normal;
+  display: inline;
+  user-select: none;
+}
+
+.flex-wrap {
+  display: flex;
+}
+
+.grid-wrap {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.align-center {
+  text-align: center;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+  color: PRIMARY_BUTTON_BG;
+  user-select: none;
+}
+
+.grid {
+  display: grid;
+}
+
+.margin-top {
+  margin-top: 20px;
+}
+
+.margin-bottom {
+  margin-bottom: 20px;
+}
+
+.sep-left {
+  background-color: black;
+  /* flex-grow: 1; */
+  height: 2px;
+  margin-left: 5px;
+}
+
+.sep {
+  background-color: black;
+  /* flex-grow: 1; */
+  height: 2px;
+}
+
+.sep-right {
+  background-color: black;
+  /* flex-grow: 1; */
+  height: 2px;
+  margin-right: 5px;
+}
+
+#include "input.css"
+
+button {
+  padding: 10px;
+  margin: 5px;
+  color: FONT_COLOR;
+  border: 2px solid SECONDARY_BG;
+  background: PRIMARY_BG_1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 120px;
+
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  /*font-weight: 300;*/
+  min-width: 130px;
+  font-style: normal;
+}
+
+button svg {
+  display: inline;
+  /* margin: -2px; */
+  margin-bottom: -2px;
+  margin-right: 1px;
+  width: 14px;
+  height: 14px;
+}
+
+a svg {
+  display: inline;
+  /* margin: -2px; */
+  margin-bottom: -2px;
+  margin-right: 1px;
+  width: 14px;
+  height: 14px;
+}
+
+button:hover {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 20px PRIMARY_BG_1; /* Add a subtle shadow on focus */
+
+  color: PRIMARY_BG_1;
+  border: 2px solid SECONDARY_BG;
+  background: SECONDARY_BG;
+}
+
+.file-input-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+input[type="file"] {
+  position: absolute;
+  font-size: 10px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: -1;
+}
+
+.file-input-wrap label {
+  display: block;
+  background-color: PRIMARY_BG_2;
+  color: SECONDARY_FONT_COLOR; /*padding:10px20px;*/
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 14px;
+  margin: 5px;
+  transition: all 0.2s;
+}
+
+.file-input-wrap label:hover {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px PRIMARY_BUTTON_BG; /* Add a subtle shadow on focus */
+}
+
+.hidden {
+  display: none;
+}

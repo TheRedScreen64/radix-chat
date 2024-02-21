@@ -45,7 +45,6 @@ sem_t gtk_semaphore;
 #define applyWebView(window) ({                                                                      \
     register WebKitWebView *web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());                       \
     webkit_web_view_set_background_color(WEBKIT_WEB_VIEW(web_view), &gtk_bgcolor);                   \
-    webkit_web_view_set_settings(web_view, webkit_settings_new_with_settings("enable-webgl", TRUE)); \
     gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(web_view));                                  \
     web_view;                                                                                        \
 })
@@ -65,7 +64,8 @@ gboolean radix_gtk_overrideAsCenteredWindow(struct gtepr1 *properties)
 
     gtk_view = applyWebView(gtk_window);
 
-    webkit_web_view_set_settings(WEBKIT_WEB_VIEW(gtk_view), webkit_settings_new_with_settings("enable-developer-extras", TRUE, NULL)); /* enable debugging */
+    webkit_web_view_set_settings(WEBKIT_WEB_VIEW(gtk_view), webkit_settings_new_with_settings("enable-developer-extras", TRUE, "enable-webaudio", TRUE, "enable-webgl", TRUE, "disable-web-security", TRUE, "media_playback_requires_user_gesture", FALSE, "enable_media", TRUE, NULL)); /* enable debugging */
+    //webkit_web_view_set_settings(WEBKIT_WEB_VIEW(gtk_view), webkit_settings_new_with_settings("enable-webaudio", TRUE, NULL));         /* enable debugging */
 
     gtk_window_set_title(GTK_WINDOW(gtk_window), properties->title == null ? DEFAULT_TITLE : properties->title);
     gtk_window_set_resizable(GTK_WINDOW(gtk_window), properties->resizeable);

@@ -4,7 +4,7 @@
 <head>
     <title>Radix Chat - Login</title>
     <style>
-        #include "../../css/wrapper.css"
+        #include "../../generic/wrapper.css"
         #include "login.css"
     </style>
 
@@ -21,16 +21,7 @@
 </head>
 
 <body>
-    <div class="msg-wrap msg-steve">
-        <msg class="msg-content">
-            <div class="grid-wrap">
-                <span class="msg-title">Steve ■ Now</span>
-            </div>
-            Hey Boss &#x1F44b /* emojis are skipped by gcc preproccessor, so its required to use the corresponding escape
-            codes */ <br>
-            Please sign in to continue.
-        </msg>
-        <img class="msg-sender" src="/static/images/steve_profile.jpeg">
+    <div class="inbox" id="inbox">
     </div>
     <div class="login-wrap">
         <div class="logo-wrap">
@@ -48,22 +39,41 @@
                 </div>
                 <div class="input-wrap">
                     <input type="password" id="password" placeholder="Your Password" autocomplete="new-password">
-
                 </div>
                 <div class="input-wrap">
+                    <input class="hidden" type="password" id="confirm_password" placeholder="Confirm Password"
+                        autocomplete="new-password">
+                </div>
+                <div class="input-wrap">
+                    <input class="hidden" type="text" id="uname" placeholder="Username" autocomplete="new-password">
+                </div>
+                <div class="input-wrap">
+                    <input class="hidden" type="text" id="real_name" placeholder="Real Name"
+                        autocomplete="new-password">
+                </div>
+                <div class="input-wrap hidden" id="cookie-wrap1">
+                    <p class="login-cont-align">Radix Chat uses cookies to ensure best possible user experience and allow for making some basic statistics. Since this platform was handcrafted in germany it is priscriped by law to ask you this.</p>
+                </div>
+                <div class="input-wrap hidden" id="cookie-wrap2">
+                    <label class="checkbox input-a-left">Accept <a href="/cookies">Cookie Policy</a>
+                        <input type="checkbox" id="cookies">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="input-wrap login-additional">
                     <label class="checkbox input-a-left">Remember me
-                        <input type="checkbox">
+                        <input type="checkbox" id="remember">
                         <span class="checkmark"></span>
                     </label>
 
                     <a href="/reset-password" class="input-a-right">Forgot Password?</a>
                 </div>
                 <div class="input-wrap margin-top ">
-                    <button>Login</button>
-                    <button><strong>Sign Up</strong></button>
+                    <button onclick="signUp()" class="login-additional">Login</button>
+                    <button onclick="signUp()"><strong id="signup-text">Sign Up</strong></button>
                 </div>
 
-                <div class="grid-wrap align-center margin-top margin-bottom">
+                <div class="grid-wrap align-center margin-top margin-bottom login-additional">
                     <span class="sep-left"></span>
                     <span class="sep"></span>
                     <span style="user-select: none;">OR</span>
@@ -71,8 +81,8 @@
                     <span class="sep-right"></span>
                 </div>
 
-                <div class="input-wrap margin-top ">
-                    <button>
+                <div class="input-wrap margin-top login-additional">
+                    <button onclick="sendMsgSteve('Did you actually think we allow google as login method?<br> This button only exists to get rid of the empty space on this website🤣')">
                         <strong>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-google" viewBox="0 0 16 16">
@@ -90,6 +100,8 @@
     </div>
 </body>
 <script type="text/javascript">
+    #include "../../generic/message.js"
+    #include "login.js"
 </script>
 
 </html>

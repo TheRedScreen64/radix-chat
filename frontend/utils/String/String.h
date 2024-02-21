@@ -91,6 +91,8 @@ extern "C"
     extern void xstrappendi(XString *str, int i);
     extern void xstrappendl(XString *str, long long l);
 
+    extern char* xstrgetfileextension(char* str);
+
     extern void xstrappendui(XString *str, unsigned int i);
     extern void xstrappendul(XString *str, unsigned long long l);
 

@@ -10,7 +10,7 @@
 #define SRV_PREFIX "[\e[36m\e[1mSERV-LOCAL\e[0m] "
 #define SRV_STATIC_DIR "./assets/"
 #define SRV_BUILD_DIR "./html"
-#define SRV_404_TEMPLATE "./assets/404.html"
+#define SRV_404_TEMPLATE "./assets/404.nosehad"
 #define SRV_USEDEBUGMODE 2024 /* enable outomatic recompile on file change */
 
 #ifdef SRV_USEDEBUGMODE
@@ -32,7 +32,11 @@ static char *SRV_STATIC_DIR_R; /* = SRV_STATIC_DIR; */ /* gets initialized in lo
 #include "utils/SQTree/SQTreeSlowLocal.h"
 
 /* file structure */
-typedef XString FileData;
+typedef struct
+{
+    XString dat;
+    char *content_type;
+} FileData;
 
 /* server */
 struct MHD_Daemon *microhttp_server;
@@ -50,13 +54,53 @@ static struct MHD_Response *srv_responseFromStaticFile(char *file)
 {
     debga(SRV_PREFIX "%s\n", __func__);
 
+    register struct MHD_Response *response;
+    register char *content_type = "text/html";
+
     FileData *dat = sqtr_local_get(staticFiles, file);
     if (dat != null)
-        return MHD_create_response_from_buffer(dat->_size, (void *)dat->_str, MHD_RESPMEM_PERSISTENT);
+    {
+        response = MHD_create_response_from_buffer(dat->dat._size, (void *)dat->dat._str, MHD_RESPMEM_PERSISTENT);
+        content_type = dat->content_type;
+        goto send_response;
+    }
     XString filePath = xstrcreate();
     xstrappends(&filePath, SRV_STATIC_DIR_R);
     xstrappends(&filePath, file);
     xstrappendc(&filePath, '\00');
+
+    printf("Extension: %s\n", xstrgetfileextension(filePath._str));
+    switch (strequalsmo(xstrgetfileextension(filePath._str), 9,
+                        ".nosehad", ".png", ".jpeg", ".svg", ".ttf", ".json", ".js", ".css", ".mpeg"))
+    {
+    case 0:
+        content_type = "text/html";
+        break;
+    case 1:
+        content_type = "image/png";
+        break;
+    case 2:
+        content_type = "image/jpeg";
+        break;
+    case 3:
+        content_type = "image/svg+xml";
+        break;
+    case 4:
+        content_type = "font/ttf";
+        break;
+    case 5:
+        content_type = "application/json";
+        break;
+    case 6:
+        content_type = "text/javascript";
+        break;
+    case 7:
+        content_type = "text/css";
+        break;
+    case 8:
+        content_type = "audio/mpeg";
+        break;
+    }
 
     int fd;
 
@@ -64,7 +108,8 @@ static struct MHD_Response *srv_responseFromStaticFile(char *file)
     if ((fd = open(filePath._str, O_RDONLY)) < 0)
     {
         debgaa(SRV_PREFIX "File '%s' (request path: '%s') is not accessable.\n", filePath._str, file);
-        return srv_response404(); /* return error 404 */
+        response = srv_response404(); /* return error 404 */
+        goto send_response;
     }
     struct stat stat;
     fstat(fd, &stat);
@@ -74,19 +119,21 @@ static struct MHD_Response *srv_responseFromStaticFile(char *file)
 
     /* create file data */
     dat = (FileData *)malloc(sizeof(FileData));
-    dat->_str = (char *)malloc(stat.st_size);
-    dat->_size = stat.st_size;
+    dat->dat._str = (char *)malloc(stat.st_size);
+    dat->dat._size = stat.st_size;
 
-    if (read(fd, dat->_str, stat.st_size) == -1)
+    if (read(fd, dat->dat._str, stat.st_size) == -1)
     {
 
         debgaa(SRV_PREFIX "failed to read '%s' (%s)\n", filePath._str, strerror(errno));
         /* free filepath */
         free(filePath._str);
-        return srv_response404();
+        response = srv_response404();
+        goto send_response;
     }
 
     /* write FileData into cache */
+    dat->content_type = content_type;
     sqtr_local_set(staticFiles, strcopyusingmalloc(file) /* copy is required since the <file>
                                                       buffer is automatically freed by MHD */
                    ,
@@ -99,7 +146,12 @@ static struct MHD_Response *srv_responseFromStaticFile(char *file)
     free(filePath._str);
 
     /* return response */
-    return MHD_create_response_from_buffer(dat->_size, (void *)dat->_str, MHD_RESPMEM_PERSISTENT);
+    response = MHD_create_response_from_buffer(dat->dat._size, (void *)dat->dat._str, MHD_RESPMEM_PERSISTENT);
+
+send_response:
+    MHD_add_response_header(response, "Content-Type", content_type);
+
+    return response;
 }
 
 #pragma GCC diagnostic push
@@ -189,7 +241,7 @@ static void srv_unloadFiles()
 
         /* free filedata */
         FileData *data = (FileData *)freen->value;
-        free(data->_str);
+        free(data->dat._str);
         free(data);
 
         /* free entire node */

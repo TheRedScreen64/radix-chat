@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radix Chat</title>
+    <style>
+body,
+html {
+  background: #E4DFDA;
+  background-size: cover;
+  color: #0D1317;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-family: "Changa", sans-serif, "Noto Color Emoji", "Twemoji",
+    "Apple Color Emoji";
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+}
+footer {
+  text-align: center;
+  display: block;
+}
+.content-wrap {
+  display: block;
+  align-self: center;
+  margin: 40px;
+}
+logo {
+  font-family: "Major Mono Display", monospace;
+  font-weight: 400;
+  font-style: normal;
+  display: inline;
+  user-select: none;
+}
+.flex-wrap {
+  display: flex;
+}
+.grid-wrap {
+  display: grid;
+  grid-auto-flow: column;
+}
+.align-center {
+  text-align: center;
+  align-items: center;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #E63946;
+  user-select: none;
+}
+.grid {
+  display: grid;
+}
+.margin-top {
+  margin-top: 20px;
+}
+.margin-bottom {
+  margin-bottom: 20px;
+}
+.sep-left {
+  background-color: black;
+  height: 2px;
+  margin-left: 5px;
+}
+.sep {
+  background-color: black;
+  height: 2px;
+}
+.sep-right {
+  background-color: black;
+  height: 2px;
+  margin-right: 5px;
+}
+.input-wrap {
+  display: grid;
+  text-align: left;
+  grid-auto-flow: column;
+}
+.input-a-right {
+  justify-self: flex-end;
+  margin-right: 5px;
+}
+.input-a-left {
+  justify-self: flex-start;
+  margin-left: 5px;
+}
+.checkbox {
+  display: block;
+  position: relative;
+  padding-left: 27px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 2px solid #252627;
+  background: #E4DFDA;
+  margin-top: 3px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+.checkbox:hover input ~ .checkmark {
+  background: #252627;
+}
+.checkbox input:checked ~ .checkmark {
+  color: #E4DFDA;
+  background: #252627;
+}
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+.checkbox .checkmark:after {
+  left: 8px;
+  top: 5px;
+  width: 3px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+input[type]:not([type="checkbox"]) {
+  padding: 10px;
+  margin: 5px;
+  color: #0D1317;
+  background: #E4DFDA;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  transition: all 0.3s;
+}
+input[type]:not([type="checkbox"]):not(.invalid) {
+  border: 2px solid #252627;
+}
+input.invalid {
+  border: 2px solid #E63946;
+}
+input[type]:not([type="checkbox"])::after {
+  content: "\0062";
+}
+input::-ms-reveal {
+  display: none;
+}
+input::placeholder {
+  color: #0D1317;
+}
+input[type]:not([type="checkbox"]):focus,
+input[type]:not([type="checkbox"]):hover {
+  outline: none;
+  box-shadow: 0 0 20px #E4DFDA;
+  color: #E4DFDA;
+  border: 2px solid #252627;
+  background: #252627;
+}
+input:focus::placeholder,
+input:hover::placeholder {
+  color: #E4DFDA;
+}
+input[type="file"]:hover {
+  outline: none;
+  box-shadow: 0 0 5px #E63946;
+}
+input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+input:checked ~ input[type="checkbox"]::after {
+  display: block;
+}
+input[type="checkbox"]::after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+button {
+  padding: 10px;
+  margin: 5px;
+  color: #0D1317;
+  border: 2px solid #252627;
+  background: #E4DFDA;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 120px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  min-width: 130px;
+  font-style: normal;
+}
+button svg {
+  display: inline;
+  margin-bottom: -2px;
+  margin-right: 1px;
+  width: 14px;
+  height: 14px;
+}
+a svg {
+  display: inline;
+  margin-bottom: -2px;
+  margin-right: 1px;
+  width: 14px;
+  height: 14px;
+}
+button:hover {
+  outline: none;
+  box-shadow: 0 0 20px #E4DFDA;
+  color: #E4DFDA;
+  border: 2px solid #252627;
+  background: #252627;
+}
+.file-input-wrap {
+  position: relative;
+  overflow: hidden;
+}
+input[type="file"] {
+  position: absolute;
+  font-size: 10px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: -1;
+}
+.file-input-wrap label {
+  display: block;
+  background-color: #fff;
+  color: #F2EFE9;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 14px;
+  margin: 5px;
+  transition: all 0.2s;
+}
+.file-input-wrap label:hover {
+  outline: none;
+  box-shadow: 0 0 5px #E63946;
+}
+.hidden {
+  display: none;
+}
+body {
+  background-color: #E4DFDA;
+  justify-content: space-between;
+  flex-direction: column;
+}
+button {
+  background-color: transparent;
+}
+.landing-wrap {
+  background-color: #e4dfda;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.landing-header {
+  max-width: 410px;
+}
+header h1 {
+  margin-bottom: 3px;
+  margin-top: 0px;
+}
+header p {
+    margin-bottom: 0px;
+}
+footer a {
+  color: #0D1317;
+}
+header logo {
+  color: #E63946;
+}
+footer {
+  background: #fff;
+  bottom: 0px;
+  backdrop-filter: invert(1);
+  width: 100%;
+  border-top: 2px solid #fff;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.footer-wrap {
+  margin: 15px;
+}
+@media only screen and (max-width: 600px) {
+  .footer-inner-wrap a {
+    margin: 0px 10px 0px 10px;
+  }
+  .footer-inner-wrap {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  logo {
+    display: block;
+  }
+}
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Changa:wght@200&family=Dosis:wght@200..800&family=Major+Mono+Display&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    <div class="landing-wrap">
+        <header class="landing-header">
+            <p>Where Conversations Flourish!</p>
+            <h1>Welcome to <logo>RAdiX cHAt</logo>
+            </h1>
+            <div class="input-wrap">
+                <button style="margin-left:0px">Download</button>
+                <button style="margin-right: 0px;">Open in Web</button>
+            </div>
+        </header>
+    </div>
+</body>
+<footer>
+    <div class="footer-wrap">
+        <div class="footer-inner-wrap grid-wrap">
+            <a>
+                Imprint
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer"
+                    viewBox="0 0 16 16">
+                    <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                    <path
+                        d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1" />
+                </svg>
+            </a>
+            <a>
+                Cookie Policy
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cookie"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M6 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m4.5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m-.5 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                    <path
+                        d="M8 0a7.96 7.96 0 0 0-4.075 1.114q-.245.102-.437.28A8 8 0 1 0 8 0m3.25 14.201a1.5 1.5 0 0 0-2.13.71A7 7 0 0 1 8 15a6.97 6.97 0 0 1-3.845-1.15 1.5 1.5 0 1 0-2.005-2.005A6.97 6.97 0 0 1 1 8c0-1.953.8-3.719 2.09-4.989a1.5 1.5 0 1 0 2.469-1.574A7 7 0 0 1 8 1c1.42 0 2.742.423 3.845 1.15a1.5 1.5 0 1 0 2.005 2.005A6.97 6.97 0 0 1 15 8c0 .596-.074 1.174-.214 1.727a1.5 1.5 0 1 0-1.025 2.25 7 7 0 0 1-2.51 2.224Z" />
+                </svg>
+            </a>
+            <a>
+                Privacy Policy
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-shield-fill-check" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z" />
+                </svg></a>
+            <a>
+                Github
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+                </svg>
+            </a>
+            <a>
+                About
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-book-half" viewBox="0 0 16 16">
+                    <path
+                        d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</footer>
+</html>

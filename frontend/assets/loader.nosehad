@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading...</title>
+    <style>
+*, *:before, *:after {
+ box-sizing: border-box;
+}
+html, body {
+ height: 100%;
+ overflow: hidden;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ top: 0;
+ margin: 0;
+}
+body {
+ padding: 40px;
+ font-family: "Major Mono Display", monospace;
+ font-weight: 400;
+ font-style: normal;
+ background: #E4DFDA;
+ background-size: cover;
+ color: #0D1317;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&family=Major+Mono+Display&family=Playfair+Display&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    <div>
+        <h1>RAdiX cHAt</h1>
+        <p>for you.</p>
+    </div>
+</body>
+<script type="text/javascript">
+</script>
+</html>

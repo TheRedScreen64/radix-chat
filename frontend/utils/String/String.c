@@ -1,5 +1,15 @@
 #include "String.h"
 
+char* xstrgetfileextension(char* str)
+{
+    register char* str_start = str;
+
+    for(;*str != '\00'; ++str);
+    for(;str != str_start && *str != '.'; --str);
+    
+    return str;
+}
+
 int strend(char *str)
 {
     for (; *str != null; ++str)
