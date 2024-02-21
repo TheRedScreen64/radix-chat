@@ -2,11 +2,11 @@ import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 import express from "express";
 import { lucia } from "./lib/auth.js";
-import { existsRouter } from "./routes/auth/exists.js";
 import { loginRouter } from "./routes/auth/login.js";
 import { logoutRouter } from "./routes/auth/logout.js";
 import { signupRouter } from "./routes/auth/signup.js";
 import { mainRouter } from "./routes/index.js";
+import { existsRouter } from "./routes/user/exists.js";
 
 dotenv.config();
 
