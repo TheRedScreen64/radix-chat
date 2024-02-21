@@ -41,11 +41,13 @@ Body:
 {
    "email": "EMAIL",
    "username": "USERNAME (Min length 3, Max length 30)",
-   "password": "PASSWORD (Min length 6, Max length 255)"
+   "name": "REAL NAME (Min length 1, Max length 50)",
+   "password": "PASSWORD (Min length 6, Max length 255)",
+   "persistent": "REMEMBER USER (bool)"
 }
 ```
 
-**Response**
+**Response Example**
 
 Success
 
@@ -60,11 +62,12 @@ Body:
 ```json
 {
    "email": "EMAIL",
-   "password": "PASSWORD"
+   "password": "PASSWORD",
+   "persistent": "REMEMBER USER (bool)"
 }
 ```
 
-**Response**
+**Response Example**
 
 Success
 
@@ -74,6 +77,31 @@ Success
 
 `POST /auth/logout`
 
-**Response**
+**Response Example**
 
 Success
+
+## User - Exists
+
+Returns true if a user with this email and/or username does already exist.
+
+**Request**
+
+`POST /user/exists`
+
+Body:
+
+```json
+{
+   "email": "EMAIL (optional)",
+   "username": "USERNAME (optional)"
+}
+```
+
+**Response Example**
+
+```json
+{
+   "exists": false
+}
+```
