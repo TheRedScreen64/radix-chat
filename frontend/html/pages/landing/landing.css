@@ -28,7 +28,8 @@ header h1 {
 }
 
 header p {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 footer a {
@@ -54,6 +55,14 @@ footer {
   margin: 15px;
 }
 
+@media only screen and (min-width: 600px) {
+  .landing-header {
+    border: 2px solid #fff;
+    border-radius: 5px;
+    padding: 90px;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .footer-inner-wrap a {
     margin: 0px 10px 0px 10px;
@@ -62,8 +71,10 @@ footer {
     display: flex;
     flex-wrap: wrap;
   }
-  
+
   logo {
     display: block;
+    margin-left: -3px;
+    margin-bottom: 20px;
   }
 }

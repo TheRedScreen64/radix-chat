@@ -1,7 +1,26 @@
-#include "../colortheme.h" #include "message.css"
+#include "../colortheme.h"
+#include "fonts.css"
+#include "message.css"
+
+@keyframes body-fade {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
 
 body,
 html {
+  overflow-x: hidden;
+  
+  background-color: PRIMARY_BG_2;
+
+  animation-name: body-fade;
+  animation-duration: 0.5s; /* pop out after two seconds */
+  animation-timing-function: ease-out;
+
   background: PRIMARY_BG_1;
   background-size: cover;
   color: FONT_COLOR;
@@ -92,7 +111,7 @@ a {
   margin-right: 5px;
 }
 
-#include "input.css"
+#include "input.css" 
 
 button {
   padding: 10px;

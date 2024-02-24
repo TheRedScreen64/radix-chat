@@ -38,11 +38,11 @@
                     <input type="email" id="email" placeholder="Your Mail Address" autocomplete="email">
                 </div>
                 <div class="input-wrap">
-                    <input type="password" id="password" placeholder="Your Password" autocomplete="new-password">
+                    <input type="password" id="password" placeholder="Your Password" autocomplete="current-password">
                 </div>
                 <div class="input-wrap">
                     <input class="hidden" type="password" id="confirm_password" placeholder="Confirm Password"
-                        autocomplete="new-password">
+                        autocomplete="current-password">
                 </div>
                 <div class="input-wrap">
                     <input class="hidden" type="text" id="uname" placeholder="Username" autocomplete="new-password">
@@ -52,10 +52,13 @@
                         autocomplete="new-password">
                 </div>
                 <div class="input-wrap hidden" id="cookie-wrap1">
-                    <p class="login-cont-align">Radix Chat uses cookies to ensure best possible user experience and allow for making some basic statistics. Since this platform was handcrafted in germany it is priscriped by law to ask you this.</p>
+                    <p class="login-cont-align">Radix Chat uses cookies to ensure best possible user experience and
+                        allow for making some basic statistics. Since this platform was handcrafted in germany it is
+                        priscriped by law to ask you this.</p>
                 </div>
                 <div class="input-wrap hidden" id="cookie-wrap2">
-                    <label class="checkbox input-a-left">Accept <a href="/cookies">Cookie Policy</a>
+                    <label class="checkbox input-a-left">Accept <a onclick="redirect('/cookies', true)">Cookie
+                            Policy</a>
                         <input type="checkbox" id="cookies">
                         <span class="checkmark"></span>
                     </label>
@@ -66,7 +69,7 @@
                         <span class="checkmark"></span>
                     </label>
 
-                    <a href="/reset-password" class="input-a-right">Forgot Password?</a>
+                    <a onclick="redirect('/reset-password', true);" class="input-a-right">Forgot Password?</a>
                 </div>
                 <div class="input-wrap margin-top ">
                     <button onclick="signUp()" class="login-additional">Login</button>
@@ -82,7 +85,8 @@
                 </div>
 
                 <div class="input-wrap margin-top login-additional">
-                    <button onclick="sendMsgSteve('Did you actually think we allow google as login method?<br> This button only exists to get rid of the empty space on this website🤣')">
+                    <button
+                        onclick="sendMsgSteve('Did you actually think we allow google as login method?<br> This button only exists to get rid of the empty space on this website🤣')">
                         <strong>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-google" viewBox="0 0 16 16">
@@ -100,8 +104,8 @@
     </div>
 </body>
 <script type="text/javascript">
-    #include "../../generic/message.js"
-    #include "login.js"
+    cms_loadScript("/static/scripts/message.js");
+    cms_loadScript("/static/scripts/login.js");
 </script>
 
 </html>

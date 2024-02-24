@@ -11,6 +11,7 @@
 #define SRV_STATIC_DIR "./assets/"
 #define SRV_BUILD_DIR "./html"
 #define SRV_404_TEMPLATE "./assets/404.nosehad"
+#define SRV_DEF_TEMPLATE "./assets/cms.nosehad"
 #define SRV_USEDEBUGMODE 2024 /* enable outomatic recompile on file change */
 
 #ifdef SRV_USEDEBUGMODE
@@ -44,17 +45,78 @@ struct MHD_Daemon *microhttp_server;
 /* static files */
 SQLTree *staticFiles;
 XString static404;
+XString staticCMS;
 
 static struct MHD_Response *srv_response404()
 {
     return MHD_create_response_from_buffer(static404._size, (void *)static404._str, MHD_RESPMEM_PERSISTENT);
 }
 
-static struct MHD_Response *srv_responseFromStaticFile(char *file)
+static struct MHD_Response *srv_responseDef()
+{
+    return MHD_create_response_from_buffer(staticCMS._size, (void *)staticCMS._str, MHD_RESPMEM_PERSISTENT);
+}
+
+/* simple switch statement to examine content type of static file */
+static inline char *srv_optainct(XString filePath)
+{
+    switch (strequalsmo(xstrgetfileextension(filePath._str), 9,
+                        ".nosehad", ".png", ".jpeg", ".svg", ".ttf", ".json", ".js", ".css", ".mpeg"))
+    {
+    case 0:
+        return "text/html";
+    case 1:
+        return "image/png";
+    case 2:
+        return "image/jpeg";
+    case 3:
+        return "image/svg+xml";
+    case 4:
+        return "font/ttf";
+    case 5:
+        return "application/json";
+    case 6:
+        return "text/javascript";
+    case 7:
+        return "text/css";
+    case 8:
+        return "audio/mpeg";
+    default:
+        return "text/html";
+    }
+}
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers" /* ignore warning, because strremoveAdStart doesn't \
+                                                           modify the string, it just moves the pointer*/
+static enum MHD_Result srv_handleonreq(void *cls,
+                                       struct MHD_Connection *connection,
+                                       const char *url,
+                                       const char *method,
+                                       const char *version,
+                                       const char *upload_data,
+                                       size_t *upload_data_size,
+                                       void **con_cls)
 {
     debga(SRV_PREFIX "%s\n", __func__);
 
-    register struct MHD_Response *response;
+    debgaa(SRV_PREFIX "[\e[1m%s\e[0m] request on '%s'.\n", method, url);
+
+    char *file;
+    struct MHD_Response *response;
+    /* only static allowed currently */
+    if ((file = strremoveAdStart(url, "/static/")) == null)
+    {
+        response = srv_responseDef();
+
+        int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+        MHD_destroy_response(response);
+
+        return ret;
+    }
+
+    /* response from static file */
+
     register char *content_type = "text/html";
 
     FileData *dat = sqtr_local_get(staticFiles, file);
@@ -69,45 +131,14 @@ static struct MHD_Response *srv_responseFromStaticFile(char *file)
     xstrappends(&filePath, file);
     xstrappendc(&filePath, '\00');
 
-    printf("Extension: %s\n", xstrgetfileextension(filePath._str));
-    switch (strequalsmo(xstrgetfileextension(filePath._str), 9,
-                        ".nosehad", ".png", ".jpeg", ".svg", ".ttf", ".json", ".js", ".css", ".mpeg"))
-    {
-    case 0:
-        content_type = "text/html";
-        break;
-    case 1:
-        content_type = "image/png";
-        break;
-    case 2:
-        content_type = "image/jpeg";
-        break;
-    case 3:
-        content_type = "image/svg+xml";
-        break;
-    case 4:
-        content_type = "font/ttf";
-        break;
-    case 5:
-        content_type = "application/json";
-        break;
-    case 6:
-        content_type = "text/javascript";
-        break;
-    case 7:
-        content_type = "text/css";
-        break;
-    case 8:
-        content_type = "audio/mpeg";
-        break;
-    }
+    content_type = srv_optainct(filePath);
 
     int fd;
 
     /* file doesn't exist or is inaccessible */
     if ((fd = open(filePath._str, O_RDONLY)) < 0)
     {
-        debgaa(SRV_PREFIX "File '%s' (request path: '%s') is not accessable.\n", filePath._str, file);
+        debgaa(SRV_PREFIX "File '%s' (request path: '%s') not accessable.\n", filePath._str, file);
         response = srv_response404(); /* return error 404 */
         goto send_response;
     }
@@ -151,41 +182,6 @@ static struct MHD_Response *srv_responseFromStaticFile(char *file)
 send_response:
     MHD_add_response_header(response, "Content-Type", content_type);
 
-    return response;
-}
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers" /* ignore warning, because strremoveAdStart doesn't \
-                                                           modify the string, it just moves the pointer*/
-static enum MHD_Result srv_handleonreq(void *cls,
-                                       struct MHD_Connection *connection,
-                                       const char *url,
-                                       const char *method,
-                                       const char *version,
-                                       const char *upload_data,
-                                       size_t *upload_data_size,
-                                       void **con_cls)
-{
-    debga(SRV_PREFIX "%s\n", __func__);
-
-    debgaa(SRV_PREFIX "[\e[1m%s\e[0m] request on '%s'.\n", method, url);
-
-    char *staticfile;
-    struct MHD_Response *response;
-    /* only static allowed currently */
-    if ((staticfile = strremoveAdStart(url, "/static/")) == null)
-    {
-        response = srv_response404();
-
-        int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
-        MHD_destroy_response(response);
-
-        return ret;
-    }
-
-    /* response from static file */
-    response = srv_responseFromStaticFile(staticfile);
-
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
     MHD_destroy_response(response);
 
@@ -197,6 +193,7 @@ static void srv_loadFiles()
 {
     /* create qtree */
     staticFiles = sqtr_local_create();
+    /* 404 Template */
     int fd = open(SRV_404_TEMPLATE, O_RDONLY);
     if (fd < 0)
     {
@@ -204,6 +201,16 @@ static void srv_loadFiles()
         exit(1);
     }
     static404 = xstrcreatefromfiledescriptor(fd);
+    close(fd);
+
+    /* CMS Template */
+    fd = open(SRV_DEF_TEMPLATE, O_RDONLY);
+    if (fd < 0)
+    {
+        debg(SRV_PREFIX AC_ERRORTEXT " config file " AC_BOLD "SRV_DEF_TEMPLATE" AC_R " not found\n");
+    }
+    staticCMS = xstrcreatefromfiledescriptor(fd);
+    close(fd);
 }
 
 static void _radix_srv_start()
@@ -249,6 +256,7 @@ static void srv_unloadFiles()
     }
     free(staticFiles);
     free(static404._str);
+    free(staticCMS._str);
 }
 
 static void srv_filelistener()
