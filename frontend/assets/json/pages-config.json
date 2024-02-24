@@ -1,0 +1,39 @@
+[
+    {
+        "route":"login",
+        "static": "/static/login.nosehad",
+        "title": "Radix Chat Login",
+        "description": "Login to your Radix Chat Account",
+        "keywords": ["Radix", "Chat", "Login"]
+    },
+
+
+
+
+
+
+
+
+
+    {
+        "route":"/",
+        "static": "/static/login.nosehad",
+        "title": "Radix Chat",
+        "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
+        "keywords": ["Radix", "Chat", "App", "Innovative"]
+    },
+    {
+        "route":"",
+        "static": "/static/login.nosehad",
+        "title": "Radix Chat",
+        "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
+        "keywords": ["Radix", "Chat", "App", "Innovative"]
+    },
+    {
+        "route":"/about",
+        "static": "/static/login.nosehad",
+        "title": "Radix Chat",
+        "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
+        "keywords": ["Radix", "Chat", "App", "Innovative"]
+    }
+]

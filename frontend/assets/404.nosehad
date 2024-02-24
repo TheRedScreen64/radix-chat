@@ -3,8 +3,104 @@
 <head>
     <title>404 - Not Found</title>
     <style>
+@font-face {
+  font-family: "Changa";
+  src: url("/static/fonts/Changa-VariableFont_wght.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Major Mono Display";
+  src: url("/static/fonts/MajorMonoDisplay-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Nunito";
+  src: url("/static/fonts/Nunito-VariableFont_wght.ttf") format("truetype");
+}
+.msg-wrap {
+  opacity: 0;
+  display: flex;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  animation-name: appear;
+  animation-duration: 4s;
+}
+.inbox {
+  position: fixed;
+  top: 10px;
+  right: 0px;
+  z-index: 2;
+}
+.msg-sender {
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  user-select: none;
+}
+.msg-content {
+  line-height: 20px;
+  font-size: 15px;
+}
+@keyframes pop-in {
+  0% {
+    margin-right: -295px;
+  }
+  25% {
+    margin-right: 10px;
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes appear {
+  0% {
+    opacity: 1;
+  }
+  85% {
+    margin-right: 10px;
+  }
+  95% {
+    margin-right: -280px;
+    opacity: 1;
+  }
+  96% {
+    opacity: 0;
+  }
+}
+msg {
+  padding: 5px;
+  border-radius: 5px 0px 5px 5px;
+  background: #508CA4;
+  margin-right: 10px;
+  animation-name: pop-in;
+  animation-duration: 1s;
+}
+.msg-title {
+  justify-self: flex-end;
+  font-size: 12px;
+  margin-right: 5px;
+  user-select: none;
+}
+@keyframes body-fade {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
 body,
 html {
+  overflow-x: hidden;
+  background-color: #fff;
+  animation-name: body-fade;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
   background: #E4DFDA;
   background-size: cover;
   color: #0D1317;
