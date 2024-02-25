@@ -33,8 +33,15 @@ function initWebsocket(wss: WebSocketServer) {
 
          switch (parsed.type!) {
             case "message":
-               broadcast(wss, parsed, ws);
-               await createMessage(parsed.data, user.id);
+               const contentSchema = z.string().trim().min(1).max(500);
+               const contentParsed = contentSchema.safeParse(parsed.data);
+               if (!contentParsed.success) {
+                  const validationErrors = contentParsed.error.flatten().fieldErrors;
+                  return { error: { message: "Wrong input", errors: validationErrors } };
+               }
+               const content = contentParsed.data;
+               broadcast(wss, content, ws);
+               await createMessage(content, user.id);
                break;
 
             default:
@@ -66,14 +73,6 @@ function broadcast(wss: WebSocketServer, data: any, skip: WebSocket | null) {
 }
 
 async function createMessage(content: string, userId: string) {
-   const contentSchema = z.string().min(1).max(500);
-
-   const parsed = contentSchema.safeParse(content);
-   if (!parsed.success) {
-      const validationErrors = parsed.error.flatten().fieldErrors;
-      return { error: { message: "Wrong input", errors: validationErrors } };
-   }
-
    try {
       await prisma.message.create({
          data: {
