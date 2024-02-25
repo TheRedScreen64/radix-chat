@@ -18,10 +18,6 @@ button {
   flex: 1;
 }
 
-.landing-header {
-  max-width: 410px;
-}
-
 header h1 {
   margin-bottom: 3px;
   margin-top: 0px;

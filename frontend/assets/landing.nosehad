@@ -119,6 +119,9 @@ html {
   margin: 0;
   padding: 0;
 }
+h1 {
+  font-weight: 400;
+}
 footer {
   text-align: center;
   display: block;
@@ -388,9 +391,6 @@ button {
   align-items: center;
   flex: 1;
 }
-.landing-header {
-  max-width: 410px;
-}
 header h1 {
   margin-bottom: 3px;
   margin-top: 0px;
@@ -451,7 +451,7 @@ footer {
     <div class="landing-wrap">
         <header class="landing-header">
             <p>Where Conversations Flourish!</p>
-            <h1>Welcome to <logo>RAdiX cHAt</logo>
+            <h1>Welcome to <logo>RAdiXcHAt</logo>
             </h1>
             <div class="input-wrap">
                 <button style="margin-left:0px">Download</button>

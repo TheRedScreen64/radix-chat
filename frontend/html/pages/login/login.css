@@ -36,7 +36,6 @@
 
   .login-radix-logo {
     writing-mode: tb-rl;
-    min-height: 100%;
   }
 
   .logo-wrap {
@@ -67,6 +66,7 @@
 
   .login-container {
     min-width: 100%;
+    min-height: 400px;
   }
 
   .login-wrap {

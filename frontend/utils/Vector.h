@@ -112,7 +112,7 @@ extern "C"
 #define vect_iteratorPostPop() end--
 
 /* get index of iterator pointer */
-#define vect_getIndex(vect, pointer) pointer - vect->_vect
+#define vect_getIndex(vect, pointer) (pointer - vect->_vect)
 
 #define vect_popAtIndex(vect, type, i) ({                                                         \
     type elem = vect->_vect[i];                                                                \

@@ -12,6 +12,9 @@
 #define SRV_BUILD_DIR "./html"
 #define SRV_404_TEMPLATE "./assets/404.nosehad"
 #define SRV_DEF_TEMPLATE "./assets/cms.nosehad"
+
+#define SRV_PAGE_CONFIG "./assets/json/pages-config.json"
+
 #define SRV_USEDEBUGMODE 2024 /* enable outomatic recompile on file change */
 
 #ifdef SRV_USEDEBUGMODE
@@ -46,6 +49,8 @@ struct MHD_Daemon *microhttp_server;
 SQLTree *staticFiles;
 XString static404;
 XString staticCMS;
+
+#include "PageData.h"
 
 static struct MHD_Response *srv_response404()
 {
@@ -282,6 +287,7 @@ void radix_srv_start()
     debga(SRV_PREFIX "%s\n", __func__);
 
     _radix_srv_start();
+    srv_optainPageData();
 
     if (pthread_create(&file_check, NULL, (void *(*)(void *)) & srv_filelistener, null) != 0)
     {
@@ -294,6 +300,8 @@ void radix_srv_start()
 void radix_srv_exit()
 {
     debga(SRV_PREFIX "%s\n", __func__);
+
+    srv_destroyPageData();
 
     if (pthread_detach(file_check) != 0) /* detach pthread */
     {
