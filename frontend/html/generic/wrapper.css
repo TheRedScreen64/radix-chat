@@ -39,6 +39,10 @@ html {
   padding: 0;
 }
 
+h1 {
+  font-weight: 400;
+}
+
 footer {
   text-align: center;
   display: block;

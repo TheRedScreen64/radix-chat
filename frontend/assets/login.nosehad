@@ -117,6 +117,9 @@ html {
   margin: 0;
   padding: 0;
 }
+h1 {
+  font-weight: 400;
+}
 footer {
   text-align: center;
   display: block;
@@ -401,7 +404,6 @@ input[type="file"] {
   }
   .login-radix-logo {
     writing-mode: tb-rl;
-    min-height: 100%;
   }
   .logo-wrap {
     border-radius: 5px 0px 0px 5px;
@@ -426,6 +428,7 @@ input[type="file"] {
   }
   .login-container {
     min-width: 100%;
+    min-height: 400px;
   }
   .login-wrap {
     min-width: 100%;
@@ -446,7 +449,7 @@ input[type="file"] {
     <div class="login-wrap">
         <div class="logo-wrap">
             <h1 class="login-radix-logo">
-                <logo>RAdiX cHAt</logo>
+                <logo>RAdiXcHAt</logo>
             </h1>
         </div>
         <div class="login-container">

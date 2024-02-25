@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
-        <script type="text/javascript">
+    <meta>
+    <script type="text/javascript">
 let cms_ov_responseText;
 let cms_ov_modifyer;
 let cms_init_body;
@@ -80,7 +81,7 @@ function redirect(rlocation, r = true, ps = true) {
     xhttp.send();
 }
 redirect(window.location.pathname, false);
-        </script>
+    </script>
 </head>
 <body>
     <style>

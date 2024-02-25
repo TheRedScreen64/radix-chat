@@ -16,8 +16,9 @@ function api_login_userWithGoogle(oAuthClientToken) {
 const bg_color = `#E4DFDA`;
 const range = document.createRange();
 const email_regex = /[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/;
+const user_regex = /([A-Za-z0-9]+(_[A-Za-z0-9]+)+)/
 let inbox, emailInp, passwdInp, confirmPasswdInp,
- rememberUser, usernameInp, realnameInp, cookieInp, signUpStage;
+    rememberUser, usernameInp, realnameInp, cookieInp, signUpStage;
 function sendMsgSteve(text) {
     if (inbox.childNodes.length > 5)
         return;
@@ -105,10 +106,23 @@ function signUp_doStage3() {
         sendMsgSteve("Do you think I am stupid🙄<br> I don't allow empty user names.<br>Do I have to <a onclick='generateRandomUname()'>create one Random</a>?");
         return;
     }
+    else if (user_regex.test(usernameInp.value)) {
+        usernameInp.classList.add("invalid");
+        sendMsgSteve("Bro just use lower case number and letters💀 or <a onclick='generateRandomUname()'>create one Random</a>");
+        return;
+    }
     else if (api_uname_present(usernameInp.value)) {
         usernameInp.classList.add("invalid");
         sendMsgSteve("Oh seems like this usernameInp is already taken🫤<br> Think of something else, or<br><a onclick='generateRandomUname()'>create one Random</a>");
         return;
+    }
+    else if (usernameInp.value.toLowerCase().includes("kaiss")) {
+        localStorage.setItem("kaiss", "true");
+        cms_runOnStartup(() => {
+            setInterval(() => {
+                sendMsgSteve("Du kannst nicht chatten während dem du durch den Raum rollst<br><img src='/static/images/kaiss.png' style='width: 420px;'>");
+            }, 5000);
+        });
     }
     if (realnameInp.value == "") {
         realnameInp.classList.add("invalid");
@@ -161,11 +175,18 @@ cms_runOnStartup(() => {
     realnameInp = document.getElementById("real_name");
     cookieInp = document.getElementById("cookies");
     signUpStage = 0;
+    if (localStorage.getItem("kaiss") != undefined) {
+        cms_runOnStartup(() => {
+            setInterval(() => {
+                sendMsgSteve("Du kannst nicht chatten während dem du durch den Raum rollst<br><img src='/static/images/kaiss.png' style='width: 420px;'>");
+            }, 5000);
+        });
+    }
     setTimeout(() => {
         sendMsgSteve("Hey Boss 👋<br>Please sign in to continue.");
     }, 1000);
     document.addEventListener("keypress", (event) => {
-        if(event.key == "Enter")
+        if (event.key == "Enter")
             signUp();
     });
 });

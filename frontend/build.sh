@@ -5,6 +5,7 @@ corec=(utils/SHashmap.c
        utils/SString.c
        utils/String/String.c
        utils/SQTree/SQTreeSlowLocal.c
+       utils/StringIterator/StringIterator.c
        utils/debug.c
        app/RadixApplication.c
        app/RadixGTK.c
