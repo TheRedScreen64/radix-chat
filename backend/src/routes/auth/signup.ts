@@ -14,10 +14,10 @@ signupRouter.post("/auth/signup", async (req, res) => {
    }
 
    const schema = z.object({
-      email: z.string().email(),
-      username: z.string().min(3).max(30),
-      name: z.string().min(1).max(50),
-      password: z.string().min(6).max(255),
+      email: z.string().email().trim().toLowerCase(),
+      username: z.string().min(3).max(30).trim().toLowerCase(),
+      name: z.string().min(1).max(50).trim(),
+      password: z.string().min(6).max(255).trim(),
       persistent: z.boolean(),
    });
 

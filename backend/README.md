@@ -105,3 +105,76 @@ Body:
    "exists": false
 }
 ```
+
+## Messages - Get
+
+**Request**
+
+`GET /messages`
+
+**Response Example**
+
+```json
+[
+   {
+      "id": 1,
+      "postedAt": "2024-02-25T12:20:22.262Z",
+      "updatedAt": "2024-02-25T12:20:22.262Z",
+      "content": "some content \nsupports linebreaks 👌",
+      "userId": "xyz123",
+      "user": {
+         "name": "Werner Sauerkraut",
+         "username": "werner",
+         "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      }
+   }
+]
+```
+
+# Websocket
+
+**Request structure**
+
+```json
+{
+   "type": "string (see below at 'Message Types')",
+   "data": "any"
+}
+```
+
+## Example usage
+
+```js
+const ws = new WebSocket("ws://host:port?session=sessionId");
+
+ws.onopen = () => {
+   // Send Message
+   ws.send(JSON.stringify({ type: "message", data: "moinsen" }));
+};
+
+ws.onmessage = ({ data }) => {
+   let parsed = JSON.parse(data);
+   switch (parsed.type) {
+      case "message":
+         let li = document.createElement("li");
+         li.innerText = parsed.data;
+         document.querySelector(".list").appendChild(li);
+         console.log(`Received message: ${parsed.data}`);
+         break;
+
+      default:
+         break;
+   }
+};
+```
+
+## Message Types
+
+### Global message:
+
+```json
+{
+   "type": "message",
+   "data": "string"
+}
+```
