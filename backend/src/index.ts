@@ -17,6 +17,11 @@ import { userInfoRouter } from "./routes/user/info.js";
 
 dotenv.config();
 
+const jsonErrorHandler = (err: any, req: any, res: any, next: any) => {
+   console.log("Moinsen error: ", err);
+   res.status(500).send({ error: err });
+};
+
 const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
@@ -49,6 +54,8 @@ app.use(async (req, res, next) => {
 });
 
 app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter, userInfoRouter, messagesRouter, voteRouter, topicRouter);
+
+app.use(jsonErrorHandler);
 
 server.listen(PORT, () => {
    console.log(`Listening on port ${PORT}`);
