@@ -31,7 +31,7 @@ function initWebsocket(wss: WebSocketServer) {
 
          let parsed = JSON.parse(data) as Message;
 
-         switch (parsed.type!) {
+         switch (parsed.type) {
             case "message":
                const contentSchema = z.string().trim().min(1).max(500);
                const contentParsed = contentSchema.safeParse(parsed.data);
@@ -87,7 +87,7 @@ async function createMessage(content: string, userId: string) {
    } catch (err) {
       console.error(err);
       const errorMessage = formatPrismaError(err);
-      return { error: { message: `Failed to create the user: ${errorMessage}` } };
+      return { error: { message: `Failed to create the message: ${errorMessage}` } };
    }
 }
 

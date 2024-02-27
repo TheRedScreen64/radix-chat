@@ -9,14 +9,16 @@ datasource db {
 
 // Auth
 model User {
-   id             String    @id
-   email          String    @unique
-   username       String    @unique
-   name           String
-   hashedPassword String
-   avatarUrl      String?
-   sessions       Session[]
-   messages       Message[]
+   id              String    @id
+   email           String    @unique
+   username        String    @unique
+   name            String
+   hashedPassword  String
+   avatarUrl       String?
+   sessions        Session[]
+   messages        Message[]
+   suggestedTopics Topic[]   @relation("suggestedTopics")
+   votedTopics     Topic[]
 }
 
 model Session {
@@ -34,4 +36,15 @@ model Message {
    content   String   @db.VarChar(500)
    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
    userId    String
+}
+
+// Topic voting
+model Topic {
+   id          Int      @id @default(autoincrement())
+   suggestedAt DateTime @default(now())
+   content     String   @db.VarChar(100)
+   votes       Int      @default(1)
+   author      User     @relation("suggestedTopics", fields: [authorId], references: [id], onDelete: Cascade)
+   authorId    String
+   voters      User[]
 }

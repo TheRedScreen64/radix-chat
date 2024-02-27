@@ -10,6 +10,8 @@ import { logoutRouter } from "./routes/auth/logout.js";
 import { signupRouter } from "./routes/auth/signup.js";
 import { mainRouter } from "./routes/index.js";
 import { messagesRouter } from "./routes/messages.js";
+import { topicRouter } from "./routes/topic/topic.js";
+import { voteRouter } from "./routes/topic/vote.js";
 import { existsRouter } from "./routes/user/exists.js";
 import { userInfoRouter } from "./routes/user/info.js";
 
@@ -46,7 +48,7 @@ app.use(async (req, res, next) => {
    return next();
 });
 
-app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter, userInfoRouter, messagesRouter);
+app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter, userInfoRouter, messagesRouter, voteRouter, topicRouter);
 
 server.listen(PORT, () => {
    console.log(`Listening on port ${PORT}`);

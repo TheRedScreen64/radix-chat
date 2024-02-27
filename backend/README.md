@@ -47,10 +47,6 @@ Body:
 }
 ```
 
-**Response Example**
-
-Success
-
 ## Auth - Login
 
 **Request**
@@ -67,19 +63,11 @@ Body:
 }
 ```
 
-**Response Example**
-
-Success
-
 ## Auth - Logout
 
 **Request**
 
 `POST /auth/logout`
-
-**Response Example**
-
-Success
 
 ## User - Exists
 
@@ -106,6 +94,28 @@ Body:
 }
 ```
 
+## User - Info
+
+Returns all information about the user
+
+**Request**
+
+`GET /user/info`
+
+**Response Example**
+
+```json
+{
+   "id": "123xyz",
+   "email": "some@mail.com",
+   "name": "Werner Sauerkraut",
+   "username": "werner",
+   "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg",
+   "suggestedTopics": [],
+   "votedTopics": []
+}
+```
+
 ## Messages - Get
 
 **Request**
@@ -129,6 +139,73 @@ Body:
       }
    }
 ]
+```
+
+## Topics - Get
+
+Returns all topics.
+
+**Request**
+
+`GET /topics`
+
+**Response Example**
+
+```json
+[
+   {
+      "id": 9,
+      "suggestedAt": "2024-02-27T19:03:00.755Z",
+      "content": "some topic",
+      "votes": 12,
+      "authorId": "123xyz",
+      "author": {
+         "name": "Werner Sauerkraut",
+         "username": "werner",
+         "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      }
+   },
+   {
+      "id": 3,
+      "suggestedAt": "2024-02-27T18:45:18.204Z",
+      "content": "some other topic",
+      "votes": 201,
+      "authorId": "123xyz",
+      "author": {
+         "name": "Werner Sauerkraut",
+         "username": "werner",
+         "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      }
+   }
+]
+```
+
+## Topic - Suggest
+
+**Request**
+
+`POST /topic`
+
+Body:
+
+```json
+{
+   "content": "TOPIC (Min length 1, Max length 100)"
+}
+```
+
+## Topic - Vote
+
+**Request**
+
+`POST /topic/vote`
+
+Body:
+
+```json
+{
+   "topicId": "TOPIC ID"
+}
 ```
 
 # Websocket
