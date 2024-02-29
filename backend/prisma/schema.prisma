@@ -48,3 +48,8 @@ model Topic {
    authorId    String
    voters      User[]
 }
+
+model KeyValue {
+   id    String @id
+   value Json
+}

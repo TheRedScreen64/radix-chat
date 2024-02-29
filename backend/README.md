@@ -208,6 +208,33 @@ Body:
 }
 ```
 
+## Topic - Today
+
+Returns the topic of the day.
+
+**Request**
+
+`GET /topic/today`
+
+**Response Example**
+
+```json
+[
+   {
+      "id": 9,
+      "suggestedAt": "2024-02-27T19:03:00.755Z",
+      "content": "some topic",
+      "votes": 12,
+      "authorId": "123xyz",
+      "author": {
+         "name": "Werner Sauerkraut",
+         "username": "werner",
+         "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      }
+   }
+]
+```
+
 # Websocket
 
 **Request structure**

@@ -4,12 +4,14 @@ import express from "express";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { lucia } from "./lib/auth.js";
+import { initCronJob } from "./lib/evaluateTopics.js";
 import { initWebsocket } from "./lib/websocket.js";
 import { loginRouter } from "./routes/auth/login.js";
 import { logoutRouter } from "./routes/auth/logout.js";
 import { signupRouter } from "./routes/auth/signup.js";
 import { mainRouter } from "./routes/index.js";
 import { messagesRouter } from "./routes/messages.js";
+import { todaysTopicRouter } from "./routes/topic/today.js";
 import { topicRouter } from "./routes/topic/topic.js";
 import { voteRouter } from "./routes/topic/vote.js";
 import { existsRouter } from "./routes/user/exists.js";
@@ -27,6 +29,7 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 const PORT = parseInt(process.env.PORT ? process.env.PORT : "3000");
 
+initCronJob();
 initWebsocket(wss);
 
 // app.use(cors);
@@ -53,7 +56,18 @@ app.use(async (req, res, next) => {
    return next();
 });
 
-app.use(mainRouter, loginRouter, logoutRouter, signupRouter, existsRouter, userInfoRouter, messagesRouter, voteRouter, topicRouter);
+app.use(
+   mainRouter,
+   loginRouter,
+   logoutRouter,
+   signupRouter,
+   existsRouter,
+   userInfoRouter,
+   messagesRouter,
+   voteRouter,
+   topicRouter,
+   todaysTopicRouter
+);
 
 app.use(jsonErrorHandler);
 
