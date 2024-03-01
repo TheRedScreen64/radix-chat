@@ -9,17 +9,17 @@ existsRouter.post("/user/exists", async (req, res) => {
       return res.status(400).json({ error: { message: "No input provided" } });
    }
 
-   const schema = z.object({
+   const requestSchema = z.object({
       email: z.string().email().optional(),
       username: z.string().min(3).max(30).optional(),
    });
 
-   const parsed = schema.safeParse(req.body);
-   if (!parsed.success) {
-      const validationErrors = parsed.error.flatten().fieldErrors;
+   const requestParams = requestSchema.safeParse(req.body);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
       return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
    }
-   const { email, username } = parsed.data;
+   const { email, username } = requestParams.data;
 
    let existingUser;
    if (email != null && username != null) {

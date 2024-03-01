@@ -10,6 +10,7 @@ datasource db {
 // Auth
 model User {
    id             String    @id
+   createdAt      DateTime  @default(now())
    email          String    @unique
    username       String    @unique
    name           String
@@ -17,6 +18,8 @@ model User {
    avatarUrl      String?
    sessions       Session[]
    messages       Message[]
+   suggestedTopic Topic?    @relation("suggestedTopic")
+   votedTopics    Topic[]
 }
 
 model Session {
@@ -28,10 +31,29 @@ model Session {
 
 // Chat
 model Message {
-   id        Int      @id @default(autoincrement())
+   id        String   @id @default(uuid())
    postedAt  DateTime @default(now())
    updatedAt DateTime @updatedAt
-   content   String   @db.VarChar(500)
+   content   String   @db.VarChar(2000)
    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
    userId    String
+}
+
+// Topic voting
+model Topic {
+   id          String   @id @default(uuid())
+   suggestedAt DateTime @default(now())
+   title       String   @db.VarChar(100)
+   description String?  @db.VarChar(1000)
+   votes       Int      @default(1)
+   author      User     @relation("suggestedTopic", fields: [authorId], references: [id], onDelete: Cascade)
+   authorId    String   @unique
+   voters      User[]
+}
+
+// Key-Value store
+model KeyValue {
+   key       String   @id
+   value     Json
+   updatedAt DateTime @updatedAt
 }

@@ -47,10 +47,6 @@ Body:
 }
 ```
 
-**Response Example**
-
-Success
-
 ## Auth - Login
 
 **Request**
@@ -67,19 +63,11 @@ Body:
 }
 ```
 
-**Response Example**
-
-Success
-
 ## Auth - Logout
 
 **Request**
 
 `POST /auth/logout`
-
-**Response Example**
-
-Success
 
 ## User - Exists
 
@@ -106,18 +94,54 @@ Body:
 }
 ```
 
+## User - Info
+
+Returns all information about the user
+
+**Request**
+
+`GET /user/info`
+
+**Response Example**
+
+```json
+{
+   "id": "123xyz",
+   "email": "some@mail.com",
+   "name": "Werner Sauerkraut",
+   "username": "werner",
+   "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg",
+   "suggestedTopic": {...},
+   "votedTopics": []
+}
+```
+
 ## Messages - Get
+
+Returns 50 messages
+
+> Tip:
+> Don't define lastId to get the first 50 messages,
+> define lastId to get 50 messages after the last topic of the messages fetched before.
 
 **Request**
 
 `GET /messages`
+
+Body:
+
+```json
+{
+   "lastId": "ID OF LAST FETCHED MESSAGE (uuid, optional)"
+}
+```
 
 **Response Example**
 
 ```json
 [
    {
-      "id": 1,
+      "id": "df4fcf62-c0a8-4f52-a015-fdf8ab06c139",
       "postedAt": "2024-02-25T12:20:22.262Z",
       "updatedAt": "2024-02-25T12:20:22.262Z",
       "content": "some content \nsupports linebreaks 👌",
@@ -129,6 +153,112 @@ Body:
       }
    }
 ]
+```
+
+## Topics - Get
+
+Returns 50 topics
+
+> Tip:
+> Don't define lastId to get the first 50 topics,
+> define lastId to get 50 topics after the last topic of the topics fetched before.
+
+**Request**
+
+`GET /topics`
+
+Body:
+
+```json
+{
+   "lastId": "ID OF LAST FETCHED TOPIC (uuid, optional)"
+}
+```
+
+**Response Example**
+
+```json
+[
+   {
+      "id": "ca9e0073-94f6-42a5-a534-7bb42de5f6e9",
+      "suggestedAt": "2024-02-27T19:03:00.755Z",
+      "title": "some title",
+      "description": null,
+      "votes": 12,
+      "authorId": "123xyz",
+      "author": {
+         "name": "Werner Sauerkraut",
+         "username": "werner",
+         "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      }
+   },
+   {
+      "id": "d5745b1d-555d-4742-b520-145480ed4ef6",
+      "suggestedAt": "2024-02-27T18:45:18.204Z",
+      "title": "some title",
+      "description": "some desc.",
+      "votes": 201,
+      "authorId": "123xyz",
+      "author": {
+         "name": "Werner Sauerkraut",
+         "username": "werner",
+         "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      }
+   }
+]
+```
+
+## Topic - Suggest
+
+**Request**
+
+`POST /topic`
+
+Body:
+
+```json
+{
+   "title": "TOPIC (Min length 1, Max length 100)",
+   "description": "DESCRIPTION (Optional, Min length 1, Max length 1000)
+}
+```
+
+## Topic - Vote
+
+**Request**
+
+`POST /topic/vote`
+
+Body:
+
+```json
+{
+   "topicId": "TOPIC ID (uuid)"
+}
+```
+
+## Topic - Today
+
+Returns the topic of the day.
+
+**Request**
+
+`GET /topic/today`
+
+**Response Example**
+
+```json
+{
+   "title": "some title",
+   "description": "some desc.",
+   "votes": 1,
+   "authorId": "8jq36o0lxfq76ed",
+   "author": {
+      "name": "Günther Jauch",
+      "username": "jauch",
+      "avatarUrl": null
+   }
+}
 ```
 
 # Websocket
