@@ -149,6 +149,14 @@ Returns all topics.
 
 `GET /topics`
 
+Body:
+
+```json
+{
+   "from_id": "FROM ID (BigInt, Min 1)"
+}
+```
+
 **Response Example**
 
 ```json

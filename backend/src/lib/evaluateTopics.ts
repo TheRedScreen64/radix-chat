@@ -23,8 +23,8 @@ async function evaluateTopics() {
       where: {
          key: "topicOfTheDay",
       },
-      update: { value: votedTopic.id },
-      create: { key: "topicOfTheDay", value: votedTopic.id },
+      update: { value: String(votedTopic.id) },
+      create: { key: "topicOfTheDay", value: String(votedTopic.id) },
    });
 }
 

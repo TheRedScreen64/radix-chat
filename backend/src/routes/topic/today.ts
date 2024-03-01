@@ -17,7 +17,7 @@ todaysTopicRouter.get("/topic/today", async (_, res) => {
 
       let topic = await prisma.topic.findUnique({
          where: {
-            id: Number(topicId.value),
+            id: BigInt(String(topicId.value)),
          },
          include: {
             author: {
