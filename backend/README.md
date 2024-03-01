@@ -216,7 +216,8 @@ Body:
 
 ```json
 {
-   "content": "TOPIC (Min length 1, Max length 100)"
+   "title": "TOPIC (Min length 1, Max length 100)",
+   "description": "DESCRIPTION (Optional, Min length 1, Max length 1000)
 }
 ```
 
@@ -248,7 +249,8 @@ Returns the topic of the day.
 {
    "id": 9,
    "suggestedAt": "2024-02-27T19:03:00.755Z",
-   "content": "some topic",
+   "title": "some topic",
+   "description": null,
    "votes": 12,
    "authorId": "123xyz",
    "author": {

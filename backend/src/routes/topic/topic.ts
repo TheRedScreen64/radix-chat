@@ -14,7 +14,8 @@ topicRouter.post("/topic", async (req, res) => {
    }
 
    const requestSchema = z.object({
-      content: z.string().min(1).max(100).trim(),
+      title: z.string().min(1).max(100).trim(),
+      description: z.string().min(1).max(1000).trim().optional(),
    });
 
    const requestParams = requestSchema.safeParse(req.body);
@@ -22,12 +23,13 @@ topicRouter.post("/topic", async (req, res) => {
       const validationErrors = requestParams.error.flatten().fieldErrors;
       return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
    }
-   const { content } = requestParams.data;
+   const { title, description } = requestParams.data;
 
    try {
       await prisma.topic.create({
          data: {
-            content,
+            title,
+            description,
             author: {
                connect: {
                   id: res.locals.user.id,

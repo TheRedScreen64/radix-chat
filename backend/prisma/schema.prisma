@@ -10,6 +10,7 @@ datasource db {
 // Auth
 model User {
    id              String    @id
+   createdAt       DateTime  @default(now())
    email           String    @unique
    username        String    @unique
    name            String
@@ -33,7 +34,7 @@ model Message {
    id        String   @id @default(uuid())
    postedAt  DateTime @default(now())
    updatedAt DateTime @updatedAt
-   content   String   @db.VarChar(500)
+   content   String   @db.VarChar(2000)
    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
    userId    String
 }
@@ -42,7 +43,8 @@ model Message {
 model Topic {
    id          String   @id @default(uuid())
    suggestedAt DateTime @default(now())
-   content     String   @db.VarChar(100)
+   title       String   @db.VarChar(100)
+   description String?  @db.VarChar(1000)
    votes       Int      @default(1)
    author      User     @relation("suggestedTopics", fields: [authorId], references: [id], onDelete: Cascade)
    authorId    String

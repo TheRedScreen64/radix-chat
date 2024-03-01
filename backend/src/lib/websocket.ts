@@ -33,7 +33,7 @@ function initWebsocket(wss: WebSocketServer) {
 
          switch (parsed.type) {
             case "message":
-               const contentSchema = z.string().trim().min(1).max(500);
+               const contentSchema = z.string().trim().min(1).max(2000);
                const contentParsed = contentSchema.safeParse(parsed.data);
                if (!contentParsed.success) {
                   const validationErrors = contentParsed.error.flatten().fieldErrors;
