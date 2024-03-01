@@ -50,6 +50,7 @@ model Topic {
 }
 
 model KeyValue {
-   id    String @id
-   value Json
+   key       String   @id
+   value     Json
+   updatedAt DateTime @updatedAt
 }

@@ -64,6 +64,9 @@ topicRouter.get("/topics", async (_, res) => {
                },
             },
          },
+         orderBy: {
+            votes: "desc"
+         }
       });
 
       if (topics) {

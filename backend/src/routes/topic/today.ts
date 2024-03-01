@@ -8,7 +8,7 @@ todaysTopicRouter.get("/topic/today", async (_, res) => {
    try {
       let topicId = await prisma.keyValue.findUnique({
          where: {
-            id: "topicOfTheDay",
+            key: "topicOfTheDay",
          },
       });
       if (!topicId) {

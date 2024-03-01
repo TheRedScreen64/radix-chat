@@ -21,10 +21,10 @@ async function evaluateTopics() {
 
    await prisma.keyValue.upsert({
       where: {
-         id: "topicOfTheDay",
+         key: "topicOfTheDay",
       },
       update: { value: votedTopic.id },
-      create: { id: "topicOfTheDay", value: votedTopic.id },
+      create: { key: "topicOfTheDay", value: votedTopic.id },
    });
 }
 
@@ -32,7 +32,20 @@ async function initCronJob() {
    cron.schedule("0 0 * * *", async () => {
       await evaluateTopics();
    });
-   await evaluateTopics();
+
+   let today = new Date()
+   today.setHours(0, 0, 0, 0)
+   
+   let topicOfTheDay = await prisma.keyValue.findUnique({
+      where: {
+         key: "topicOfTheDay"
+      }
+   })
+   if (!topicOfTheDay) {
+      await evaluateTopics()
+   } else if (topicOfTheDay.updatedAt < today) {
+      await evaluateTopics()
+   }
 }
 
 export { initCronJob };
