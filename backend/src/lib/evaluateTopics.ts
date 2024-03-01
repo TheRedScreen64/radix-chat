@@ -4,6 +4,19 @@ import { prisma } from "./prisma.js";
 async function evaluateTopics() {
    const topVotedTopic = await prisma.topic
       .findFirst({
+         select: {
+            title: true,
+            description: true,
+            authorId: true,
+            author: {
+               select: {
+                  name: true,
+                  username: true,
+                  avatarUrl: true,
+               },
+            },
+            votes: true,
+         },
          orderBy: {
             votes: "desc",
          },
@@ -15,16 +28,14 @@ async function evaluateTopics() {
 
    if (!topVotedTopic) return;
 
-   await prisma.topic.deleteMany({
-      where: { id: { not: topVotedTopic.id } },
-   });
+   await prisma.topic.deleteMany();
 
    await prisma.keyValue.upsert({
       where: {
          key: "topicOfTheDay",
       },
-      update: { value: topVotedTopic.id },
-      create: { key: "topicOfTheDay", value: topVotedTopic.id },
+      update: { value: topVotedTopic },
+      create: { key: "topicOfTheDay", value: topVotedTopic },
    });
 }
 

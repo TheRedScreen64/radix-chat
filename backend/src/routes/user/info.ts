@@ -18,7 +18,7 @@ userInfoRouter.get("/user/info", async (_, res) => {
          name: true,
          username: true,
          avatarUrl: true,
-         suggestedTopics: true,
+         suggestedTopic: true,
          votedTopics: true,
       },
    });

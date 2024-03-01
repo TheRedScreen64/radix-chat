@@ -111,7 +111,7 @@ Returns all information about the user
    "name": "Werner Sauerkraut",
    "username": "werner",
    "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg",
-   "suggestedTopics": [],
+   "suggestedTopic": {...},
    "votedTopics": []
 }
 ```
@@ -122,7 +122,7 @@ Returns 50 messages
 
 > Tip:
 > Don't define lastId to get the first 50 messages,
-> define lastId to get 50 messages after the last topic of the first fetched messages.
+> define lastId to get 50 messages after the last topic of the messages fetched before.
 
 **Request**
 
@@ -141,7 +141,7 @@ Body:
 ```json
 [
    {
-      "id": 1,
+      "id": "df4fcf62-c0a8-4f52-a015-fdf8ab06c139",
       "postedAt": "2024-02-25T12:20:22.262Z",
       "updatedAt": "2024-02-25T12:20:22.262Z",
       "content": "some content \nsupports linebreaks 👌",
@@ -161,7 +161,7 @@ Returns 50 topics
 
 > Tip:
 > Don't define lastId to get the first 50 topics,
-> define lastId to get 50 topics after the last topic of the first fetched topics.
+> define lastId to get 50 topics after the last topic of the topics fetched before.
 
 **Request**
 
@@ -180,9 +180,10 @@ Body:
 ```json
 [
    {
-      "id": 9,
+      "id": "ca9e0073-94f6-42a5-a534-7bb42de5f6e9",
       "suggestedAt": "2024-02-27T19:03:00.755Z",
-      "content": "some topic",
+      "title": "some title",
+      "description": null,
       "votes": 12,
       "authorId": "123xyz",
       "author": {
@@ -192,9 +193,10 @@ Body:
       }
    },
    {
-      "id": 3,
+      "id": "d5745b1d-555d-4742-b520-145480ed4ef6",
       "suggestedAt": "2024-02-27T18:45:18.204Z",
-      "content": "some other topic",
+      "title": "some title",
+      "description": "some desc.",
       "votes": 201,
       "authorId": "123xyz",
       "author": {
@@ -231,7 +233,7 @@ Body:
 
 ```json
 {
-   "topicId": "TOPIC ID"
+   "topicId": "TOPIC ID (uuid)"
 }
 ```
 
@@ -247,16 +249,14 @@ Returns the topic of the day.
 
 ```json
 {
-   "id": 9,
-   "suggestedAt": "2024-02-27T19:03:00.755Z",
-   "title": "some topic",
-   "description": null,
-   "votes": 12,
-   "authorId": "123xyz",
+   "title": "some title",
+   "description": "some desc.",
+   "votes": 1,
+   "authorId": "8jq36o0lxfq76ed",
    "author": {
-      "name": "Werner Sauerkraut",
-      "username": "werner",
-      "avatarUrl": "https://img.unocero.com/2021/08/rickroll_4k-1024x768.jpeg"
+      "name": "Günther Jauch",
+      "username": "jauch",
+      "avatarUrl": null
    }
 }
 ```

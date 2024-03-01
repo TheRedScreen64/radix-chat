@@ -26,6 +26,20 @@ topicRouter.post("/topic", async (req, res) => {
    const { title, description } = requestParams.data;
 
    try {
+      let suggestedTopic = await prisma.user
+         .findUnique({
+            where: {
+               id: res.locals.user.id,
+            },
+            select: {
+               suggestedTopic: true,
+            },
+         })
+         .suggestedTopic();
+      if (suggestedTopic) {
+         return res.status(400).json({ error: { message: "You already have suggested a topic today" } });
+      }
+
       await prisma.topic.create({
          data: {
             title,
