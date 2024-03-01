@@ -118,9 +118,23 @@ Returns all information about the user
 
 ## Messages - Get
 
+Returns 50 messages
+
+> Tip:
+> Don't define lastId to get the first 50 messages,
+> define lastId to get 50 messages after the last topic of the first fetched messages.
+
 **Request**
 
 `GET /messages`
+
+Body:
+
+```json
+{
+   "lastId": "ID OF LAST FETCHED MESSAGE (uuid, optional)"
+}
+```
 
 **Response Example**
 
@@ -143,7 +157,11 @@ Returns all information about the user
 
 ## Topics - Get
 
-Returns all topics.
+Returns 50 topics
+
+> Tip:
+> Don't define lastId to get the first 50 topics,
+> define lastId to get 50 topics after the last topic of the first fetched topics.
 
 **Request**
 
@@ -153,7 +171,7 @@ Body:
 
 ```json
 {
-   "from_id": "FROM ID (BigInt, Min 1)"
+   "lastId": "ID OF LAST FETCHED TOPIC (uuid, optional)"
 }
 ```
 

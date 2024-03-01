@@ -26,6 +26,6 @@ userInfoRouter.get("/user/info", async (_, res) => {
    if (user) {
       return res.status(200).json(user);
    } else {
-      return res.status(404);
+      return res.status(404).send("User not found");
    }
 });

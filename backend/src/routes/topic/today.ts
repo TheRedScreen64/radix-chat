@@ -6,18 +6,18 @@ export const todaysTopicRouter = express.Router();
 
 todaysTopicRouter.get("/topic/today", async (_, res) => {
    try {
-      let topicId = await prisma.keyValue.findUnique({
+      let topicOfTheDay = await prisma.keyValue.findUnique({
          where: {
             key: "topicOfTheDay",
          },
       });
-      if (!topicId) {
+      if (!topicOfTheDay) {
          return res.status(500).json({ error: { message: `The topic of today is not set` } });
       }
 
       let topic = await prisma.topic.findUnique({
          where: {
-            id: BigInt(String(topicId.value)),
+            id: String(topicOfTheDay.value),
          },
          include: {
             author: {
@@ -37,6 +37,6 @@ todaysTopicRouter.get("/topic/today", async (_, res) => {
    } catch (err) {
       console.error(err);
       const errorMessage = formatPrismaError(err);
-      return res.status(500).json({ error: { message: `Failed to get todays topic: ${errorMessage}` } });
+      return res.status(500).json({ error: { message: `Failed to get the topic of today: ${errorMessage}` } });
    }
 });

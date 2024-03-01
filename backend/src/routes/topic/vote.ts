@@ -14,7 +14,7 @@ voteRouter.post("/topic/vote", async (req, res) => {
    }
 
    const schema = z.object({
-      topicId: z.number().min(1),
+      topicId: z.string().min(1),
    });
 
    const parsed = schema.safeParse(req.body);

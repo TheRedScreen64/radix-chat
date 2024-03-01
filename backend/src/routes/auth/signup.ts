@@ -13,7 +13,7 @@ signupRouter.post("/auth/signup", async (req, res) => {
       return res.status(400).json({ error: { message: "No input provided" } });
    }
 
-   const schema = z.object({
+   const requestSchema = z.object({
       email: z.string().email().trim().toLowerCase(),
       username: z.string().min(3).max(30).trim().toLowerCase(),
       name: z.string().min(1).max(50).trim(),
@@ -21,12 +21,12 @@ signupRouter.post("/auth/signup", async (req, res) => {
       persistent: z.boolean(),
    });
 
-   const parsed = schema.safeParse(req.body);
-   if (!parsed.success) {
-      const validationErrors = parsed.error.flatten().fieldErrors;
+   const requestParams = requestSchema.safeParse(req.body);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
       return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
    }
-   const { email, username, name, password, persistent } = parsed.data;
+   const { email, username, name, password, persistent } = requestParams.data;
 
    const userId = generateId(15);
    const hashedPassword = await new Argon2id().hash(password);

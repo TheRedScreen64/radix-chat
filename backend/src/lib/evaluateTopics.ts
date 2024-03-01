@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { prisma } from "./prisma.js";
 
 async function evaluateTopics() {
-   const votedTopic = await prisma.topic
+   const topVotedTopic = await prisma.topic
       .findFirst({
          orderBy: {
             votes: "desc",
@@ -13,18 +13,18 @@ async function evaluateTopics() {
          return;
       });
 
-   if (!votedTopic) return;
+   if (!topVotedTopic) return;
 
    await prisma.topic.deleteMany({
-      where: { id: { not: votedTopic.id } },
+      where: { id: { not: topVotedTopic.id } },
    });
 
    await prisma.keyValue.upsert({
       where: {
          key: "topicOfTheDay",
       },
-      update: { value: String(votedTopic.id) },
-      create: { key: "topicOfTheDay", value: String(votedTopic.id) },
+      update: { value: topVotedTopic.id },
+      create: { key: "topicOfTheDay", value: topVotedTopic.id },
    });
 }
 
@@ -33,18 +33,16 @@ async function initCronJob() {
       await evaluateTopics();
    });
 
-   let today = new Date()
-   today.setHours(0, 0, 0, 0)
-   
+   let today = new Date();
+   today.setHours(0, 0, 0, 0);
+
    let topicOfTheDay = await prisma.keyValue.findUnique({
       where: {
-         key: "topicOfTheDay"
-      }
-   })
-   if (!topicOfTheDay) {
-      await evaluateTopics()
-   } else if (topicOfTheDay.updatedAt < today) {
-      await evaluateTopics()
+         key: "topicOfTheDay",
+      },
+   });
+   if (!topicOfTheDay || topicOfTheDay.updatedAt < today) {
+      await evaluateTopics();
    }
 }
 
