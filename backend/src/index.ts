@@ -20,7 +20,6 @@ import { userInfoRouter } from "./routes/user/info.js";
 dotenv.config();
 
 const jsonErrorHandler = (err: any, req: any, res: any, next: any) => {
-   console.log("Moinsen error: ", err);
    res.status(500).send({ error: err });
 };
 
