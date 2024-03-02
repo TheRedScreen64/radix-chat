@@ -5,12 +5,12 @@ import { formatPrismaError } from "../../lib/utils.js";
 
 export const voteRouter = express.Router();
 
-voteRouter.post("/topic/vote", async (req, res) => {
+voteRouter.post("/topic/vote", async (req, res, next) => {
    if (!res.locals.user) {
-      return res.status(401).send("Not authorized");
+      return next({ msg: "Not authorized", status: 401 });
    }
    if (!req.body) {
-      return res.status(400).json({ error: { message: "No input provided" } });
+      return next({ msg: "No input provided", status: 400 });
    }
 
    const schema = z.object({
@@ -20,7 +20,7 @@ voteRouter.post("/topic/vote", async (req, res) => {
    const parsed = schema.safeParse(req.body);
    if (!parsed.success) {
       const validationErrors = parsed.error.flatten().fieldErrors;
-      return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
    }
    const { topicId } = parsed.data;
 
@@ -46,10 +46,11 @@ voteRouter.post("/topic/vote", async (req, res) => {
          },
       });
    } catch (err) {
-      console.error(err);
       const errorMessage = formatPrismaError(err);
-      // NOTE: Error message when already voted: There is no Topic that meets the requirements
-      return res.status(500).json({ error: { message: `Failed to vote for the topic: ${errorMessage}` } });
+      if (errorMessage === "There is no Topic that meets the requirements") {
+         return next({ msg: "You have already voted for this topic or it does not exist", status: 400 });
+      }
+      return next({ msg: `Failed to vote for topic: ${errorMessage}`, status: 500 });
    }
 
    return res.status(200).send();
