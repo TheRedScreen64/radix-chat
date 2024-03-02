@@ -5,7 +5,7 @@ import { formatPrismaError } from "../../lib/utils.js";
 
 export const todaysTopicRouter = express.Router();
 
-todaysTopicRouter.get("/topic/today", async (_, res) => {
+todaysTopicRouter.get("/topic/today", async (_, res, next) => {
    try {
       let topicOfTheDay = await prisma.keyValue.findUnique({
          where: {
@@ -13,18 +13,17 @@ todaysTopicRouter.get("/topic/today", async (_, res) => {
          },
       });
       if (!topicOfTheDay) {
-         return res.status(500).json({ error: { message: `The topic of today is not defined` } });
+         return next({ msg: "Topic of the day not defined", status: 404 });
       }
 
       let topic = topicOfTheDay.value as JsonObject;
       if (!topic) {
-         return res.status(500).json({ error: { message: `The topic of today is not defined` } });
+         return next({ msg: "Topic of the day not defined", status: 404 });
       }
 
       return res.status(200).json(topic);
    } catch (err) {
-      console.error(err);
       const errorMessage = formatPrismaError(err);
-      return res.status(500).json({ error: { message: `Failed to get the topic of today: ${errorMessage}` } });
+      return next({ msg: `Failed to get topic of today: ${errorMessage}`, status: 500 });
    }
 });

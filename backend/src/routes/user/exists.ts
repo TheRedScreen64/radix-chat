@@ -1,12 +1,13 @@
 import express from "express";
 import { z } from "zod";
 import { prisma } from "../../lib/prisma.js";
+import { formatPrismaError } from "../../lib/utils.js";
 
 export const existsRouter = express.Router();
 
-existsRouter.post("/user/exists", async (req, res) => {
+existsRouter.post("/user/exists", async (req, res, next) => {
    if (!req.body) {
-      return res.status(400).json({ error: { message: "No input provided" } });
+      return next({ msg: "No input provided", status: 400 });
    }
 
    const requestSchema = z.object({
@@ -17,35 +18,40 @@ existsRouter.post("/user/exists", async (req, res) => {
    const requestParams = requestSchema.safeParse(req.body);
    if (!requestParams.success) {
       const validationErrors = requestParams.error.flatten().fieldErrors;
-      return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
    }
    const { email, username } = requestParams.data;
 
-   let existingUser;
-   if (email != null && username != null) {
-      existingUser = await prisma.user.findUnique({
-         where: {
-            email,
-            username,
-         },
-      });
-   } else if (email != null) {
-      existingUser = await prisma.user.findUnique({
-         where: {
-            email,
-         },
-      });
-   } else if (username != null) {
-      existingUser = await prisma.user.findUnique({
-         where: {
-            username,
-         },
-      });
-   }
+   try {
+      let existingUser;
+      if (email != null && username != null) {
+         existingUser = await prisma.user.findUnique({
+            where: {
+               email,
+               username,
+            },
+         });
+      } else if (email != null) {
+         existingUser = await prisma.user.findUnique({
+            where: {
+               email,
+            },
+         });
+      } else if (username != null) {
+         existingUser = await prisma.user.findUnique({
+            where: {
+               username,
+            },
+         });
+      }
 
-   if (existingUser) {
-      return res.status(200).json({ exists: true });
-   } else {
-      return res.status(200).json({ exists: false });
+      if (existingUser) {
+         return res.status(200).json({ exists: true });
+      } else {
+         return res.status(200).json({ exists: false });
+      }
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      return res.status(500).json({ error: { message: `Failed to check if user exists: ${errorMessage}` } });
    }
 });

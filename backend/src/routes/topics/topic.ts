@@ -5,23 +5,23 @@ import { formatPrismaError } from "../../lib/utils.js";
 
 export const topicRouter = express.Router();
 
-topicRouter.post("/topic", async (req, res) => {
+topicRouter.post("/topics", async (req, res, next) => {
    if (!res.locals.user) {
-      return res.status(401).send("Not authorized");
+      return next({ msg: "Not authorized", status: 401 });
    }
    if (!req.body) {
-      return res.status(400).json({ error: { message: "No input provided" } });
+      return next({ msg: "No input provided", status: 400 });
    }
 
    const requestSchema = z.object({
-      title: z.string().min(1).max(100).trim(),
-      description: z.string().min(1).max(1000).trim().optional(),
+      title: z.string().trim().min(1).max(100),
+      description: z.string().trim().min(1).max(1000).optional(),
    });
 
    const requestParams = requestSchema.safeParse(req.body);
    if (!requestParams.success) {
       const validationErrors = requestParams.error.flatten().fieldErrors;
-      return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
    }
    const { title, description } = requestParams.data;
 
@@ -37,7 +37,7 @@ topicRouter.post("/topic", async (req, res) => {
          })
          .suggestedTopic();
       if (suggestedTopic) {
-         return res.status(400).json({ error: { message: "You already have suggested a topic today" } });
+         return next({ msg: "You have already suggested a topic today", status: 400 });
       }
 
       await prisma.topic.create({
@@ -57,20 +57,19 @@ topicRouter.post("/topic", async (req, res) => {
          },
       });
    } catch (err) {
-      console.error(err);
       const errorMessage = formatPrismaError(err);
-      return res.status(500).json({ error: { message: `Failed to create the topic: ${errorMessage}` } });
+      return next({ msg: `Failed to create topic: ${errorMessage}`, status: 500 });
    }
 
    return res.status(200).send();
 });
 
-topicRouter.get("/topics", async (req, res) => {
+topicRouter.get("/topics", async (req, res, next) => {
    if (!res.locals.user) {
-      return res.status(401).send("Not authorized");
+      return next({ msg: "Not authorized", status: 401 });
    }
    if (!req.body) {
-      return res.status(400).json({ error: { message: "No input provided" } });
+      return next({ msg: "No input provided", status: 400 });
    }
 
    const requestSchema = z.object({
@@ -80,7 +79,7 @@ topicRouter.get("/topics", async (req, res) => {
    const requestParams = requestSchema.safeParse(req.body);
    if (!requestParams.success) {
       const validationErrors = requestParams.error.flatten().fieldErrors;
-      return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
    }
    const { lastId } = requestParams.data;
 
@@ -105,12 +104,57 @@ topicRouter.get("/topics", async (req, res) => {
 
       if (topics) {
          return res.status(200).json(topics);
+      } else {
+         return next({ msg: "No topics found", status: 404 });
       }
    } catch (err) {
-      console.error(err);
       const errorMessage = formatPrismaError(err);
-      return res.status(500).json({ error: { message: `Failed to get topics: ${errorMessage}` } });
+      return next({ msg: `Failed to get topics: ${errorMessage}`, status: 500 });
+   }
+});
+
+topicRouter.get("/topics/:id", async (req, res, next) => {
+   if (!res.locals.user) {
+      return next({ msg: "Not authorized", status: 401 });
+   }
+   if (!req.body) {
+      return next({ msg: "No input provided", status: 400 });
    }
 
-   return res.status(200).send();
+   const requestSchema = z.object({
+      id: z.string().uuid().optional(),
+   });
+
+   const requestParams = requestSchema.safeParse(req.params);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
+      return next({ msg: "Wrong parameters", status: 400, errors: validationErrors });
+   }
+   const { id } = requestParams.data;
+
+   try {
+      const topic = await prisma.topic.findUnique({
+         where: {
+            id,
+         },
+         include: {
+            author: {
+               select: {
+                  name: true,
+                  username: true,
+                  avatarUrl: true,
+               },
+            },
+         },
+      });
+
+      if (topic) {
+         return res.status(200).json(topic);
+      } else {
+         return next({ msg: "No topic found", status: 404 });
+      }
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      return next({ msg: `Failed to get topic: ${errorMessage}`, status: 500 });
+   }
 });

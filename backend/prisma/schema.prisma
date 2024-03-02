@@ -9,17 +9,21 @@ datasource db {
 
 // Auth
 model User {
-   id             String    @id
-   createdAt      DateTime  @default(now())
-   email          String    @unique
-   username       String    @unique
+   id             String   @id
+   createdAt      DateTime @default(now())
+   email          String   @unique
+   username       String   @unique
    name           String
    hashedPassword String
    avatarUrl      String?
+
    sessions       Session[]
-   messages       Message[]
-   suggestedTopic Topic?    @relation("suggestedTopic")
+   globalMessages GlobalMessage[]
+   chatMessages   ChatMessage[]
+   suggestedTopic Topic?          @relation("suggestedTopic")
    votedTopics    Topic[]
+   chats          Chat[]
+   createdChats   Chat[]          @relation("chatOwner")
 }
 
 model Session {
@@ -30,13 +34,38 @@ model Session {
 }
 
 // Chat
-model Message {
+model GlobalMessage {
    id        String   @id @default(uuid())
    postedAt  DateTime @default(now())
    updatedAt DateTime @updatedAt
    content   String   @db.VarChar(2000)
    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
    userId    String
+}
+
+model ChatMessage {
+   id        String   @id @default(uuid())
+   postedAt  DateTime @default(now())
+   updatedAt DateTime @updatedAt
+   content   String   @db.VarChar(2000)
+   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+   userId    String
+   chat      Chat     @relation(fields: [chatId], references: [id])
+   chatId    String
+}
+
+model Chat {
+   id            String        @id @default(uuid())
+   createdAt     DateTime      @default(now())
+   lastMessageAt DateTime      @updatedAt
+   name          String        @db.VarChar(100)
+   description   String?       @db.VarChar(1024)
+   icon          String?
+   participants  User[]
+   messages      ChatMessage[]
+   // TODO: Fix onDelete
+   owner         User          @relation("chatOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+   ownerId       String
 }
 
 // Topic voting

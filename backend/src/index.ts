@@ -9,18 +9,33 @@ import { initWebsocket } from "./lib/websocket.js";
 import { loginRouter } from "./routes/auth/login.js";
 import { logoutRouter } from "./routes/auth/logout.js";
 import { signupRouter } from "./routes/auth/signup.js";
-import { mainRouter } from "./routes/index.js";
-import { messagesRouter } from "./routes/messages.js";
-import { todaysTopicRouter } from "./routes/topic/today.js";
-import { topicRouter } from "./routes/topic/topic.js";
-import { voteRouter } from "./routes/topic/vote.js";
+import { chatRouter } from "./routes/chats/chats.js";
+import { messagesRouter } from "./routes/global/messages.js";
+import { todaysTopicRouter } from "./routes/topics/today.js";
+import { topicRouter } from "./routes/topics/topic.js";
+import { voteRouter } from "./routes/topics/vote.js";
 import { existsRouter } from "./routes/user/exists.js";
-import { userInfoRouter } from "./routes/user/info.js";
+import { userInfoRouter } from "./routes/user/user.js";
 
 dotenv.config();
 
-const jsonErrorHandler = (err: any, req: any, res: any, next: any) => {
-   res.status(500).send({ error: err });
+const errorHandler = (err: any, req: any, res: any, next: any) => {
+   console.error(err);
+   if (!err.status) err.status = 500;
+   if (err.type) {
+      switch (err.type) {
+         case "entity.parse.failed":
+            return res.status(err.status).send({ error: { message: "Could not parse input" } });
+
+         default:
+            return res.status(err.status).send({ error: { type: err.type } });
+      }
+   }
+   if (err.errors) {
+      return res.status(err.status).send({ error: { message: err.msg, errors: err.errors } });
+   } else {
+      return res.status(err.status).send({ error: { message: err.msg } });
+   }
 };
 
 const app = express();
@@ -56,7 +71,6 @@ app.use(async (req, res, next) => {
 });
 
 app.use(
-   mainRouter,
    loginRouter,
    logoutRouter,
    signupRouter,
@@ -65,10 +79,16 @@ app.use(
    messagesRouter,
    voteRouter,
    topicRouter,
-   todaysTopicRouter
+   todaysTopicRouter,
+   chatRouter
 );
 
-app.use(jsonErrorHandler);
+app.use(errorHandler);
+
+// Route does not exist
+app.use((_, res) => {
+   return res.status(404).json({ error: { message: "Route not found" } });
+});
 
 server.listen(PORT, () => {
    console.log(`Listening on port ${PORT}`);

@@ -8,23 +8,23 @@ import { formatPrismaError } from "../../lib/utils.js";
 
 export const signupRouter = express.Router();
 
-signupRouter.post("/auth/signup", async (req, res) => {
+signupRouter.post("/auth/signup", async (req, res, next) => {
    if (!req.body) {
-      return res.status(400).json({ error: { message: "No input provided" } });
+      return next({ msg: "No input provided", status: 400 });
    }
 
    const requestSchema = z.object({
       email: z.string().email().trim().toLowerCase(),
-      username: z.string().min(3).max(30).trim().toLowerCase(),
-      name: z.string().min(1).max(50).trim(),
-      password: z.string().min(6).max(255).trim(),
+      username: z.string().trim().min(3).max(30).toLowerCase(),
+      name: z.string().trim().min(1).max(50),
+      password: z.string().trim().min(6).max(255),
       persistent: z.boolean(),
    });
 
    const requestParams = requestSchema.safeParse(req.body);
    if (!requestParams.success) {
       const validationErrors = requestParams.error.flatten().fieldErrors;
-      return res.status(400).json({ error: { message: "Wrong input", errors: validationErrors } });
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
    }
    const { email, username, name, password, persistent } = requestParams.data;
 
@@ -41,17 +41,16 @@ signupRouter.post("/auth/signup", async (req, res) => {
             hashedPassword,
          },
       });
-   } catch (err) {
-      console.error(err);
-      const errorMessage = formatPrismaError(err);
-      return res.status(500).json({ error: { message: `Failed to create the user: ${errorMessage}` } });
-   }
 
-   const session = await lucia.createSession(userId, {});
-   const sessionCookie = lucia.createSessionCookie(session.id);
-   if (persistent == true) {
-      return res.cookie(sessionCookie.name, sessionCookie.value, { maxAge: 7776000000 }).status(200).send();
-   } else {
-      return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send();
+      const session = await lucia.createSession(userId, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      if (persistent == true) {
+         return res.cookie(sessionCookie.name, sessionCookie.value, { maxAge: 7776000000 }).status(200).send();
+      } else {
+         return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send();
+      }
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      return next({ msg: `Failed to create user: ${errorMessage}`, status: 500 });
    }
 });

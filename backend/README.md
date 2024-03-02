@@ -82,7 +82,7 @@ Body:
 ```json
 {
    "email": "EMAIL (optional)",
-   "username": "USERNAME (optional)"
+   "username": "USERNAME (min 3, max 30, optional)"
 }
 ```
 
@@ -100,7 +100,7 @@ Returns all information about the user
 
 **Request**
 
-`GET /user/info`
+`GET /user`
 
 **Response Example**
 
@@ -120,19 +120,21 @@ Returns all information about the user
 
 Returns 50 messages
 
+Order: by post date desc
+
 > Tip:
-> Don't define lastId to get the first 50 messages,
-> define lastId to get 50 messages after the last topic of the messages fetched before.
+> Leave lastId undefined to get the first 50 messages,
+> define lastId (as the id of the last message in the response before) to get the next 50 messages.
 
 **Request**
 
-`GET /messages`
+`GET /global/messages`
 
 Body:
 
 ```json
 {
-   "lastId": "ID OF LAST FETCHED MESSAGE (uuid, optional)"
+   "lastId": "ID OF LAST MESSAGE (uuid, optional)"
 }
 ```
 
@@ -155,13 +157,18 @@ Body:
 ]
 ```
 
+**Alternative: Get message info by id**
+`GET /global/messages/{ID}`
+
 ## Topics - Get
 
 Returns 50 topics
 
+Order: by votes desc
+
 > Tip:
-> Don't define lastId to get the first 50 topics,
-> define lastId to get 50 topics after the last topic of the topics fetched before.
+> Leave lastId undefined to get the first 50 topics,
+> define lastId (as the id of the last topic in the response before) to get the next 50 topics.
 
 **Request**
 
@@ -171,7 +178,7 @@ Body:
 
 ```json
 {
-   "lastId": "ID OF LAST FETCHED TOPIC (uuid, optional)"
+   "lastId": "ID OF LAST TOPIC (uuid, optional)"
 }
 ```
 
@@ -208,18 +215,21 @@ Body:
 ]
 ```
 
+**Alternative: Get topic info by id**
+`GET /topics/{ID}`
+
 ## Topic - Suggest
 
 **Request**
 
-`POST /topic`
+`POST /topics`
 
 Body:
 
 ```json
 {
    "title": "TOPIC (Min length 1, Max length 100)",
-   "description": "DESCRIPTION (Optional, Min length 1, Max length 1000)
+   "description": "DESCRIPTION (Optional, Min length 1, Max length 1000)"
 }
 ```
 
@@ -258,6 +268,110 @@ Returns the topic of the day.
       "username": "jauch",
       "avatarUrl": null
    }
+}
+```
+
+## Chat - Get
+
+Returns 50 chats
+
+Order: by last message post date desc
+
+> Tip:
+> Leave lastId undefined to get the first 50 chats,
+> define lastId (as the id of the last chat in the response before) to get the next 50 chats.
+
+**Request**
+
+`GET /chats`
+
+Body:
+
+```json
+{
+   "lastId": "ID OF LAST CHAT (uuid, optional)"
+}
+```
+
+**Response Example**
+
+```json
+[
+   {
+      "id": "18c08dd5-dc91-460a-8204-e489ecd15525",
+      "createdAt": "2024-03-01T22:09:14.932Z",
+      "lastMessageAt": "2024-03-02T18:43:43.154Z",
+      "name": "some chat",
+      "description": null,
+      "icon": null,
+      "ownerId": "e1mg098ox3d4nun",
+      "owner": {
+         "name": "Günther Jauch",
+         "username": "jauch3",
+         "avatarUrl": null
+      }
+   }
+]
+```
+
+**Alternative: Get chat info by id**
+`GET /chats/{ID}`
+
+## Chat - Get Messages
+
+Returns 50 chats
+
+Order: by last message post date desc
+
+> Tip:
+> Leave lastId undefined to get the first 50 messages,
+> define lastId (as the id of the last message in the response before) to get the next 50 messages.
+
+**Request**
+
+`GET /chats/{ID}/messages`
+
+Body:
+
+```json
+{
+   "lastId": "ID OF LAST MESSAGE (uuid, optional)"
+}
+```
+
+**Response Example**
+
+```json
+[
+   {
+      "id": "8ab9d1ca-d876-4c68-8eae-d22bf9f3ff4f",
+      "postedAt": "2024-03-02T18:43:38.695Z",
+      "updatedAt": "2024-03-02T18:43:38.695Z",
+      "content": "some content",
+      "userId": "e1mg098ox3d4nun",
+      "chatId": "18c08dd5-dc91-460a-8204-e489ecd15525",
+      "user": {
+         "name": "Günther Jauch",
+         "username": "jauch3",
+         "avatarUrl": null
+      }
+   }
+]
+```
+
+## Chat - Create
+
+**Request**
+
+`POST /chats`
+
+Body:
+
+```json
+{
+   "name": "NAME (Min 1, Max 100)",
+   "description": "DESCRIPTION (Min 1, Max 1024, optional)",
+   "icon": "ICON (optional)"
 }
 ```
 
@@ -300,11 +414,25 @@ ws.onmessage = ({ data }) => {
 
 ## Message Types
 
-### Global message:
+### Global message
 
 ```json
 {
-   "type": "message",
-   "data": "string"
+   "type": "globalMessage",
+   "data": {
+      "content": "string (min 1, max 2000)"
+   }
+}
+```
+
+### Chat message
+
+```json
+{
+   "type": "chatMessage",
+   "data": {
+      "chatId": "string (uuid)",
+      "content": "string (min 1, max 2000)"
+   }
 }
 ```
