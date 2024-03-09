@@ -1,3 +1,5 @@
+let cms_pages = C_PRELOAD_CONST_PAGES;
+
 let cms_ov_responseText;
 let cms_ov_modifyer;
 let cms_init_body;

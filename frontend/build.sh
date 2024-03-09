@@ -13,12 +13,26 @@ corec=(utils/SHashmap.c
        Main.c)
 
 os=$(grep -oP '(?<=PRETTY_NAME=").*(?=")' /etc/os-release)
-coreoptions=(-D_VERSION='"'"$version_full"'"' -D_OS='"'"$os"'"') # -D_VERSION="0.1"
+coreoptions=(-D_VERSION='"'"$version_full"'"' -D_OS='"'"$os"'"' $(pkg-config --cflags --libs webkit2gtk-4.0) -lmicrohttpd) # -D_VERSION="0.1"
 arguments=()
 
 mkdir -p out
+mkdir -p out/assembler
 
-gcc "${corec[@]}" "$@" "${coreoptions[@]}" -DUTIL_DEBUG_CMPL -o out/core $(pkg-config --cflags --libs webkit2gtk-4.0) -lmicrohttpd
+for arg in "$@"; do
+  if [[ "$arg" == "--assembler" ]]; then
+    mkdir -p out/assembler
+    echo -e "Generating assembler output...\n"
+    for file in "${corec[@]}"; do
+      echo "Compiling $file..."  
+      gcc "$file" -S -masm=intel "${coreoptions[@]}" -o "out/assembler/${file##*/}.asm"
+    done
+    echo -e "\nAssembler output generated at out/assembler/core."
+    exit
+   fi 
+done
+
+gcc "${corec[@]}" "$@" "${coreoptions[@]}" -DUTIL_DEBUG_CMPL -o out/core
 
 # assemble html code
 chmod +x ./html/build.sh

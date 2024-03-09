@@ -1,4 +1,5 @@
 #include "../null.h"
+#include "../debug.h"
 #include "../Vector.h"
 #include "../String/String.h"
 
@@ -72,6 +73,8 @@ struct _freelink
 
 struct _nmap *nmap_openStorage(const char *name)
 {
+    assert_non_null(name);
+
     char *t = getenv("HOME");
     if (t == null)
     {
@@ -192,6 +195,9 @@ struct _nmap *nmap_openStorage(const char *name)
 
 NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
 {
+    assert_non_null(name);
+    assert_non_null(deviceId);
+
     xstrcreateft(sharedmem, (char *)name);
     xstrappends(&sharedmem, "_ndb");
 
@@ -290,7 +296,7 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
     }
     read(dbfd, map, sizeof(struct _nmap)); /* collect database object */
     /* load mmap */
-    //printf("map->map_addr: %llu, map->dbcapacity: %llu, dbfd: %d, map->dbsize: %llu\n", map->map_addr, map->dbcapacity, dbfd, map->dbsize);
+    // printf("map->map_addr: %llu, map->dbcapacity: %llu, dbfd: %d, map->dbsize: %llu\n", map->map_addr, map->dbcapacity, dbfd, map->dbsize);
     if (mmap(map->map_addr, map->dbcapacity, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED_NOREPLACE, dbfd, 0) == MAP_FAILED)
     {
         perror("nmap_openStorage mmap 2");
@@ -308,6 +314,8 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
 
 void nmap_closeStorage(NMap *map)
 {
+    assert_non_null(map);
+
     lseek(map->dbfd, 0, SEEK_SET);
     write(map->dbfd, map, sizeof(NMap));
     close(map->dbfd);
@@ -320,6 +328,8 @@ void nmap_closeStorage(NMap *map)
 
 void *nmap_optainDbDir(NMap *map, _nmap_size size)
 {
+    assert_non_null(map);
+
     if ((map->map_addr + map->dbsize) == map->dbdir)
         nmap_qalloc(map, size);
     return map->dbdir;
@@ -327,13 +337,15 @@ void *nmap_optainDbDir(NMap *map, _nmap_size size)
 
 const char *nmap_getDbName(struct _nmap *map)
 {
+    assert_non_null(map);
+
     return map->name;
 }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 
- _nmap_size nmap_getPageSize()
+_nmap_size nmap_getPageSize()
 {
     return __NMAP_DEFAULT_PAGESIZE;
 }
@@ -348,6 +360,8 @@ static __attribute__((__always_inline__)) void nmap_grow(struct _nmap *map)
 
 __attribute__((__always_inline__)) void *nmap_qalloc(struct _nmap *map, _nmap_size size)
 {
+    assert_non_null(map);
+
     size += sizeof(_nmap_head); /* add header size */
     /* round up to multiple of page size */
     size = (size - (size % __NMAP_DEFAULT_PAGESIZE)) + __NMAP_DEFAULT_PAGESIZE;
@@ -366,6 +380,8 @@ __attribute__((__always_inline__)) void *nmap_qalloc(struct _nmap *map, _nmap_si
 
 __attribute__((__always_inline__)) void *nmap_alloc(struct _nmap *map, _nmap_size size)
 {
+    assert_non_null(map);
+
     size += sizeof(_nmap_head); /* add header size */
     /* round up to multiple of page size */
     size = (size - (size % __NMAP_DEFAULT_PAGESIZE)) + __NMAP_DEFAULT_PAGESIZE;
@@ -401,6 +417,9 @@ __attribute__((__always_inline__)) void *nmap_alloc(struct _nmap *map, _nmap_siz
 
 void *nmap_seek(NMap *map, void *addr, _nmap_size size)
 {
+    assert_non_null(map);
+    assert_non_null(addr);
+
     register _nmap_size oldsize = _nmap_usableSize(addr);
 
     if (addr == ((map->dbsize + map->map_addr) - oldsize)) /* check if address is on top to increase size */
@@ -430,6 +449,9 @@ void *nmap_seek(NMap *map, void *addr, _nmap_size size)
 
 void *nmap_realloc(NMap *map, void *addr, _nmap_size size)
 {
+    assert_non_null(map);
+    assert_non_null(addr);
+
     register _nmap_head *ret = nmap_alloc(map, size);
     memcpy(ret, addr, _nmap_usableSize(addr));
     nmap_free(map, addr); /* free old buff */
@@ -438,12 +460,17 @@ void *nmap_realloc(NMap *map, void *addr, _nmap_size size)
 
 _nmap_size nmap_usableSize(void *addr)
 {
+    assert_non_null(addr);
+
     return _nmap_usableSize(addr);
 }
 #pragma GCC diagnostic pop
 
 void nmap_free(NMap *map, void *addr)
 {
+    assert_non_null(map);
+    assert_non_null(addr);
+
     register struct _freelink *link = (struct _freelink *)nmap_alloc(map, sizeof(struct _freelink));
     link->next = map->dbfreelist;
     link->buff = (((_nmap_head *)addr) - 1); /* remove header */

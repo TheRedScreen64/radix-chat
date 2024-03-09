@@ -10,6 +10,7 @@ extern "C"
 #endif
 
 #include "String/String.h"
+#include "debug.h"
 
 #include <malloc.h>
 #include <string.h>

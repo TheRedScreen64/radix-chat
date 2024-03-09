@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <immintrin.h>
 
+#include "debug.h"
 #include "null.h"
 
 #define Node struct _hashnode
@@ -61,11 +62,16 @@ Hashmap *hm_create()
 
 void hm_putp(Hashmap *hm, Pair *p)
 {
+    assert_non_null(hm);
+    assert_non_null(p);
+
     hm_put(hm, p->key, p->value);
 }
 
 void hm_put(Hashmap *hm, K key, V value)
 {
+    assert_non_null(hm);
+
     /* resize map if there are more elements than buckets */
     if (hm->size++ == hm->capacity)
         hm_resize(hm);
@@ -91,6 +97,8 @@ void hm_put(Hashmap *hm, K key, V value)
 
 void hm_set(Hashmap *hm, K key, V value)
 {
+    assert_non_null(hm);
+
     /* resize map if there are more elements than buckets */
     if (hm->size++ == hm->capacity)
         hm_resize(hm);
@@ -127,6 +135,8 @@ void hm_set(Hashmap *hm, K key, V value)
 
 int hm_contains(Hashmap *hm, K key)
 {
+    assert_non_null(hm);
+
     hasht index = hm_hash(key) % hm->capacity;
     Node *bucket = getBucket(index);
     /* check if bucket of index even contains nodes */
@@ -139,6 +149,8 @@ int hm_contains(Hashmap *hm, K key)
 
 V hm_get(Hashmap *hm, K key)
 {
+    assert_non_null(hm);
+
     hasht index = hm_hash(key) % hm->capacity;
     Node *bucket = getBucket(index);
     /* check if bucket of index even contains nodes */
@@ -151,6 +163,8 @@ V hm_get(Hashmap *hm, K key)
 
 V hm_pop(Hashmap *hm, K key)
 {
+    assert_non_null(hm);
+
     hasht index = hm_hash(key) % hm->capacity;
     register Node *bucket = getBucket(index);
     register Node *prev = null;
@@ -179,6 +193,8 @@ V hm_pop(Hashmap *hm, K key)
 
 void hm_remove(Hashmap *hm, K key)
 {
+    assert_non_null(hm);
+
     hasht index = hm_hash(key) % hm->capacity;
     register Node *bucket = getBucket(index);
     register Node *prev = null;
@@ -207,6 +223,8 @@ void hm_remove(Hashmap *hm, K key)
 
 Hashmap *hm_copy(Hashmap *hm)
 {
+    assert_non_null(hm);
+
     Hashmap *ret = malloc(sizeof(Hashmap));
     ret->size = hm->size;
     ret->capacity = hm->capacity;
@@ -260,6 +278,8 @@ static inline void hm_insertToBucketList(Node **list, Node *node, hasht capacity
 
 void hm_resize(Hashmap *hm)
 {
+    assert_non_null(hm);
+
     Node **cap = (hm->table + hm->capacity);
     hm->capacity <<= 1; /* double amounts of buckets */
     Node **new_table = (Node **)malloc(hm->capacity * sizeof(Node *));
@@ -286,6 +306,9 @@ void hm_resize(Hashmap *hm)
 
 void hm_iterate(Hashmap *hm, void (*_iterator)(Pair *p))
 {
+    assert_non_null(hm);
+    assert_non_null(_iterator);
+
     Node **cap = (hm->table + hm->capacity);
     for (Node **bucket = hm->table; bucket != cap; ++bucket)
     {
@@ -298,6 +321,8 @@ void hm_iterate(Hashmap *hm, void (*_iterator)(Pair *p))
 
 void hm_delete(Hashmap *hm)
 {
+    assert_non_null(hm);
+
     Node **cap = (hm->table + hm->capacity);
     for (Node **bucket = hm->table; bucket != cap; ++bucket)
     {

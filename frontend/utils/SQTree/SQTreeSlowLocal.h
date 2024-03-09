@@ -10,12 +10,15 @@ extern "C"
 
 #include <malloc.h>
 
+#include "../Vector.h"
+
     struct _qlNode
     {
         char *key;
         char *value;
         struct _qlNode *ln; /* left node */
         struct _qlNode *rn; /* right node */
+        int free;
     };
 
     typedef struct _qlNode SQLNode;
@@ -24,13 +27,13 @@ extern "C"
 
     SQLTree *sqtr_local_create();
 
-    void _sqtr_local_clonen(SQLNode *node1, SQLNode *node2);
-
     SQLTree *sqtr_local_clone(SQLTree *tree);
 
     int sqtr_local_empty(SQLTree *tree);
 
     void sqtr_local_set(SQLTree *tree, char *key, char *value);
+
+    void sqtr_local_foreach(SQLNode *branch, void (*itr)(SQLNode *node));
 
     void *sqtr_local_get(SQLTree *tree, char *key);
 
@@ -44,6 +47,21 @@ extern "C"
     for (; !sqtr_local_empty(tree); free(sqtr_local_popl(tree))) \
         ;                                                        \
     free(tree);
+
+#define sqtr_local_foreach_nr(tree, itr_func, itr_node_name)          \
+    Vector(SQLNode *) itr_node_name##_stack = vect_create(SQLNode *); \
+    register SQLNode *itr_node_name = tree;                           \
+    while (itr_node_name != 0 || itr_node_name##_stack._size != 0)    \
+    {                                                                 \
+        while (itr_node_name != 0)                                    \
+        {                                                             \
+            vect_pushback(itr_node_name##_stack, itr_node_name);      \
+            itr_node_name = itr_node_name->ln;                        \
+        }                                                             \
+        itr_node_name = vect_pop(itr_node_name##_stack);              \
+        itr_func;                                                     \
+        itr_node_name = itr_node_name->rn;                            \
+    }
 
 #ifdef __cplusplus
 }

@@ -3,6 +3,7 @@
 #include "SQTree.h"
 #include "NString.h"
 #include "../null.h"
+#include "../debug.h"
 
 struct _qTree
 {
@@ -28,6 +29,8 @@ struct _qNode
 
 SQTree *sqtr_open(const char *name)
 {
+    assert_non_null(name);
+
     /* optain map (file memory allocator) */
     xstrcreateft(_name, (char *)name);
     xstrappends(&_name, "_sqtr");
@@ -50,12 +53,16 @@ SQTree *sqtr_open(const char *name)
 
 void sqtr_set(SQTree *tree, char *key, char *value)
 {
+    assert_non_null(tree);
+    assert_non_null(key);
+    assert_str_not_empty(key);
+
     register SQNode *n = (SQNode *)tree;
 insert:
-    for (register unsigned int i = 0; *key != '\00'; i++)
+    for (register unsigned int i = 0; key[i] != '\00'; i++)
     {
         /* node is already inserted to tree / free node is on path -> update value */
-        if (n->free == 1 || ((*n->key == *key) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
+        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
         {
             if (n->free == 1)
             {
@@ -94,14 +101,18 @@ insert:
     goto insert;
 }
 
-void sqtr_sets(SQTree *tree, char* key, char *value, int value_size)
+void sqtr_sets(SQTree *tree, char *key, char *value, int value_size)
 {
+    assert_non_null(tree);
+    assert_non_null(key);
+    assert_str_not_empty(key);
+
     register SQNode *n = (SQNode *)tree;
 insert:
-    for (register unsigned int i = 0; *key != '\00'; i++)
+    for (register unsigned int i = 0; key[i] != '\00'; i++)
     {
         /* node is already inserted to tree / free node is on path -> update value */
-        if (n->free == 1 || ((*n->key == *key) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
+        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
         {
             if (n->free == 1)
             {
@@ -153,13 +164,17 @@ struct _nmap
 
 SQNode *sqtr_optain(SQTree *tree, char *key)
 {
-    register  SQNode *n = (SQNode *)tree;
+    assert_non_null(tree);
+    assert_non_null(key);
+    assert_str_not_empty(key);
+
+    register SQNode *n = (SQNode *)tree;
     // printf("map start: 0x%lx, map end: 0x%lx\n", ((struct _nmap *)tree->map)->map_addr, ((struct _nmap *)tree->map)->map_addr + ((struct _nmap *)tree->map)->dbsize);
     // printf("true 1\n");
     for (register unsigned int i = 0;; i++)
         // printf("true 1.5\n");
         // printf("n->key: 0x%lx, key: 0x%lx\n", n->key, key);
-        if (((*n->key == *key) && strequals(n->key, key))) /*  node is found -> return  */
+        if (((n->key[i] == key[i]) && strequals(n->key, key))) /*  node is found -> return  */
             return n;
 
         /* take right branch */
@@ -178,6 +193,9 @@ SQNode *sqtr_optain(SQTree *tree, char *key)
 
 void sqtr_foreach(SQNode *branch, void (*itr)(SQNode *node))
 {
+    assert_non_null(tree);
+    assert_non_null(itr);
+
     if (branch == null)
         return;
     itr(branch);
@@ -187,11 +205,15 @@ void sqtr_foreach(SQNode *branch, void (*itr)(SQNode *node))
 
 void sqtr_close(SQTree *tree)
 {
+    assert_non_null(tree);
+
     nmap_closeStorage(tree->map);
 }
 
 debug int sqtr_longbr(SQTree *tree)
 {
+    assert_non_null(tree);
+
     SQNode *n = (SQNode *)tree;
     int i = 0;
 
@@ -209,6 +231,8 @@ debug int sqtr_longbr(SQTree *tree)
 
 debug int sqtr_size(SQNode *branch, int size)
 {
+    assert_non_null(branch);
+
     if (branch == null)
         return size;
     size++;

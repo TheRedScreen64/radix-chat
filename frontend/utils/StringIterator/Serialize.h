@@ -10,6 +10,8 @@
 
 void itr_printObject(AbstractValue *obj)
 {
+    assert_non_null(obj);
+
     printf("{\n");
     switch (obj->valueType)
     {
@@ -51,6 +53,9 @@ void itr_printObject(AbstractValue *obj)
 
 void itr_stringify(AbstractValue *obj, XString *str)
 {
+    assert_non_null(obj);
+    assert_non_null(str);
+
     switch (obj->valueType)
     {
         itr_str(IT_NONE, xstrappends(str, "undefined"));
@@ -74,11 +79,14 @@ void itr_stringify(AbstractValue *obj, XString *str)
         itr_str(IT_STRING, itr_w(xstrappends(str, obj->valueData.string_val), '"'));
         itr_str(IT_TEXT, xstrappends(str, obj->valueData.string_val));
     }
-    //itr_clearAbstract(obj); /* automatically delete abstract */
+    // itr_clearAbstract(obj); /* automatically delete abstract */
 }
 
 void itr_stringifyArray(JsonArray *arr, XString *str)
 {
+    assert_non_null(arr);
+    assert_non_null(str);
+
     if (arr->_size == 0)
     {
         xstrappends(str, "[]");
@@ -96,6 +104,9 @@ void itr_stringifyArray(JsonArray *arr, XString *str)
 
 void itr_stringifyObject(JsonObject *obj, XString *str)
 {
+    assert_non_null(obj);
+    assert_non_null(str);
+
     if (obj->size == 0)
     {
         xstrappends(str, "{}");
@@ -114,11 +125,14 @@ void itr_stringifyObject(JsonObject *obj, XString *str)
 
 void itr_dump(AbstractValue *val, const char *file)
 {
+    assert_non_null(val);
+    assert_non_null(file);
+
     XString str = xstrcreate();
 
     itr_stringify(val, &str);
 
-    int fd = open(file, O_RDWR | O_CREAT,  S_IRUSR | S_IWUSR);
+    int fd = open(file, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 
     if (fd == -1)
     {

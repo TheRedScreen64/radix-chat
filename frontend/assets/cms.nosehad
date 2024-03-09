@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <head>
-    <meta>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="cms-dynamic-header">
     <script type="text/javascript">
+let cms_pages = C_PRELOAD_CONST_PAGES;
 let cms_ov_responseText;
 let cms_ov_modifyer;
 let cms_init_body;

@@ -10,6 +10,9 @@ void __attribute__((ifunc("itr_abstractDispatcher"))) itr_getAbstract(StringIter
 __attribute__((optimize("O0"))) void
 _itr_getAbstract(StringIterator *iterator, AbstractValue *value)
 {
+    assert_non_null(iterator);
+    assert_non_null(value);
+
     /* check first char */
     sticlbl_jumpa(itr_getjump((unsigned char)*__str__));
 
@@ -66,6 +69,8 @@ _itr_getAbstract(StringIterator *iterator, AbstractValue *value)
 
 void itr_clearAbstract(AbstractValue *value)
 {
+    assert_non_null(value);
+
     switch (value->valueType)
     {
     case IT_JSON:

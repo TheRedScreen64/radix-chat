@@ -1,18 +1,21 @@
 #include "SQTreeSlowLocal.h"
 
-#include <string.h>
-
+#include "../String/String.h"
+#include "../debug.h"
 #include "../null.h"
+
+#include <string.h>
 
 SQLTree *sqtr_local_create()
 {
     SQLTree *res = (SQLTree *)malloc(sizeof(SQLTree));
-    res->key = null, res->rn = null, res->ln = null;
+    res->key = "", res->rn = null, res->ln = null, res->free = 1;
     return res;
 }
 
-void _sqtr_local_clonen(SQLNode *node1, SQLNode *node2)
+static void _sqtr_local_clonen(SQLNode *node1, SQLNode *node2)
 {
+
     node2->key = node1->key;
     node2->value = node1->value;
 
@@ -29,8 +32,22 @@ void _sqtr_local_clonen(SQLNode *node1, SQLNode *node2)
     }
 }
 
+void sqtr_local_foreach(SQLNode *branch, void (*itr)(SQLNode *node))
+{
+    assert_non_null(branch);
+    assert_non_null(itr);
+
+    if (branch == null)
+        return;
+    itr(branch);
+    sqtr_local_foreach(branch->rn, itr);
+    sqtr_local_foreach(branch->ln, itr);
+}
+
 SQLTree *sqtr_local_clone(SQLTree *tree)
 {
+    assert_non_null(tree);
+
     SQLTree *res = (SQLTree *)malloc(sizeof(SQLTree));
     _sqtr_local_clonen(tree, res);
     return res;
@@ -50,102 +67,110 @@ static int sqtr_local_keyeqval(char *key1, char *key2)
 
 int sqtr_local_empty(SQLTree *tree)
 {
+    assert_non_null(tree);
+
     if (tree->ln == null && tree->rn == null)
         return 1;
     return 0;
 }
 
+#define sqtr_createNode(_key, _value) ({                                                                                              \
+    /* qalloc since sqtr algorithm doesn't use nmap_free internally there is no need to take the overhead of checking the freelist */ \
+    register SQLNode *new = (SQLNode *)malloc(sizeof(SQLNode));                                                                       \
+    new->key = _key;                                                                                                                  \
+    new->value = _value;                                                                                                              \
+    new->rn = null;                                                                                                                   \
+    new->ln = null;                                                                                                                   \
+    new->free = 0;                                                                                                                    \
+    new;                                                                                                                              \
+})
+
 void sqtr_local_set(SQLTree *tree, char *key, char *value)
 {
-    if (tree == null || key == null)
-        return;
-    // printf("set\n");
-    // printf("%lld -> %s\n", key, key);
-    char *_key = key;
-    /* right shift bits */
-    unsigned char shifting_bits = 0;
-    for (; *key != 0; shifting_bits++)
+    assert_non_null(tree);
+    assert_non_null(key);
+    assert_str_not_empty(key);
+
+    //printf("Setting %ss\n", key);
+
+    register SQLNode *n = (SQLNode *)tree;
+insert:
+    for (register unsigned int i = 0; key[i] != '\00'; i++)
     {
-        // printf("tree: %lld\n", tree);
-        // printf("key: %lld\n", tree->key);
-        // printf("key: %s\n", tree->key);
-        if (tree->key != null && sqtr_local_keyeqval(tree->key, _key) == 1)
+        /* node is already inserted to tree / free node is on path -> update value */
+        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
         {
-            tree->value = value;
+            //printf("overriding since %s == %s\n", n->key, key);
+            if (n->free == 1)
+            {
+                n->key = key;
+                n->free = 0;
+            }
+            n->value = value;
             return;
         }
-        if (shifting_bits == 8)
+
+        /* take right branch */
+        if ((key[i / 8] >> (i % 8)) & 1) /* qtree algorithm look github/swiftense/qtree for reference */
         {
-            shifting_bits = 0;
-            key++; /* increase byte right shift*/
-        }
-        if (((*key) >> shifting_bits) & 1)
-        {
-            if (tree->rn == null) /* if right node is null -> set right node to insert node */
+            if (n->rn != null)
             {
-                SQLNode *insert = (SQLNode *)malloc(sizeof(SQLNode));
-                // printf("New Tree: %lld\n", insert);
-                insert->rn = null;
-                insert->ln = null;
-                insert->key = key;
-                insert->value = value;
-                tree->rn = insert;
-                return;
+                n = n->rn;
+                continue;
             }
-            /* not directly set tree node, to reinsert leafs of node that is beeing removed */
-            tree = tree->rn;
+            n->rn = sqtr_createNode(
+                key,
+                value);
+            return;
+        }
+
+        /* take left branch */
+        if (n->ln != null)
+        {
+            n = n->ln;
             continue;
         }
-        if (tree->ln == null) /* if left node is null -> set left node to insert node */
-        {
-            SQLNode *insert = (SQLNode *)malloc(sizeof(SQLNode));
-            // printf("New Tree: %lld\n", insert);
-            insert->rn = null;
-            insert->ln = null;
-            insert->key = key;
-            insert->value = value;
-            tree->ln = insert;
-            return;
-        }
-        tree = tree->ln;
-        continue;
+        n->ln = sqtr_createNode(
+            key,
+            value);
+        return;
     }
+    goto insert;
 }
+
+#undef sqtr_createNode
 
 void *sqtr_local_get(SQLTree *tree, char *key)
 {
-    char *_key = key;
-    /* right shift bits */
-    unsigned char shifting_bits = 0;
-    for (; *key != 0; shifting_bits++)
+    assert_non_null(tree);
+    assert_non_null(key);
+    assert_str_not_empty(key);
+
+    register SQLNode *n = (SQLNode *)tree;
+// printf("map start: 0x%lx, map end: 0x%lx\n", ((struct _nmap *)tree->map)->map_addr, ((struct _nmap *)tree->map)->map_addr + ((struct _nmap *)tree->map)->dbsize);
+// printf("true 1\n");
+get:
+    for (register unsigned int i = 0; key[i] != '\00'; i++)
     {
-        if (tree->key != null && strcmp(tree->key, _key) == 0)
-        {
-            return tree->value;
-        }
-        if (shifting_bits == 8)
-        {
-            shifting_bits = 0;
-            key++; /* increase byte right shift*/
-        }
-        if (((*key) >> shifting_bits) & 1)
-        {
-            if (tree->rn == null)
-            {
-                /* return if branch ends */
+
+        // printf("true 1.5\n");
+        if (((n->key[i] == key[i]) && strequals(n->key, key))) /*  node is found -> return  */
+            return n->value;
+
+        /* take right branch */
+        else if ((key[i / 8] >> (i % 8)) & 1) /* qtree algorithm look github/swiftense/qtree for reference */
+            if ((n = n->rn) != null)
+                continue;
+            else
                 return null;
-            }
-            /* not directly set tree node, to reinsert leafs of node that is beeing removed */
-            tree = tree->rn;
+
+        /* take left branch */
+        else if ((n = n->ln) != null)
             continue;
-        }
-        if (tree->ln == null)
-        {
+        else
             return null;
-        }
-        tree = tree->ln;
-        continue;
     }
+    goto get;
 }
 
 static inline void _sqtr_local_insertn(SQLNode *start, unsigned int startb, SQLNode *insert)
@@ -194,6 +219,10 @@ static inline void _sqtr_local_insertn(SQLNode *start, unsigned int startb, SQLN
 
 void sqtr_local_delete(SQLTree *tree, char *key)
 {
+    assert_non_null(tree);
+    assert_non_null(key);
+    assert_str_not_empty(key);
+
     SQLNode *next;
     char *_key = key;
     unsigned char shifting_bits = 0;
@@ -252,6 +281,9 @@ void sqtr_local_delete(SQLTree *tree, char *key)
 
 char *sqtr_local_pop(SQLTree *tree, char *key)
 {
+    assert_non_null(tree);
+    assert_non_null(key);
+
     SQLNode *next;
     char *_key = key;
     unsigned char shifting_bits = 0;
@@ -314,6 +346,8 @@ char *sqtr_local_pop(SQLTree *tree, char *key)
 
 SQLNode *sqtr_local_popl(SQLTree *tree)
 {
+    assert_non_null(tree);
+
     SQLNode *_tree = tree;
     SQLNode *previous = tree;
     for (;;)
@@ -340,6 +374,7 @@ SQLNode *sqtr_local_popl(SQLTree *tree)
                     previous->rn = null;
                 else
                     previous->ln = null;
+                // printf("returning key: %s\n", tree->key);
                 return tree;
             }
         }

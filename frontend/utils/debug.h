@@ -16,6 +16,14 @@ extern "C"
 
 /* general debug mode */
 #ifdef UTIL_DEBUG_CMPL
+#include "ansicodes.h"
+
+/* assert functions */
+#define ASSERT_FAILED_ERR(ASSERT_ID) "<" AC_RED  "error" AC_RESET "> assert " AC_BOLD #ASSERT_ID AC_RESET " in " AC_BOLD"%s" AC_RESET" failed\n", __func__
+#define assert_str_not_empty(str) if(*str == '\00') { printf(ASSERT_FAILED_ERR(assert_str_not_empty)); _Exit(1); }
+#define assert_non_null(str) if(str == null) { printf(ASSERT_FAILED_ERR(assert_str_not_empty)); _Exit(1); }
+
+/* logger functions */
 #define UTIL_STD 1
 /* used to log something */
 #define debg(d) log_time(d)
@@ -26,6 +34,12 @@ extern "C"
 /* used to print sth */
 #define debgt(a) printf(a)
 #else
+/* assert functions */
+#define assert_str_not_empty(str) ;
+#define assert_non_null(ptr) ;
+
+
+/* logger functions */
 /* debug print with one param */
 #define debg(d) ;
 /* debug print with one argument plus one additional */
@@ -79,7 +93,6 @@ extern "C"
 #define timestart(obj) ;
 
 #define timepush(obj) ;
-
 
 #endif
 

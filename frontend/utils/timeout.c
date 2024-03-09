@@ -3,6 +3,7 @@
 #include "MapT.h"
 #include "Hashmap.h"
 #include "atomic.h"
+#include "debug.h"
 
 #include <pthread.h>
 
@@ -19,6 +20,8 @@
 
 static void timeout_cycle(struct timeout_cycle *cycle)
 {
+    assert_non_null(cycle);
+
     for (register long long timeout = cycle->cyc_timeout; cycle->cyc_active; cycle->cyc_current++)
     {
         usleep(timeout);
@@ -54,8 +57,11 @@ struct timeout_cycle *timeout_cycle_init(long long timeout_ms)
     }
 }
 
-void timeout_set(struct timeout_cycle* cycle, long long t_cycles, void (*handler)())
+void timeout_set(struct timeout_cycle *cycle, long long t_cycles, void (*handler)())
 {
+    assert_non_null(cycle);
+    assert_non_null(handler);
+
     atomice_run(
         cycle->cyc_lock,
         {
@@ -63,7 +69,9 @@ void timeout_set(struct timeout_cycle* cycle, long long t_cycles, void (*handler
         });
 }
 
-void timeout_cycle_stop(struct timeout_cycle* cycle)
+void timeout_cycle_stop(struct timeout_cycle *cycle)
 {
+    assert_non_null(cycle);
+
     cycle->cyc_active = 0;
 }

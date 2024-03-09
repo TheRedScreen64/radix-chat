@@ -6,7 +6,7 @@
 char _num_[36] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 #ifndef DEF_FUNC_PREFIX
-    #define DEF_FUNC_PREFIX(n) xstr##n
+#define DEF_FUNC_PREFIX(n) xstr##n
 #endif
 #ifdef DEF_CONVERT_RADIX
 #define CUSTOM_CONVERT_RADIX 1
@@ -35,6 +35,8 @@ char _base64_[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456
 /* convert number functions */
 void DEF_FUNC_PREFIX(appendi)(XString *str, int num)
 {
+   assert_non_null(str);
+
     if (num < 0)
     {
         xstrappendToBuff(str, '-');
@@ -49,6 +51,8 @@ void DEF_FUNC_PREFIX(appendi)(XString *str, int num)
 
 void DEF_FUNC_PREFIX(appendl)(XString *str, long long num)
 {
+   assert_non_null(str);
+
     if (num < 0)
     {
         xstrappendToBuff(str, '-');
@@ -63,6 +67,8 @@ void DEF_FUNC_PREFIX(appendl)(XString *str, long long num)
 
 void DEF_FUNC_PREFIX(appendui)(XString *str, unsigned int num)
 {
+   assert_non_null(str);
+
     register unsigned int reversed = 0;
     for (; num != 0; num /= DEF_CONVERT_RADIX)
         reversed = reversed * DEF_CONVERT_RADIX + (num % DEF_CONVERT_RADIX);
@@ -72,6 +78,8 @@ void DEF_FUNC_PREFIX(appendui)(XString *str, unsigned int num)
 
 void DEF_FUNC_PREFIX(appendul)(XString *str, unsigned long long num)
 {
+   assert_non_null(str);
+
     register unsigned long long reversed = 0;
     for (; num != 0; num /= DEF_CONVERT_RADIX)
         reversed = reversed * DEF_CONVERT_RADIX + (num % DEF_CONVERT_RADIX);
@@ -81,6 +89,8 @@ void DEF_FUNC_PREFIX(appendul)(XString *str, unsigned long long num)
 
 void DEF_FUNC_PREFIX(appendf)(XString *str, float f)
 {
+   assert_non_null(str);
+
     /* value before point is the same for any conversion function */
     if (f < 0)
     {
@@ -109,6 +119,8 @@ void DEF_FUNC_PREFIX(appendf)(XString *str, float f)
 
 void DEF_FUNC_PREFIX(appendd)(XString *str, double f)
 {
+   assert_non_null(str);
+
     /* value before point is the same for any conversion function */
     if (f < 0)
     {
@@ -139,6 +151,8 @@ void DEF_FUNC_PREFIX(appendd)(XString *str, double f)
 
 void DEF_FUNC_PREFIX(appendfp)(XString *str, float f, int precision)
 {
+   assert_non_null(str);
+
     /* value before point is the same for any conversion function */
     if (f < 0)
     {
@@ -169,6 +183,8 @@ void DEF_FUNC_PREFIX(appendfp)(XString *str, float f, int precision)
 
 void DEF_FUNC_PREFIX(appenddp)(XString *str, double f, int precision)
 {
+   assert_non_null(str);
+
     /* value before point is the same for any conversion function */
     if (f < 0)
     {
@@ -203,8 +219,6 @@ void DEF_FUNC_PREFIX(appenddp)(XString *str, double f, int precision)
 
 /// custom functions - end
 
-
-
 /// default functions - start
 
 #define DEF_CONVERT_RADIX 16 /* memory addresses are always displayed in hexadecimal */
@@ -212,6 +226,8 @@ void DEF_FUNC_PREFIX(appenddp)(XString *str, double f, int precision)
 #define strnumchar(num) _num_[num]
 void xstrappendmemaddr(XString *str, unsigned long long addr)
 {
+   assert_non_null(str);
+
     xstrappendToBuff(str, '0');
     xstrappendToBuff(str, 'x');
     register unsigned long long reversed = 0;
@@ -226,6 +242,8 @@ void xstrappendmemaddr(XString *str, unsigned long long addr)
 
 void xstrappendformat(XString *str, char *format, ...)
 {
+   assert_non_null(str);
+
     /* get arguments */
     __builtin_va_list args;
     __builtin_va_start(args, format);
@@ -270,7 +288,7 @@ void xstrappendformat(XString *str, char *format, ...)
                     /* code */
                     break;
                 case 'F': /* lF for double floating point values */
-                    format += 2;
+                    format += 1;
                     xstrappendd(str, __builtin_va_arg(args, double));
                     break;
 
@@ -280,16 +298,14 @@ void xstrappendformat(XString *str, char *format, ...)
                     break;
                 }
                 break;
-            case 'F': /* F for single floating point values */
-                format += 1;
+            case 'F':                                             /* F for single floating point values */
                 xstrappendf(str, __builtin_va_arg(args, double)); /* ‘float’ is promoted to ‘double’ when passed through ‘...’ */
                 break;
             case 'u': /* u for unsigned integer values */
-                format += 1;
                 xstrappendui(str, __builtin_va_arg(args, unsigned int));
                 break;
             case 'c': /* c for unsigned character values */
-                format += 1;
+                // format += 1;
                 {
                     if ((str->_size) == malloc_usable_size(str->_str))
                         str->_str = realloc(str->_str, malloc_usable_size(str->_str) * 2);
@@ -297,11 +313,11 @@ void xstrappendformat(XString *str, char *format, ...)
                 }
                 break;
             case 's': /* s for string values */
-                format += 1;
+                // format += 1;
                 xstrappends(str, __builtin_va_arg(args, char *));
                 break;
             case 'p': /* p for memory addresses */
-                format += 1;
+                // format += 1;
                 xstrappendmemaddr(str, __builtin_va_arg(args, unsigned long long));
                 break;
             }

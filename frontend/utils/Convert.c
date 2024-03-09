@@ -2,6 +2,8 @@
 
 #include "Convert.h"
 
+#include "debug.h"
+
 /* the amount of digits of original floating point that should be used in converted String */
 /* the amount of zeros representate the amount of digits that are put into the new string after converting the floating point*/
 #define FLOAT_CONVERSION_CONSTANT 100
@@ -26,6 +28,8 @@
 /* return type by numberType */
 int convert_getType(char *cstr)
 {
+    assert_non_null(cstr);
+
     int type = NT_INT;
     if (*cstr == '-')
         ++cstr;
@@ -58,6 +62,8 @@ int convert_getType(char *cstr)
 
 int convert_LongToCStr(long long l, char *dest)
 {
+    assert_non_null(dest);
+
     char *b = (char *)__builtin_alloca(MAX_LENGTH_INT);
     char *a = b;
     char n;
@@ -90,6 +96,8 @@ int convert_LongToCStr(long long l, char *dest)
 
 int convert_ULongToCStr(unsigned long long l, char *dest)
 {
+    assert_non_null(dest);
+
     char *b = (char *)__builtin_alloca(MAX_LENGTH_UINT);
     char *a = b;
 
@@ -112,6 +120,8 @@ int convert_ULongToCStr(unsigned long long l, char *dest)
 
 int convert_IntToCStr(int i, char *dest)
 {
+    assert_non_null(dest);
+
     char *b = (char *)__builtin_alloca(MAX_LENGTH_INT);
     char *a = b;
     char n = 0;
@@ -144,6 +154,8 @@ int convert_IntToCStr(int i, char *dest)
 
 int convert_UIntToCStr(unsigned int i, char *dest)
 {
+    assert_non_null(dest);
+
     char *b = (char *)__builtin_alloca(MAX_LENGTH_UINT);
     char *a = b;
 
@@ -166,6 +178,8 @@ int convert_UIntToCStr(unsigned int i, char *dest)
 
 unsigned int convert_CStrToUInt(char *cstr)
 {
+    assert_non_null(cstr);
+
     unsigned int i = 0;
     for (; *cstr != '\0'; ++cstr)
         i = i * 10 + *cstr - '0';
@@ -174,6 +188,8 @@ unsigned int convert_CStrToUInt(char *cstr)
 
 int convert_CStrToInt(char *cstr)
 {
+    assert_non_null(cstr);
+
     char n;
     if (*cstr == '-') /* check if number should be negative */
     {
@@ -192,6 +208,8 @@ int convert_CStrToInt(char *cstr)
 
 unsigned long long convert_CStrToULong(char *cstr)
 {
+    assert_non_null(cstr);
+
     unsigned long long i = 0;
     for (; *cstr != '\0'; ++cstr)
         i = i * 10 + *cstr - '0';
@@ -200,6 +218,8 @@ unsigned long long convert_CStrToULong(char *cstr)
 
 long long convert_CStrToLong(char *cstr)
 {
+    assert_non_null(cstr);
+
     char n = 0;
     if (*cstr == '-') /* check if number should be negative */
     {
@@ -218,6 +238,8 @@ long long convert_CStrToLong(char *cstr)
 
 float convert_CStrToFloat(char *cstr)
 {
+    assert_non_null(cstr);
+
     /* check if number is negative */
     char n = 0;
     if (*cstr == '-')
@@ -254,6 +276,8 @@ float convert_CStrToFloat(char *cstr)
 
 double convert_CStrToDouble(char *cstr)
 {
+    assert_non_null(cstr);
+
     /* check if number is negative */
     char n = 0;
     if (*cstr == '-')
@@ -290,6 +314,8 @@ double convert_CStrToDouble(char *cstr)
 
 int convert_FloatToCStr(float f, char *dest)
 {
+    assert_non_null(dest);
+
     unsigned long long significant, fractional;
     char n = 0;
 
@@ -342,6 +368,8 @@ int convert_FloatToCStr(float f, char *dest)
 
 int convert_DoubleToCStr(double d, char *dest)
 {
+    assert_non_null(dest);
+
     unsigned long long significant, fractional;
     char n = 0;
 
@@ -398,6 +426,8 @@ int convert_DoubleToCStr(double d, char *dest)
 /* for the print function to work, you will need the String implementation of my SString gist*/
 void convert_printf(char *format, ...)
 {
+    assert_non_null(format);
+
     sstr_createeOnStack(output);
     /* get arguments */
     va_list args;
@@ -445,6 +475,8 @@ void convert_printf(char *format, ...)
 
 void convert_dprintf(int fd, char *format, ...)
 {
+    assert_non_null(format);
+
     sstr_createeOnStack(output);
     /* get arguments */
     va_list args;

@@ -91,7 +91,7 @@ extern "C"
     extern void xstrappendi(XString *str, int i);
     extern void xstrappendl(XString *str, long long l);
 
-    extern char* xstrgetfileextension(char* str);
+    extern char *xstrgetfileextension(char *str);
 
     extern void xstrappendui(XString *str, unsigned int i);
     extern void xstrappendul(XString *str, unsigned long long l);
@@ -112,7 +112,7 @@ extern "C"
     extern unsigned long long strhash(char *str);
     extern int strendswith(char *str, char *end);
     /* check if <str> contains <ch> - returns 1 if so */
-    extern int strcontainschar(char* str, char ch);
+    extern int strcontainschar(char *str, char ch);
     /**
      * @brief splits string into two parts seperated by <char>
      * @param str mutable string of any size
@@ -120,7 +120,26 @@ extern "C"
      * @example strsplitmutable("hello.world", '.') will return "world"
      * @return second part of string (the first one is the <str> pointer)
      */
-    extern char* strsplitmutable(char* str, char split);
+    extern char *strsplitmutable(char *str, char split);
+    /*
+     * will replace all occurances of substring in string while copying the result to a new string allocated using malloc
+     */
+    extern char *strreplaceall(char *str, char *_target, char *replace);
+    /*
+     * will replace all occurances of substring in string while copying the result to a new string allocated using malloc
+     * @param ... individiual targets seperated in format <char *_target, char *replace> finalised with null
+     */
+    extern char *strreplaceallmultiple(char *str, ...);
+    /*
+     * will replace all occurances of substring in string while copying the result to a new string allocated using malloc
+     * @param ... individiual targets seperated in format <char *_target, char *replace> finalised with null
+     * @param dest target string
+     */
+    extern void strreplaceallmultipletd(XString*dest,char *str, ...);
+    /*
+     * will replace first occurance of substring in string
+     */
+    extern void xstrreplaceonce(XString *_str, char *_target, int _target_len, char *replace, int replace_len);
     extern signed int strequalsmo(char *str, char opts, ...);
     extern int strequals(char *str1, char *str2);
     extern char *strremoveAdStart(char *str, char *start);

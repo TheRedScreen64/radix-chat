@@ -68,7 +68,7 @@ function signUp_doStage1() { /// TODO: check if email was already taken
 
     if (api_email_present(emailInp.value)) /* if user is already in system login */ {
         if (api_login_user(emailInp.value, passwdInp.value, rememberUser.checked)) {
-            window.location.replace('/');
+            redirect('/');
         } else {
             passwdInp.classList.add("invalid");
             sendMsgSteve("The password is incorrect🤔");
@@ -78,6 +78,13 @@ function signUp_doStage1() { /// TODO: check if email was already taken
 
     /* increase stage */
     signUpStage++;
+
+    document.body.appendChild(range.createContextualFragment(
+`<div class="setup-progress" id="progress-indicator">
+    <h5><logo>siGnup - step ii</logo><br>Confirm Password</h5>
+    <a onclick="redirect('/login')">Start Over</a>
+</div>`
+));
 
     hideAdditional(); /* hide other stuff */
 
@@ -98,6 +105,14 @@ function signUp_doStage2() {
 
     /* increase stage */
     signUpStage++;
+    document.getElementById("progress-indicator").remove();
+    document.body.appendChild(range.createContextualFragment(
+        `<div class="setup-progress" id="progress-indicator">
+            <h5><logo>siGnup - step iii</logo><br>Account Identity</h5>
+            <a onclick="redirect('/login')">Start Over</a>
+        </div>`
+        ));
+
     confirmPasswdInp.style.display = 'none';
 
     usernameInp.style.display = 'block';
@@ -141,6 +156,13 @@ function signUp_doStage3() { /// TODO: check if username is taken already
 
     /* increase stage */
     signUpStage++;
+    document.getElementById("progress-indicator").remove();
+    document.body.appendChild(range.createContextualFragment(
+        `<div class="setup-progress" id="progress-indicator">
+            <h5><logo>siGnup - step iv</logo><br>Cookie Policy</h5>
+            <a onclick="redirect('/login')">Start Over</a>
+        </div>`
+        ));
 
     usernameInp.style.display = 'none';
     real_name.style.display = 'none';

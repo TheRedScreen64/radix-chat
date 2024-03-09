@@ -7,25 +7,8 @@
         "keywords": ["Radix", "Chat", "Login"],
         "author": "Noah Nagel"
     },
-
-
-
-
-
-
-
-
-
     {
         "route":"/",
-        "static": "/static/login.nosehad",
-        "title": "Radix Chat",
-        "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
-        "keywords": ["Radix", "Chat", "App", "Innovative"],
-        "author": "Noah Nagel"
-    },
-    {
-        "route":"",
         "static": "/static/login.nosehad",
         "title": "Radix Chat",
         "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",

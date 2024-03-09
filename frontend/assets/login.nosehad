@@ -384,6 +384,30 @@ input[type="file"] {
   height: fit-content;
   max-width: 360px;
 }
+.setup-progress {
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  border: 2px solid #fff;
+  padding: 30px;
+  border-radius: 5px;
+  animation-name: setup-progress;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+}
+@keyframes setup-progress {
+ from {
+  left: -220px;
+ }
+ to {
+  left: 5px;
+ }
+}
+.setup-progress h5 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 15px;
+}
 .login-cont-align {
   margin-left: 5px;
 }

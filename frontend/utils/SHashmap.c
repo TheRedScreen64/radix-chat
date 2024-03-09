@@ -3,16 +3,11 @@
 #define DEFAULT_CAPACITY 0xFULL
 #define null 0
 
-static void *shm_memset(void *_, int __, size_t ___)
-{
-    return null;
-}
-
 static hasht shm_hash(sK key)
 {
     /* convert str to number */
     /* divide by 8, since memory addresses are mostly 64 bit alligned */
-    return strhash(key); 
+    return strhash(key);
 }
 
 SHashmap *shm_create(void)
@@ -25,8 +20,10 @@ SHashmap *shm_create(void)
     return hm;
 }
 
-void shm_createob(SHashmap* hm)
+void shm_createob(SHashmap *hm)
 {
+    assert_non_null(hm);
+
     hm->size = 0;
     hm->capacity = DEFAULT_CAPACITY;
     hm->table = (Node **)malloc(DEFAULT_CAPACITY * sizeof(Node *));
@@ -41,6 +38,9 @@ void shm_createob(SHashmap* hm)
 
 void shm_putp(SHashmap *hm, Pair *p)
 {
+    assert_non_null(hm);
+    assert_non_null(p);
+
     shm_put(hm, p->key, p->value);
 }
 
@@ -48,6 +48,9 @@ void shm_putp(SHashmap *hm, Pair *p)
 
 void shm_set(SHashmap *hm, sK key, sV value)
 {
+    assert_non_null(hm);
+    assert_non_null(key);
+
     /* resize map if there are more elements than buckets */
     if (hm->size++ == hm->capacity)
         shm_resize(hm);
@@ -64,13 +67,14 @@ void shm_set(SHashmap *hm, sK key, sV value)
     else /* bucket isnt empty*/
     {
         /* check if key is already present in map */
-        for(Node* n = bucket; n != null; n = n->next) {
-            if(strequals(n->key, key))
+        for (Node *n = bucket; n != null; n = n->next)
+        {
+            if (strequals(n->key, key))
             {
                 n->value = value;
                 return;
             }
-        }   
+        }
         /* node isn't present yet -> create it */
         Node *node = createNode();
         node->key = key, node->value = value, node->next = bucket, node->hash = hash;
@@ -80,6 +84,9 @@ void shm_set(SHashmap *hm, sK key, sV value)
 
 void shm_put(SHashmap *hm, sK key, sV value)
 {
+    assert_non_null(hm);
+    assert_non_null(key);
+
     /* resize map if there are more elements than buckets */
     if (hm->size++ == hm->capacity)
         shm_resize(hm);
@@ -105,6 +112,9 @@ void shm_put(SHashmap *hm, sK key, sV value)
 
 int shm_contains(SHashmap *hm, sK key)
 {
+    assert_non_null(hm);
+    assert_non_null(key);
+
     hasht index = shm_hash(key) % hm->capacity;
     Node *bucket = getBucket(index);
     /* check if bucket of index even contains nodes */
@@ -117,6 +127,9 @@ int shm_contains(SHashmap *hm, sK key)
 
 sV shm_get(SHashmap *hm, sK key)
 {
+    assert_non_null(hm);
+    assert_non_null(key);
+
     hasht index = shm_hash(key) % hm->capacity;
     Node *bucket = getBucket(index);
     /* check if bucket of index even contains nodes */
@@ -129,6 +142,9 @@ sV shm_get(SHashmap *hm, sK key)
 
 void shm_remove(SHashmap *hm, sK key)
 {
+    assert_non_null(hm);
+    assert_non_null(key);
+
     hasht index = shm_hash(key) % hm->capacity;
     register Node *bucket = getBucket(index);
     register Node *prev = null;
@@ -157,6 +173,8 @@ void shm_remove(SHashmap *hm, sK key)
 
 SHashmap *shm_copy(SHashmap *hm)
 {
+    assert_non_null(hm);
+
     SHashmap *ret = malloc(sizeof(SHashmap));
     ret->size = hm->size;
     ret->capacity = hm->capacity;
@@ -211,6 +229,8 @@ static inline void shm_insertToBucketList(Node **list, Node *node, hasht capacit
 
 void shm_resize(SHashmap *hm)
 {
+    assert_non_null(hm);
+
     Node **cap = (hm->table + hm->capacity);
     hm->capacity <<= 1; /* double amounts of buckets */
     Node **new_table = (Node **)malloc(hm->capacity * sizeof(Node *));
@@ -237,11 +257,16 @@ void shm_resize(SHashmap *hm)
 
 void shm_iterate(SHashmap *hm, void (*_iterator)(Pair *p))
 {
+    assert_non_null(hm);
+    assert_non_null(_iterator);
+
     shm_foreach(hm, node, _iterator(&(Pair){.key = node->key, .value = node->value}));
 }
 
 void shm_delete(SHashmap *hm)
 {
+    assert_non_null(hm);
+
     Node **cap = (hm->table + hm->capacity);
     for (Node **bucket = hm->table; bucket != cap; ++bucket)
     {
@@ -257,8 +282,10 @@ void shm_delete(SHashmap *hm)
     free(hm);
 }
 
-void shm_printBuckets(SHashmap*hm)
+void shm_printBuckets(SHashmap *hm)
 {
+    assert_non_null(hm);
+
     Node **cap = (hm->table + hm->capacity);
     /* reinsert buckets */
     int i = 0;
@@ -269,11 +296,11 @@ void shm_printBuckets(SHashmap*hm)
         int j = 0;
         if (node != null)
             /* next variable is required, because the node->next attribute gets overriden in insert function. */
-            for (;node != null; node = node->next)
+            for (; node != null; node = node->next)
                 ++j;
-        if(j == 1)
+        if (j == 1)
             printf("%d : %d\n", i, j);
-        if(j > 1)
+        if (j > 1)
             printf("%d : \e[1m\e[31m%d\e[0m\n", i, j);
     }
 }
