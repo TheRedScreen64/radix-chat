@@ -13,8 +13,28 @@ const messageSchema = z.object({
 
 // TODO: Overhaul
 
+const connections = new Map<string, any>();
+const limiter = {
+   timeWindowMs: 60 * 1000,
+   limit: 100,
+};
+
 function initWebsocket(wss: WebSocketServer) {
    wss.on("connection", async (ws, req) => {
+      if (!req.socket.remoteAddress) {
+         ws.close();
+         return;
+      }
+      const ip = req.socket.remoteAddress;
+      let connection = connections.get(ip);
+      if (!connection) {
+         connection = {
+            count: 0,
+            lastMessageTime: Date.now(),
+         };
+         connections.set(ip, connection);
+      }
+
       let sessionId = url.parse(req.url!, true).query.session!;
       if (!sessionId || Array.isArray(sessionId)) {
          ws.close();
@@ -31,6 +51,11 @@ function initWebsocket(wss: WebSocketServer) {
 
       ws.on("message", async (reqData: string) => {
          try {
+            const exceededRateLimit = await checkRateLimit(connection!);
+            if (exceededRateLimit) {
+               return ws.send(JSON.stringify({ error: { message: "Rate limit exceeded" } }));
+            }
+
             await validateSession(ws, sessionId);
 
             let reqJson = JSON.parse(reqData);
@@ -43,6 +68,7 @@ function initWebsocket(wss: WebSocketServer) {
 
             switch (type) {
                case "globalMessage": {
+                  // TODO: Add global chat rate limits
                   handleGlobalMessage(ws, wss, data, user);
                   break;
                }
@@ -135,7 +161,25 @@ async function validateSession(ws: WebSocket, sessionId: string | string[]) {
    }
 }
 
+async function checkRateLimit(connection: any): Promise<boolean> {
+   console.log(connection);
+   const now = Date.now();
+   const elapsedTime = now - connection.lastMessageTime;
+
+   if (elapsedTime < limiter.timeWindowMs) {
+      connection.count++;
+      if (connection.count > limiter.limit) {
+         return true;
+      }
+   } else {
+      connection.count = 1;
+      connection.lastMessageTime = now;
+   }
+   return false;
+}
+
 function broadcast(wss: WebSocketServer, data: any, skip: WebSocket | null) {
+   wss.clients;
    wss.clients.forEach((client) => {
       if (skip && client == skip) return;
       if (client.readyState === WebSocket.OPEN) {
