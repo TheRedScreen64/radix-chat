@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 import express from "express";
+import rateLimit from "express-rate-limit";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { lucia } from "./lib/auth.js";
@@ -38,6 +39,15 @@ const errorHandler = (err: any, req: any, res: any, next: any) => {
    }
 };
 
+const authLimiter = rateLimit({
+   windowMs: 60 * 1000,
+   max: 5,
+});
+const limiter = rateLimit({
+   windowMs: 60 * 1000,
+   max: 100,
+});
+
 const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
@@ -69,6 +79,9 @@ app.use(async (req, res, next) => {
    res.locals.user = user;
    return next();
 });
+
+app.use(limiter);
+app.use("/auth/*", authLimiter);
 
 app.use(
    loginRouter,
