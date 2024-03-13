@@ -13,10 +13,18 @@ const messageSchema = z.object({
 
 // TODO: Overhaul
 
-const connections = new Map<string, any>();
-const limiter = {
-   timeWindowMs: 60 * 1000,
-   limit: 100,
+let connections = new Map<string, any>();
+
+type RateLimit = {
+   count: number;
+};
+
+const generalRateLimit = {
+   timeWindowMs: 10000,
+   count: 10,
+};
+const globalChatRateLimit: RateLimit = {
+   count: 1,
 };
 
 function initWebsocket(wss: WebSocketServer) {
@@ -51,12 +59,15 @@ function initWebsocket(wss: WebSocketServer) {
 
       ws.on("message", async (reqData: string) => {
          try {
-            const exceededRateLimit = await checkRateLimit(connection!);
+            const exceededRateLimit = await handleRateLimit(connection!);
             if (exceededRateLimit) {
-               return ws.send(JSON.stringify({ error: { message: "Rate limit exceeded" } }));
+               return ws.send(JSON.stringify({ error: { message: "Rate limit exceeded, slow down" } }));
             }
 
-            await validateSession(ws, sessionId);
+            const sessionValid = await validateSession(sessionId);
+            if (!sessionValid) {
+               return ws.send(JSON.stringify({ error: { message: "Invalid session" } }));
+            }
 
             let reqJson = JSON.parse(reqData);
             let parsed = messageSchema.safeParse(reqJson);
@@ -68,7 +79,10 @@ function initWebsocket(wss: WebSocketServer) {
 
             switch (type) {
                case "globalMessage": {
-                  // TODO: Add global chat rate limits
+                  const exceededRateLimit = await checkRateLimit(connection!, globalChatRateLimit);
+                  if (exceededRateLimit) {
+                     return ws.send(JSON.stringify({ error: { message: "Rate limit exceeded, slow down" } }));
+                  }
                   handleGlobalMessage(ws, wss, data, user);
                   break;
                }
@@ -149,26 +163,25 @@ async function handleChatMessage(ws: WebSocket, data: any, user: User) {
    }
 }
 
-async function validateSession(ws: WebSocket, sessionId: string | string[]) {
+async function validateSession(sessionId: string | string[]): Promise<boolean> {
    if (Array.isArray(sessionId)) {
-      ws.close();
-      return;
+      return false;
    }
    const { session, user } = await lucia.validateSession(sessionId);
    if (!session || !user) {
-      ws.close();
-      return;
+      return false;
+   } else {
+      return true;
    }
 }
 
-async function checkRateLimit(connection: any): Promise<boolean> {
-   console.log(connection);
+async function handleRateLimit(connection: any): Promise<boolean> {
    const now = Date.now();
    const elapsedTime = now - connection.lastMessageTime;
 
-   if (elapsedTime < limiter.timeWindowMs) {
+   if (elapsedTime < generalRateLimit.timeWindowMs) {
       connection.count++;
-      if (connection.count > limiter.limit) {
+      if (connection.count > generalRateLimit.count) {
          return true;
       }
    } else {
@@ -176,6 +189,15 @@ async function checkRateLimit(connection: any): Promise<boolean> {
       connection.lastMessageTime = now;
    }
    return false;
+}
+
+async function checkRateLimit(connection: any, rateLimit: RateLimit): Promise<boolean> {
+   console.log(connection.count > rateLimit.count);
+   if (connection.count > rateLimit.count) {
+      return true;
+   } else {
+      return false;
+   }
 }
 
 function broadcast(wss: WebSocketServer, data: any, skip: WebSocket | null) {
