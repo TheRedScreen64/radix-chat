@@ -374,179 +374,55 @@ input[type="file"] {
 .hidden {
   display: none;
 }
-.login-container {
-  background-color: #fff;
-  height: 80%;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: fit-content;
-  max-width: 360px;
-}
-.setup-progress {
+nav {
   position: fixed;
-  top: 5px;
-  left: 5px;
+  top: 0;
+  text-align: center;
+  margin-top:20px;
   border: 2px solid #fff;
-  padding: 30px;
   border-radius: 5px;
-  animation-name: setup-progress;
-  animation-duration: 1s;
-  animation-timing-function: ease-out;
 }
-@keyframes setup-progress {
- from {
-  left: -220px;
- }
- to {
-  left: 5px;
- }
+nav a {
+    padding: 10px;
+    color: #0D1317;
 }
-.setup-progress h5 {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  font-size: 15px;
-}
-.login-cont-align {
-  margin-left: 5px;
-}
-.logo-wrap {
-  border: 2px solid #fff;
-  display: grid;
-}
-.login-radix-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 30px;
-  justify-self: center;
-}
-@media only screen and (min-width: 500px) {
-  .login-wrap {
-    display: flex;
-  }
-  .login-radix-logo {
-    writing-mode: tb-rl;
-  }
-  .logo-wrap {
-    border-radius: 5px 0px 0px 5px;
-  }
-}
-@media only screen and (max-width: 499px) {
-  .login-wrap {
-    display: flex;
-    flex-direction: column;
-  }
-  .login-radix-logo {
-    writing-mode: horizontal-tb;
-  }
-  .logo-wrap {
-    border-radius: 5px 5px 0px 0px;
-  }
-}
-@media only screen and (max-width: 390px) {
-  body {
-    align-items: flex-end;
-    justify-content: flex-end;
-  }
-  .login-container {
-    min-width: 100%;
-    min-height: 400px;
-  }
-  .login-wrap {
-    min-width: 100%;
-  }
+nav a.active {
+    background-color: #252627;
+    color:#E63946;
+    border-radius: 5px;
 }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Changa:wght@200&family=Dosis:wght@200..800&family=Major+Mono+Display&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-        rel="stylesheet">
 </head>
 <body>
     <div class="inbox" id="inbox">
     </div>
-    <div class="login-wrap">
-        <div class="logo-wrap">
-            <h1 class="login-radix-logo">
-                <logo>RAdiXcHAt</logo>
-            </h1>
-        </div>
-        <div class="login-container">
-            <div class="content-wrap">
-                <h1 style="margin-left: 5px;">
-                    <logo>LOGIN</logo>
-                </h1>
-                <div class="input-wrap">
-                    <input type="email" id="email" placeholder="Your Mail Address" autocomplete="email">
-                </div>
-                <div class="input-wrap">
-                    <input type="password" id="password" placeholder="Your Password" autocomplete="current-password">
-                </div>
-                <div class="input-wrap">
-                    <input class="hidden" type="password" id="confirm_password" placeholder="Confirm Password"
-                        autocomplete="current-password">
-                </div>
-                <div class="input-wrap">
-                    <input class="hidden" type="text" id="uname" placeholder="Username" autocomplete="new-password">
-                </div>
-                <div class="input-wrap">
-                    <input class="hidden" type="text" id="real_name" placeholder="Real Name"
-                        autocomplete="new-password">
-                </div>
-                <div class="input-wrap hidden" id="cookie-wrap1">
-                    <p class="login-cont-align">Radix Chat uses cookies to ensure best possible user experience and
-                        allow for making some basic statistics. Since this platform was handcrafted in germany it is
-                        priscriped by law to ask you this.</p>
-                </div>
-                <div class="input-wrap hidden" id="cookie-wrap2">
-                    <label class="checkbox input-a-left">Accept <a onclick="redirect('/cookies', true)">Cookie
-                            Policy</a>
-                        <input type="checkbox" id="cookies">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="input-wrap login-additional">
-                    <label class="checkbox input-a-left">Remember me
-                        <input type="checkbox" id="remember">
-                        <span class="checkmark"></span>
-                    </label>
-                    <a onclick="redirect('/reset-password', true);" class="input-a-right">Forgot Password?</a>
-                </div>
-                <div class="input-wrap margin-top ">
-                    <button onclick="signUp()" class="login-additional">Login</button>
-                    <button onclick="signUp()"><strong id="signup-text">Sign Up</strong></button>
-                </div>
-                <div class="grid-wrap align-center margin-top margin-bottom login-additional">
-                    <span class="sep-left"></span>
-                    <span class="sep"></span>
-                    <span style="user-select: none;">OR</span>
-                    <span class="sep"></span>
-                    <span class="sep-right"></span>
-                </div>
-                <div class="input-wrap margin-top login-additional">
-                    <button
-                        onclick="sendMsgSteve('Did you actually think we allow google as login method?<br> This button only exists to get rid of the empty space on this website🤣')">
-                        <strong>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-google" viewBox="0 0 16 16">
-                                <path
-                                    d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
-                            </svg>
-                            Use Google
-                        </strong>
-                    </button>
-                </div>
-            </div>
+    <nav>
+        <a class="active">Your Feed</a>
+        <a>Tomorrows's Topic</a>
+        <a>Private Messages</a>
+        <a>Personal Preferences</a>
+    </nav>
+    <div class="content">
+        <div class="chat-header"></div>
+        <div class="chat"></div>
+        <div class="chat-input">
+            <input type="text" placeholder="Tell the world...">
+            <span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill"
+                    viewBox="0 0 16 16">
+                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+                    <path
+                        d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+                </svg>
+            </span>
         </div>
     </div>
 </body>
 <script type="text/javascript">
     cms_loadScript("/static/scripts/message_popup.js");
-    cms_loadScript("/static/scripts/login.js");
+    cms_loadScript("/static/scripts/chat.js");
 </script>
 </html>

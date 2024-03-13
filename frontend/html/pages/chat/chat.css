@@ -1,0 +1,20 @@
+nav {
+  position: fixed;
+  top: 0;
+  /* left: 0; */
+  text-align: center;
+  margin-top:20px;
+  border: 2px solid PRIMARY_BG_2;
+  border-radius: 5px;
+}
+
+nav a {
+    padding: 10px;
+    color: FONT_COLOR;
+}
+
+nav a.active {
+    background-color: SECONDARY_BG;
+    color:PRIMARY_BUTTON_BG;
+    border-radius: 5px;
+}

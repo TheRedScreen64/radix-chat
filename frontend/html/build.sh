@@ -13,6 +13,10 @@ mkdir -p assets/scripts
 gcc  -w -E -x c -P html/pages/login/index.html -o assets/login.nosehad
 gcc  -w -E -x c -P html/pages/login/login.js -o assets/scripts/login.js
 
+# chat page
+gcc  -w -E -x c -P html/pages/chat/index.html -o assets/chat.nosehad
+gcc  -w -E -x c -P html/pages/chat/chat.js -o assets/scripts/chat.js
+
 # landing page
 gcc  -w -E -x c -P html/pages/landing/index.html -o assets/landing.nosehad
 
@@ -32,4 +36,4 @@ gcc  -w -E -x c -P html/background.svg -o assets/images/background.svg
 gcc  -w -E -x c -P html/generic/Content/cms.html -o assets/cms.nosehad
 
 # message utility
-gcc  -w -E -x c -P html/generic/message.js -o assets/scripts/message.js
+gcc  -w -E -x c -P html/generic/message_popup.js -o assets/scripts/message_popup.js
