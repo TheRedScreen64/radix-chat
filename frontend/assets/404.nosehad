@@ -374,21 +374,65 @@ input[type="file"] {
 .hidden {
   display: none;
 }
+        .wrap-404 {
+            display: grid;
+            border-radius: 5px;
+            padding: 90px;
+            text-align: left;
+        }
+        @media only screen and (min-width: 500px) {
+            .wrap-404 {
+                border: 2px solid #fff;
+                padding: 90px;
+            }
+        }
+        @media only screen and (max-width: 499px) {
+            .wrap-404 {
+                border-bottom: 2px solid #fff;
+                padding: 0px 31px 70px 31px;
+            }
+        }
+        .cntent-wrap {
+            text-align: center;
+        }
+        button {
+            margin-left: 3px;
+        }
+        p {
+            margin-bottom: 0px;
+            margin-left: 3px;
+        }
+        h1 {
+            margin-top: 0px;
+            margin-bottom: 3px;
+        }
+        ._404 {
+            color: #E63946;
+        }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&family=Major+Mono+Display&family=Playfair+Display&display=swap"
-        rel="stylesheet">
 </head>
 <body>
-    <h1>404</h1>
-    <h5>How did you end up here idiot?</h5>
+    <div class="cntent-wrap">
+        <div class="wrap-404">
+            <p>How did you end up here?</p>
+            <h1>
+                <logo>RAdiXcHAt <span class="_404">404</span></logo>
+            </h1>
+            <div class="input-wrap">
+                <button onclick="redirect('/')"><strong id="signup-text">Go Home <svg xmlns="http://www.w3.org/2000/svg"
+                            width="16" height="16" fill="currentColor" class="bi bi-houses-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M7.207 1a1 1 0 0 0-1.414 0L.146 6.646a.5.5 0 0 0 .708.708L1 7.207V12.5A1.5 1.5 0 0 0 2.5 14h.55a2.5 2.5 0 0 1-.05-.5V9.415a1.5 1.5 0 0 1-.56-2.475l5.353-5.354z" />
+                            <path
+                                d="M8.793 2a1 1 0 0 1 1.414 0L12 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l1.854 1.853a.5.5 0 0 1-.708.708L15 8.207V13.5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 4 13.5V8.207l-.146.147a.5.5 0 1 1-.708-.708z" />
+                        </svg></strong></button>
+            </div>
+        </div>
+        <p>Please submit a <a onclick="redirect('/bug-report')">bug report</a> if this is not your target destination...
+        </p>
+    </div>
 </body>
 <script type="text/javascript">
-    document.addEventListener('contextmenu', function (event) {
-        event.preventDefault();
-    });
 </script>
 </html>

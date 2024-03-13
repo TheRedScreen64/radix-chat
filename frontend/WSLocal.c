@@ -7,15 +7,6 @@
 #include <string.h>
 #include <errno.h>
 
-#define SRV_PREFIX "[\e[36m\e[1mSERV-LOCAL\e[0m] "
-#define SRV_STATIC_DIR "./assets/"
-#define SRV_BUILD_DIR "./html"
-#define SRV_404_TEMPLATE "./assets/404.nosehad"
-#define SRV_DEF_TEMPLATE "./assets/cms.nosehad"
-
-#define SRV_PAGE_CONFIG "./assets/json/pages-config.json"
-
-#define SRV_USEDEBUGMODE 2024 /* enable outomatic recompile on file change */
 
 #ifdef SRV_USEDEBUGMODE
 
@@ -50,16 +41,21 @@ SQLTree *staticFiles;
 XString static404;
 XString staticCMS;
 
-#include "PageData.h"
+#include "PageData.hpp"
 
 static struct MHD_Response *srv_response404()
 {
     return MHD_create_response_from_buffer(static404._size, (void *)static404._str, MHD_RESPMEM_PERSISTENT);
 }
 
-static struct MHD_Response *srv_responseDef()
+static struct MHD_Response *srv_responseDef(char *route)
 {
-    return MHD_create_response_from_buffer(staticCMS._size, (void *)staticCMS._str, MHD_RESPMEM_PERSISTENT);
+    PageData* data;
+    if((data = srv_optainDataForRoute(route)) == null)
+        data = srv_optainDataForRoute("/"); /* use default route */
+        
+    XString response = data->page_data;
+    return MHD_create_response_from_buffer(response._size, (void *)response._str, MHD_RESPMEM_PERSISTENT);
 }
 
 /* simple switch statement to examine content type of static file */
@@ -112,7 +108,7 @@ static enum MHD_Result srv_handleonreq(void *cls,
     /* only static allowed currently */
     if ((file = strremoveAdStart(url, "/static/")) == null)
     {
-        response = srv_responseDef();
+        response = srv_responseDef(url);
 
         int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
         MHD_destroy_response(response);
@@ -216,6 +212,8 @@ static void srv_loadFiles()
     }
     staticCMS = xstrcreatefromfiledescriptor(fd);
     close(fd);
+
+    srv_optainPageData();
 }
 
 static void _radix_srv_start()
@@ -244,7 +242,7 @@ static void srv_unloadFiles()
     // sqtr_free(staticFiles);
 
     /* custom free paradigma for SQTree, since FileData also has to be freed */
-    for (; !sqtr_local_empty(staticFiles); free(sqtr_local_popl(staticFiles)))
+    for (; !sqtr_local_empty(staticFiles);)
     {
         SQLNode *freen = sqtr_local_popl(staticFiles);
 
@@ -259,6 +257,9 @@ static void srv_unloadFiles()
         /* free entire node */
         free(freen);
     }
+
+    srv_destroyPageData();
+
     free(staticFiles);
     free(static404._str);
     free(staticCMS._str);
@@ -287,7 +288,6 @@ void radix_srv_start()
     debga(SRV_PREFIX "%s\n", __func__);
 
     _radix_srv_start();
-    srv_optainPageData();
 
     if (pthread_create(&file_check, NULL, (void *(*)(void *)) & srv_filelistener, null) != 0)
     {
@@ -300,8 +300,6 @@ void radix_srv_start()
 void radix_srv_exit()
 {
     debga(SRV_PREFIX "%s\n", __func__);
-
-    srv_destroyPageData();
 
     if (pthread_detach(file_check) != 0) /* detach pthread */
     {

@@ -9,7 +9,7 @@
     },
     {
         "route":"/",
-        "static": "/static/login.nosehad",
+        "static": "/static/landing.nosehad",
         "title": "Radix Chat",
         "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
         "keywords": ["Radix", "Chat", "App", "Innovative"],

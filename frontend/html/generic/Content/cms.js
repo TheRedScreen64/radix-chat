@@ -1,3 +1,5 @@
+#include "../../../properties.h"
+
 let cms_pages = C_PRELOAD_CONST_PAGES;
 
 let cms_ov_responseText;
@@ -7,6 +9,14 @@ let cms_current_location;
 let cms_document_cache = new Map();
 let cms_startup_cache = new Map();
 let cms_loaded_scripts = new Map();
+
+/* basically used to optaion the static path for a dynamic styled route */
+function cms_getPageFile(route) {
+    const page = cms_pages.find((page) => page['route'] === route);
+    if (page)
+        return page['static'];
+    return SRV_404_ROUTE;
+}
 
 function cms_loadScript(uri) {
     if (cms_loaded_scripts.get(uri)) /* prevent script redeclaration */
@@ -92,13 +102,8 @@ function redirect(rlocation, r = true, ps = true) {
 
     if (cms_ov_responseText != undefined)
         return;
-    else if (rlocation.endsWith('login')) {
-        xhttp.open("GET", "/static/login.nosehad", true);
-    }
-    else {
-        xhttp.open("GET", "/static/landing.nosehad", true);
-    }
-
+    
+    xhttp.open("GET", cms_getPageFile(rlocation), true);
     xhttp.send();
 }
 
