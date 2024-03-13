@@ -166,6 +166,40 @@ chatRouter.get("/chats/:id", async (req, res, next) => {
    }
 });
 
+chatRouter.delete("/chats/:id", async (req, res, next) => {
+   if (!res.locals.user) {
+      return next({ msg: "Not authorized", status: 401 });
+   }
+   if (!req.body) {
+      return next({ msg: "No input provided", status: 400 });
+   }
+
+   const requestSchema = z.object({
+      id: z.string().uuid(),
+   });
+
+   const requestParams = requestSchema.safeParse(req.params);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
+      return next({ msg: "Wrong parameters", status: 400, errors: validationErrors });
+   }
+   const { id } = requestParams.data;
+
+   try {
+      await prisma.chat.delete({
+         where: {
+            id,
+         },
+      });
+
+      return res.status(200).send();
+   } catch (err) {
+      console.log(err);
+      const errorMessage = formatPrismaError(err);
+      return next({ msg: `Failed to delete chat: ${errorMessage}`, status: 500 });
+   }
+});
+
 chatRouter.get("/chats/:id/messages", async (req, res, next) => {
    if (!res.locals.user) {
       return next({ msg: "Not authorized", status: 401 });

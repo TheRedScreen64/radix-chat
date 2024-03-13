@@ -16,7 +16,7 @@ import { todaysTopicRouter } from "./routes/topics/today.js";
 import { topicRouter } from "./routes/topics/topic.js";
 import { voteRouter } from "./routes/topics/vote.js";
 import { existsRouter } from "./routes/user/exists.js";
-import { userInfoRouter } from "./routes/user/user.js";
+import { userRouter } from "./routes/user/user.js";
 
 dotenv.config();
 
@@ -61,6 +61,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(async (req, res, next) => {
+   const validIps = ["127.0.0.1", "::1"];
+
+   if (validIps.includes(req.socket.remoteAddress ? req.socket.remoteAddress : "")) {
+      return next();
+   } else {
+      return next({ msg: `Bad IP: ${req.socket.remoteAddress}`, status: 401 });
+   }
+});
+
+app.use(async (req, res, next) => {
    const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
    if (!sessionId) {
       res.locals.user = null;
@@ -83,18 +93,7 @@ app.use(async (req, res, next) => {
 app.use(limiter);
 app.use("/auth/*", authLimiter);
 
-app.use(
-   loginRouter,
-   logoutRouter,
-   signupRouter,
-   existsRouter,
-   userInfoRouter,
-   messagesRouter,
-   voteRouter,
-   topicRouter,
-   todaysTopicRouter,
-   chatRouter
-);
+app.use(loginRouter, logoutRouter, signupRouter, existsRouter, userRouter, messagesRouter, voteRouter, topicRouter, todaysTopicRouter, chatRouter);
 
 app.use(errorHandler);
 
