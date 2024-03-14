@@ -11,6 +11,7 @@ import { loginRouter } from "./routes/auth/login.js";
 import { logoutRouter } from "./routes/auth/logout.js";
 import { signupRouter } from "./routes/auth/signup.js";
 import { chatRouter } from "./routes/chats/chats.js";
+import { inviteRouter } from "./routes/chats/invite.js";
 import { messagesRouter } from "./routes/global/messages.js";
 import { todaysTopicRouter } from "./routes/topics/today.js";
 import { topicRouter } from "./routes/topics/topic.js";
@@ -93,7 +94,19 @@ app.use(async (req, res, next) => {
 app.use(limiter);
 app.use("/auth/*", authLimiter);
 
-app.use(loginRouter, logoutRouter, signupRouter, existsRouter, userRouter, messagesRouter, voteRouter, topicRouter, todaysTopicRouter, chatRouter);
+app.use(
+   loginRouter,
+   logoutRouter,
+   signupRouter,
+   existsRouter,
+   userRouter,
+   messagesRouter,
+   voteRouter,
+   topicRouter,
+   todaysTopicRouter,
+   chatRouter,
+   inviteRouter
+);
 
 app.use(errorHandler);
 
