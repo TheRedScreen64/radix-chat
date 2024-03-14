@@ -189,12 +189,12 @@ chatRouter.delete("/chats/:id", async (req, res, next) => {
       await prisma.chat.delete({
          where: {
             id,
+            ownerId: res.locals.user.id,
          },
       });
 
       return res.status(200).send();
    } catch (err) {
-      console.log(err);
       const errorMessage = formatPrismaError(err);
       return next({ msg: `Failed to delete chat: ${errorMessage}`, status: 500 });
    }
@@ -257,11 +257,7 @@ chatRouter.get("/chats/:id/messages", async (req, res, next) => {
          return next({ msg: "Chat not found", status: 404 });
       }
 
-      if (chat.messages.length > 0) {
-         return res.status(200).json(chat.messages);
-      } else {
-         return next({ msg: "No messages found", status: 404 });
-      }
+      return res.status(200).json(chat.messages);
    } catch (err) {
       const errorMessage = formatPrismaError(err);
       return next({ msg: `Failed to get chat messages: ${errorMessage}`, status: 500 });

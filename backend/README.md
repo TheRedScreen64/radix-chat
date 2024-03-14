@@ -375,6 +375,63 @@ Body:
 }
 ```
 
+## Chat - Delete
+
+**Request**
+
+`DELETE /chats/{ID}`
+
+## Chat - Create invite
+
+Note: Only the chat owner can create, get and delete invites!
+And an invite can only be used once!
+
+**Request**
+
+`POST /chats/{ID}/invites`
+
+**Response Example**
+
+```json
+{
+   "token": "some uuid",
+   "expiresAt": "2024-03-15T16:37:04.438Z"
+}
+```
+
+## Chat - Get invites
+
+Note: Only the chat owner can create, get and delete invites!
+
+**Request**
+
+`GET /chats/{ID}/invites`
+
+**Response Example**
+
+```json
+[
+   {
+      "id": "some uuid",
+      "expiresAt": "2024-03-15T17:01:06.481Z",
+      "token": "some uuid"
+   },
+   {
+      "id": "some other uuid",
+      "expiresAt": "2024-03-15T17:01:07.232Z",
+      "token": "some other uuid"
+   }
+]
+```
+
+## Chat - Delete invite
+
+Note: Only the chat owner can create, get and delete invites!
+
+**Request**
+
+`DELETE /chats/{CHAT_ID}/invites/{INVITE_ID}`
+
 # Websocket
 
 **Request structure**

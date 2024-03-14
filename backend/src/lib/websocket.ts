@@ -192,7 +192,6 @@ async function handleRateLimit(connection: any): Promise<boolean> {
 }
 
 async function checkRateLimit(connection: any, rateLimit: RateLimit): Promise<boolean> {
-   console.log(connection.count > rateLimit.count);
    if (connection.count > rateLimit.count) {
       return true;
    } else {
