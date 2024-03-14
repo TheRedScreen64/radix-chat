@@ -66,6 +66,16 @@ model Chat {
    // TODO: Fix onDelete
    owner         User          @relation("chatOwner", fields: [ownerId], references: [id], onDelete: Restrict)
    ownerId       String
+   invites       Invite[]
+}
+
+// Invites
+model Invite {
+   id        String   @id @default(uuid())
+   expiresAt DateTime
+   token     String   @unique @default(uuid())
+   chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+   chatId    String
 }
 
 // Topic voting
