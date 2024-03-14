@@ -39,8 +39,19 @@ html {
   padding: 0;
 }
 
+::selection {
+  color: FONT_COLOR;
+  background: PRIMARY_BUTTON_BG;
+  height: 10px;
+}
+
+p {
+  line-height: 18px;
+}
+
 h1 {
   font-weight: 400;
+  line-height: 32px;
 }
 
 footer {
@@ -155,7 +166,7 @@ a svg {
 
 button:hover {
   outline: none; /* Remove default outline */
-  box-shadow: 0 0 20px PRIMARY_BG_1; /* Add a subtle shadow on focus */
+  /*box-shadow: 0 0 20px PRIMARY_BG_1;*/ /* Add a subtle shadow on focus */
 
   color: PRIMARY_BG_1;
   border: 2px solid SECONDARY_BG;

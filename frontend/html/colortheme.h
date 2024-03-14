@@ -9,6 +9,7 @@
 
 /* text */
 #define FONT_COLOR #0D1317
+#define FONT_COLOR_2 
 #define SECONDARY_FONT_COLOR #F2EFE9
 #define TEXT_FONT 'Roboto'
 
