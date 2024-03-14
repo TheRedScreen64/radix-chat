@@ -119,7 +119,7 @@ input::placeholder {
 input[type]:not([type="checkbox"]):focus,
 input[type]:not([type="checkbox"]):hover {
   outline: none; /* Remove default outline */
-  box-shadow: 0 0 20px PRIMARY_BG_1; /* Add a subtle shadow on focus */
+  /*box-shadow: 0 0 20px PRIMARY_BG_1;  Add a subtle shadow on focus */
 
   color: PRIMARY_BG_1;
   border: 2px solid SECONDARY_BG;

@@ -117,8 +117,17 @@ html {
   margin: 0;
   padding: 0;
 }
+::selection {
+  color: #0D1317;
+  background: #E63946;
+  height: 10px;
+}
+p {
+  line-height: 18px;
+}
 h1 {
   font-weight: 400;
+  line-height: 32px;
 }
 footer {
   text-align: center;
@@ -275,7 +284,6 @@ input::placeholder {
 input[type]:not([type="checkbox"]):focus,
 input[type]:not([type="checkbox"]):hover {
   outline: none;
-  box-shadow: 0 0 20px #E4DFDA;
   color: #E4DFDA;
   border: 2px solid #252627;
   background: #252627;
@@ -338,7 +346,6 @@ a svg {
 }
 button:hover {
   outline: none;
-  box-shadow: 0 0 20px #E4DFDA;
   color: #E4DFDA;
   border: 2px solid #252627;
   background: #252627;

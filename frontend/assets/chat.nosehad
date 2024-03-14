@@ -117,8 +117,17 @@ html {
   margin: 0;
   padding: 0;
 }
+::selection {
+  color: #0D1317;
+  background: #E63946;
+  height: 10px;
+}
+p {
+  line-height: 18px;
+}
 h1 {
   font-weight: 400;
+  line-height: 32px;
 }
 footer {
   text-align: center;
@@ -275,7 +284,6 @@ input::placeholder {
 input[type]:not([type="checkbox"]):focus,
 input[type]:not([type="checkbox"]):hover {
   outline: none;
-  box-shadow: 0 0 20px #E4DFDA;
   color: #E4DFDA;
   border: 2px solid #252627;
   background: #252627;
@@ -338,7 +346,6 @@ a svg {
 }
 button:hover {
   outline: none;
-  box-shadow: 0 0 20px #E4DFDA;
   color: #E4DFDA;
   border: 2px solid #252627;
   background: #252627;
@@ -374,22 +381,168 @@ input[type="file"] {
 .hidden {
   display: none;
 }
+body {
+  justify-content: space-between;
+  flex-direction: column;
+}
 nav {
-  position: fixed;
-  top: 0;
   text-align: center;
-  margin-top:20px;
+  margin-top: 20px;
   border: 2px solid #fff;
+  max-width: 600px;
   border-radius: 5px;
+  display: grid;
+  grid-auto-flow: column;
+  align-content: space-between;
+  width: 100%;
 }
 nav a {
-    padding: 10px;
-    color: #0D1317;
+  padding: 10px;
+  color: #0D1317;
 }
 nav a.active {
-    background-color: #252627;
-    color:#E63946;
-    border-radius: 5px;
+  background-color: #252627;
+  color: #E63946;
+  border-radius: 5px;
+}
+.chat-header-wrap {
+  max-width: 600px;
+}
+.chat-header {
+  border: 2px solid #fff;
+  padding: 10px;
+  border-radius: 5px 5px 0px 0px;
+}
+.chat-header h1 {
+  margin-top: 0px;
+}
+.chat-header strong {
+  color: #E63946;
+}
+.chat-header p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.tda-topic-title {
+  margin-left: 1px;
+}
+.chat {
+  height: 100%;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+.chat-info {
+  text-align: center;
+  font-style: italic;
+}
+.desc {
+  padding-left: 5px;
+  border-left: 2px solid #252627;
+  margin-left: 3px;
+}
+.chat-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.chat-input-wrap {
+  max-width: 600px;
+}
+.chat-input {
+  text-align: center;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+.chat-input-inner-wrap {
+  border: 2px solid #fff;
+  border-radius: 0px 0px 5px 5px;
+  padding: 10px;
+}
+.chat-input .svg-r {
+  padding: 12px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+@keyframes svg-r-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.chat-input .svg-c {
+  padding: 12px;
+  border-radius: 5px;
+}
+.chat-input .svg-l {
+  padding: 12px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+@keyframes svg-l-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.chat-input svg {
+  cursor: pointer;
+  border: 2px solid #252627;
+  transition: all 0.3s;
+}
+.chat-input svg:hover {
+  outline: none;
+  color: #E4DFDA;
+  background: #252627;
+}
+.chat-input textarea {
+  outline: none;
+  resize: none;
+  padding: 10px;
+  margin: 5px;
+  color: #0D1317;
+  background: #E4DFDA;
+  font-size: 15px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  transition: all 0.3s;
+  min-width: 180px;
+  text-align: center;
+  border-top: 2px solid #252627;
+  border-bottom: 2px solid #252627;
+  border-left: none;
+  border-right: none;
+  border-radius: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.chat-input textarea::-webkit-scrollbar{
+    display:none;
+}
+.chat-input textarea:focus,
+.chat-input textarea:hover {
+  color: #E4DFDA;
+  background: #252627;
+  outline: none;
+}
+.chat-input textarea::placeholder {
+  color: #0D1317;
+}
+.chat-input textarea:focus::placeholder,
+.chat-input textarea:hover::placeholder {
+  color: #E4DFDA;
 }
     </style>
     <meta charset="UTF-8">
@@ -404,20 +557,40 @@ nav a.active {
         <a>Private Messages</a>
         <a>Personal Preferences</a>
     </nav>
-    <div class="content">
-        <div class="chat-header"></div>
-        <div class="chat"></div>
-        <div class="chat-input">
-            <input type="text" placeholder="Tell the world...">
-            <span>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill"
-                    viewBox="0 0 16 16">
-                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
-                    <path
-                        d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
-                </svg>
-            </span>
+    <div class="chat-content">
+        <div class="chat-header-wrap">
+            <div class="chat-header">
+                <p class="tda-topic-title"><strong>Today's Topic</strong></p>
+                <h1>Should the European Union ban palm oil?</h1>
+                <p class="desc">A new regulation aims to rid the palm oil supply chain of imports that come from former
+                    forestland. Southeast Asian countries say it threatens livelihoods. <a>Learn more...</a></p>
+            </div>
+        </div>
+        <div class="chat">
+            <div class="chat-info">
+                <p>
+                    14th March 2024
+                </p>
+            </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="chat-input-wrap">
+            <div class="chat-input-inner-wrap">
+                <div class="chat-input" id="chat-input">
+                    <svg class="svg-l" id="svg-l" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z" />
+                    </svg>
+                    <textarea id="msg-input" rows="1" type="text" placeholder="Tell the world..."></textarea>
+                    <svg class="svg-r" id="svg-r" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16">
+                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+                        <path
+                            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </body>
