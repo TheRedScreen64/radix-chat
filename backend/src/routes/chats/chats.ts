@@ -166,6 +166,68 @@ chatRouter.get("/chats/:id", async (req, res, next) => {
    }
 });
 
+chatRouter.patch("/chats/:id", async (req, res, next) => {
+   if (!res.locals.user) {
+      return next({ msg: "Not authorized", status: 401 });
+   }
+   if (!req.body) {
+      return next({ msg: "No input provided", status: 400 });
+   }
+
+   const requestSchema = z.object({
+      id: z.string().uuid(),
+      name: z.string().trim().min(1).max(100).optional(),
+      description: z.string().trim().min(1).max(1024).optional(),
+      // TODO: Add icon url whitelist
+      icon: z.string().url().optional(),
+      // TODO: Implement owner transfer
+   });
+
+   const data = { ...req.params, ...req.body };
+
+   const requestParams = requestSchema.safeParse(data);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
+   }
+   const { id, name, description, icon } = requestParams.data;
+
+   try {
+      const updatedChat = await prisma.chat.update({
+         where: {
+            id,
+            ownerId: res.locals.user.id,
+         },
+         data: {
+            name: name ?? undefined,
+            description: description ?? undefined,
+            icon: icon ?? undefined,
+         },
+         include: {
+            owner: {
+               select: {
+                  name: true,
+                  username: true,
+                  avatarUrl: true,
+               },
+            },
+            participants: {
+               select: {
+                  name: true,
+                  username: true,
+                  avatarUrl: true,
+               },
+            },
+         },
+      });
+
+      return res.status(200).json(updatedChat);
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      return next({ msg: `Failed to update chat: ${errorMessage}`, status: 500 });
+   }
+});
+
 chatRouter.delete("/chats/:id", async (req, res, next) => {
    if (!res.locals.user) {
       return next({ msg: "Not authorized", status: 401 });
