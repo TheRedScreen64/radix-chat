@@ -158,3 +158,88 @@ topicRouter.get("/topics/:id", async (req, res, next) => {
       return next({ msg: `Failed to get topic: ${errorMessage}`, status: 500 });
    }
 });
+
+topicRouter.delete("/topics/:id", async (req, res, next) => {
+   if (!res.locals.user) {
+      return next({ msg: "Not authorized", status: 401 });
+   }
+   if (!req.body) {
+      return next({ msg: "No input provided", status: 400 });
+   }
+
+   const requestSchema = z.object({
+      id: z.string().uuid(),
+   });
+
+   const requestParams = requestSchema.safeParse(req.params);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
+      return next({ msg: "Wrong parameters", status: 400, errors: validationErrors });
+   }
+   const { id } = requestParams.data;
+
+   try {
+      await prisma.topic.delete({
+         where: {
+            id,
+            authorId: res.locals.user.id,
+         },
+      });
+
+      return res.status(200).send();
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      return next({ msg: `Failed to delete topic: ${errorMessage}`, status: 500 });
+   }
+});
+
+topicRouter.patch("/topics/:id", async (req, res, next) => {
+   if (!res.locals.user) {
+      return next({ msg: "Not authorized", status: 401 });
+   }
+   if (!req.body) {
+      return next({ msg: "No input provided", status: 400 });
+   }
+
+   const requestSchema = z.object({
+      id: z.string().uuid(),
+      title: z.string().trim().min(1).max(100).optional(),
+      description: z.string().trim().min(1).max(1000).optional(),
+   });
+
+   const data = { ...req.params, ...req.body };
+
+   const requestParams = requestSchema.safeParse(data);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
+      return next({ msg: "Wrong input", status: 400, errors: validationErrors });
+   }
+   const { id, title, description } = requestParams.data;
+
+   try {
+      const updatedTopic = await prisma.topic.update({
+         where: {
+            id,
+            authorId: res.locals.user.id,
+         },
+         data: {
+            title: title ?? undefined,
+            description: description ?? undefined,
+         },
+         include: {
+            author: {
+               select: {
+                  name: true,
+                  username: true,
+                  avatarUrl: true,
+               },
+            },
+         },
+      });
+
+      return res.status(200).json(updatedTopic);
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      return next({ msg: `Failed to update topic: ${errorMessage}`, status: 500 });
+   }
+});
