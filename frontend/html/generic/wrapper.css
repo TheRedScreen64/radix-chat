@@ -2,7 +2,8 @@
 #include "fonts.css"
 #include "message.css"
 
-@keyframes body-fade {
+  @keyframes
+  body-fade {
   0% {
     transform: translateX(-100%);
   }
@@ -14,7 +15,7 @@
 body,
 html {
   overflow-x: hidden;
-  
+
   background-color: PRIMARY_BG_2;
 
   animation-name: body-fade;
@@ -207,4 +208,39 @@ input[type="file"] {
 
 .hidden {
   display: none;
+}
+
+.hover-label {
+  position: absolute;
+  animation: label 1s ease-out 0s 1;
+  padding: 10px;
+  background: PRIMARY_BG_1;
+  border: 2px solid PRIMARY_BG_2;
+  border-radius: 5px;
+  line-height: 12px;
+  transform: translateX(calc(-50%));
+  color: PRIMARY_BUTTON_BG;
+  font-weight: 600;
+}
+
+.hover-label:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: calc(50% - 7.5px);
+  border-left: 15px solid transparent;
+  border-right: 0px solid transparent;
+  border-top: 10px solid PRIMARY_BG_2;
+}
+
+@keyframes label {
+  0% {
+    opacity: 0;
+  }
+  85% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

@@ -1,3 +1,5 @@
+#include "icons.h"
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +7,7 @@
     <title>Radix Chat - Login</title>
     <style>
         #include "../../generic/wrapper.css"
+
         #include "chat.css"
     </style>
 
@@ -23,48 +26,178 @@
         <a>Personal Preferences</a>
     </nav>
 
-    <div class="chat-content">
-        <div class="chat-header-wrap">
-            <div class="chat-header">
-                <p class="tda-topic-title"><strong>Today's Topic</strong></p>
-                <h1>Should the European Union ban palm oil?</h1>
-                <p class="desc">A new regulation aims to rid the palm oil supply chain of imports that come from former
-                    forestland. Southeast Asian countries say it threatens livelihoods. <a>Learn more...</a></p>
-            </div>
-        </div>
-
-        <div class="chat">
-            <div class="chat-info">
-                <p>
-                    14th March 2024
-                </p>
-            </div>
-        </div>
-
-
-        <!-- Chat Input -->
-        <div class="chat-input-wrap">
-            <div class="chat-input-inner-wrap">
-                <div class="chat-input" id="chat-input">
-                    <svg class="svg-l" id="svg-l" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z" />
-                    </svg>
-                    <textarea id="msg-input" rows="1" type="text" placeholder="Tell the world..."></textarea>
-                    <svg class="svg-r" id="svg-r" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        viewBox="0 0 16 16">
-                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
-                        <path
-                            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
-                    </svg>
+    <div class="chat-content-wrap">
+        <div class="threads-display">
+            <div class="display-inner">
+                <p class="tda-topic-title"><strong>Recent Threads</strong></p>
+                <div class="grid-wrap align-center margin-top margin-bottom">
+                    <span class="sep"></span>
                 </div>
+                <ul>
+                    <li><span>What happened to Obama</span> THUMBS_UP() THUMBS_DOWN()</li>
+                    <li><span>Best way to earn money</span> THUMBS_UP() THUMBS_DOWN()</li>
+                    <li><span>How are rich people able to avoid taxes?</span> THUMBS_UP() THUMBS_DOWN()</li>
+                    <li><span>Should assets be limited?</span> THUMBS_UP() THUMBS_DOWN()</li>
+                    <li><span>Fortnite vs. Minecraft</span> THUMBS_UP() THUMBS_DOWN()</li>
+                    <li><span>Can someone help with programming</span> THUMBS_UP() THUMBS_DOWN()</li>
+                </ul>
+                <div class="grid-wrap align-center margin-top margin-bottom">
+                    <span class="sep"></span>
+                </div>
+                <div class="input-wrap">
+                    <button><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                            <path
+                                d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+                        </svg></button>
+                    <button><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                            <path
+                                d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                        </svg></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-content">
+            <div class="chat-header-wrap">
+                <div class="chat-header">
+                    <p class="tda-topic-title"><strong>Today's Topic</strong></p>
+                    <h1>Should the European Union ban palm oil?</h1>
+                    <p class="desc">A new regulation aims to rid the palm oil supply chain of imports that come from
+                        former
+                        forestland. Southeast Asian countries say it threatens livelihoods. <a>Learn more...</a></p>
+                </div>
+            </div>
+
+            <div class="chat">
+                <div class="chat-info">
+                    <p>
+                        14th March 2024
+                    </p>
+                </div>
+
+                <div class="msg-storage">
+
+                    <div class="msg-wrap msg-recieved">
+                        <img class="msg-sender" src="/static/images/steve_profile.jpeg">
+                        <msg class="msg-content">
+                            <div class="grid-wrap">
+                                <span class="msg-bot-tag">BOT</span>
+                                <span class="msg-title">Steve ■ 0:00</span>
+                            </div>
+                            <p>Hello Guys,<br>
+                                Today's conversation is about palm oil. What do you think, should it be banned?
+                            </p>
+                        </msg>
+                    </div>
+
+                    <div class="msg-wrap msg-recieved">
+                        <div class="msg-sender">
+                            <name>KA</name>
+                        </div>
+                        <msg class="msg-content">
+                            <div class="grid-wrap">
+                                <span class="msg-title">Kai ■ 0:12</span>
+                            </div>
+                            <p>What's palm-oil.</p>
+                        </msg>
+                    </div>
+
+                    <div class="msg-wrap msg-recieved">
+                        <div class="msg-sender">
+                            <name>NO</name>
+                        </div>
+                        <msg class="msg-content">
+                            <div class="grid-wrap">
+                                <span class="msg-title">Noah ■ 0:13</span>
+                            </div>
+                            <p>it's an cheap flower oil alternative used in many mass produced foods</p>
+                        </msg>
+                    </div>
+
+                    <div class="msg-wrap msg-personal">
+                        <msg class="msg-content">
+                            <div class="grid-wrap">
+                                <span class="msg-title">kaisserx45 ■ Now</span>
+                            </div>
+                            <p>dont forget that it mostly comes from farms in south africa, which leads to exploiting of
+                                local people</p>
+                        </msg>
+                        <div class="msg-sender">
+                            <img src="https://th.bing.com/th/id/OIP.zOyuCbk2TDOfovH-MDkQmAHaF7?rs=1&pid=ImgDetMain">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Chat Input -->
+            <div class="chat-input-wrap">
+                <div class="chat-input-inner-wrap">
+                    <div class="chat-input" id="chat-input">
+                        <svg class="svg-l" id="svg-l" xmlns="http://www.w3.org/2000/svg" width="16" height="16" hover-label="Upload File"
+                            fill="currentColor" viewBox="0 0 16 16">
+                            <path
+                                d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z" />
+                        </svg>
+                        <textarea id="msg-input" rows="1" type="text" placeholder="Tell the world..."></textarea>
+                        <svg class="svg-r" id="svg-r" xmlns="http://www.w3.org/2000/svg" width="16" height="16" hover-label="Record Voice Message"
+                            fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+                            <path
+                                d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+                        </svg>
+
+                        <div class="msg-input-buttons" id="msg-input-buttons">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" hover-label="Send Message"
+                                class="bi bi-send-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" hover-label="Attach Content">
+  <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0"/>
+</svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="statements-display">
+            <div class="display-inner">
+                <p class="tda-topic-title"><strong>Your Account</strong></p>
+                <div class="grid-wrap">
+                    <div class="uname-inf">
+                        <h1>kaisserx45</h1>
+                        <p>James Brown</p>
+                    </div>
+                    <div class="account-image">
+                        <img src="https://th.bing.com/th/id/OIP.zOyuCbk2TDOfovH-MDkQmAHaF7?rs=1&pid=ImgDetMain">
+                    </div>
+                </div>
+            </div>
+            <div class="display-inner">
+                <p class="tda-topic-title"><strong>Controversial Statements</strong></p>
+                <ul>
+                    <li><q>Tesla stock price is too high imo</q>
+                        <q-creator>Mark</q-creator>
+                    </li>
+                    <li><q>FREE AMERICA NOW</q>
+                        <q-creator>kaisserx45</q-creator>
+                    </li>
+                    <li><q>I'm against vaccinations for your children</q>
+                        <q-creator>Itznosehad</q-creator>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </body>
 <script type="text/javascript">
     cms_loadScript("/static/scripts/message_popup.js");
+    cms_loadScript("/static/scripts/label.js");
     cms_loadScript("/static/scripts/chat.js");
 </script>
 

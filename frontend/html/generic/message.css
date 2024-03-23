@@ -1,9 +1,39 @@
-.msg-wrap {
-  opacity: 0;
+.msg-wrap,
+.msg-steve-wrap {
+  line-height: 20px;
   display: flex;
   margin-bottom: 10px;
   margin-right: 10px;
   margin-left: 10px;
+  max-width: 352px;
+}
+
+.msg-wrap {
+  opacity: 1;
+}
+
+.msg-personal {
+  justify-self: right;
+}
+
+.msg-recieved {
+  justify-self: left;
+}
+
+.msg-personal msg {
+  background: MSG_PERSONAL_COLOR;
+  border-radius: 5px 0px 5px 5px;
+  margin-right: 10px;
+}
+
+.msg-recieved msg {
+  background-color: MSG_RECIEVED_COLOR;
+  border-radius: 0px 5px 5px 5px;
+  margin-left: 10px;
+}
+
+.msg-steve-wrap {
+  opacity: 0;
   animation-name: appear;
   animation-duration: 4s; /* pop out after two seconds */
 }
@@ -15,15 +45,33 @@
   z-index: 2;
 }
 
+.msg-steve-sender,
 .msg-sender {
   /* profile picture */
   height: 50px;
   width: 50px;
+  min-width: 50px;
   border-radius: 25px;
   user-select: none;
+  background: PRIMARY_BG_2;
+  overflow: hidden;
 }
 
-.msg-content {
+.msg-sender img {
+  height: 50px;
+  width: auto;
+}
+
+.msg-sender name {
+  font-size: 30px;
+  font-family: "Major Mono Display";
+  margin-top: 14px;
+  display: block;
+  margin-left: 8px;
+  letter-spacing: -11px;
+}
+
+.msg-steve-content {
   line-height: 20px;
   font-size: 15px;
 }
@@ -64,17 +112,36 @@
 
 msg {
   padding: 5px;
-  border-radius: 5px 0px 5px 5px;
-  background: MSG_PERSONAL_COLOR;
-  margin-right: 10px;
   animation-name: pop-in;
   animation-duration: 1s;
 }
 
+msg .grid-wrap {
+  justify-content: right;
+}
+
+msg p {
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: "Nunito";
+}
+
+.msg-steve-title,
 .msg-title {
   justify-self: flex-end;
   font-size: 12px;
   margin-right: 5px;
+  user-select: none;
+}
+
+.msg-bot-tag {
+  background: MSG_PERSONAL_COLOR;
+  line-height: 10px;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
   user-select: none;
 }
 

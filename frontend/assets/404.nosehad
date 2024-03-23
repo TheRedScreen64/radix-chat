@@ -15,12 +15,36 @@
   font-family: "Nunito";
   src: url("/static/fonts/Nunito-VariableFont_wght.ttf") format("truetype");
 }
-.msg-wrap {
-  opacity: 0;
+.msg-wrap,
+.msg-steve-wrap {
+  line-height: 20px;
   display: flex;
   margin-bottom: 10px;
   margin-right: 10px;
   margin-left: 10px;
+  max-width: 352px;
+}
+.msg-wrap {
+  opacity: 1;
+}
+.msg-personal {
+  justify-self: right;
+}
+.msg-recieved {
+  justify-self: left;
+}
+.msg-personal msg {
+  background: #508CA4;
+  border-radius: 5px 0px 5px 5px;
+  margin-right: 10px;
+}
+.msg-recieved msg {
+  background-color: #FFE74C;
+  border-radius: 0px 5px 5px 5px;
+  margin-left: 10px;
+}
+.msg-steve-wrap {
+  opacity: 0;
   animation-name: appear;
   animation-duration: 4s;
 }
@@ -30,13 +54,29 @@
   right: 0px;
   z-index: 2;
 }
+.msg-steve-sender,
 .msg-sender {
   height: 50px;
   width: 50px;
+  min-width: 50px;
   border-radius: 25px;
   user-select: none;
+  background: #fff;
+  overflow: hidden;
 }
-.msg-content {
+.msg-sender img {
+  height: 50px;
+  width: auto;
+}
+.msg-sender name {
+  font-size: 30px;
+  font-family: "Major Mono Display";
+  margin-top: 14px;
+  display: block;
+  margin-left: 8px;
+  letter-spacing: -11px;
+}
+.msg-steve-content {
   line-height: 20px;
   font-size: 15px;
 }
@@ -74,19 +114,36 @@
 }
 msg {
   padding: 5px;
-  border-radius: 5px 0px 5px 5px;
-  background: #508CA4;
-  margin-right: 10px;
   animation-name: pop-in;
   animation-duration: 1s;
 }
+msg .grid-wrap {
+  justify-content: right;
+}
+msg p {
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: "Nunito";
+}
+.msg-steve-title,
 .msg-title {
   justify-self: flex-end;
   font-size: 12px;
   margin-right: 5px;
   user-select: none;
 }
-@keyframes body-fade {
+.msg-bot-tag {
+  background: #508CA4;
+  line-height: 10px;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+  user-select: none;
+}
+  @keyframes
+  body-fade {
   0% {
     transform: translateX(-100%);
   }
@@ -225,7 +282,7 @@ a {
   background: #E4DFDA;
   margin-top: 3px;
   border-radius: 3px;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 .checkbox:hover input ~ .checkmark {
   background: #252627;
@@ -380,6 +437,38 @@ input[type="file"] {
 }
 .hidden {
   display: none;
+}
+.hover-label {
+  position: absolute;
+  animation: label 1s ease-out 0s 1;
+  padding: 10px;
+  background: #E4DFDA;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  line-height: 12px;
+  transform: translateX(calc(-50%));
+  color: #E63946;
+  font-weight: 600;
+}
+.hover-label:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: calc(50% - 7.5px);
+  border-left: 15px solid transparent;
+  border-right: 0px solid transparent;
+  border-top: 10px solid #fff;
+}
+@keyframes label {
+  0% {
+    opacity: 0;
+  }
+  85% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
         .wrap-404 {
             display: grid;

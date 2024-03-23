@@ -46,7 +46,7 @@
   margin-top: 3px;
   border-radius: 3px;
 
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 
 .checkbox:hover input ~ .checkmark {

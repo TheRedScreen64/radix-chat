@@ -15,7 +15,7 @@
 
 #define GROUP_ID "com.nosehad.Editor"
 
-#define LOGIN_URI "http://localhost:" SRV_PORT_S "/static/login.html"
+#define LOGIN_URI "http://localhost:" SRV_PORT_S "/login"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"

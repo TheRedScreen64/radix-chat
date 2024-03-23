@@ -3,6 +3,7 @@
 cms_runOnStartup(() => {
     const msg_input = document.getElementById("msg-input");
     const chat_input = document.getElementById("chat-input");
+    const msg_input_buttons = document.getElementById("msg-input-buttons");
     let rows = 1;
     let input_used = false;
 
@@ -17,6 +18,8 @@ cms_runOnStartup(() => {
 
             svgr.style.animation = "svg-r-fade-out 0.3s 1 ease-out";
             svgr.style.opacity = "1";
+
+            msg_input_buttons.style.display  = "none";
 
             msg_input.style.borderLeft = "none";
             msg_input.style.borderRight = "none";
@@ -45,6 +48,8 @@ cms_runOnStartup(() => {
 
             svgr.style.animation = "svg-r-fade-out 0.3s 1 ease-out";
             svgr.style.opacity = "0";
+
+            msg_input_buttons.style.display  = "block";
 
             msg_input.style.borderLeft = `2px solid SECONDARY_BG`;
             msg_input.style.borderRight = `2px solid SECONDARY_BG`;

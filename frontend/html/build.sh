@@ -37,3 +37,6 @@ gcc  -w -E -x c -P html/generic/Content/cms.html -o assets/cms.nosehad
 
 # message utility
 gcc  -w -E -x c -P html/generic/message_popup.js -o assets/scripts/message_popup.js
+
+# label utility
+gcc  -w -E -x c -P html/generic/label.js -o assets/scripts/label.js
