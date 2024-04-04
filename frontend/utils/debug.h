@@ -19,9 +19,9 @@ extern "C"
 #include "ansicodes.h"
 
 /* assert functions */
-#define ASSERT_FAILED_ERR(ASSERT_ID) "<" AC_RED  "error" AC_RESET "> assert " AC_BOLD #ASSERT_ID AC_RESET " in " AC_BOLD"%s" AC_RESET" failed\n", __func__
-#define assert_str_not_empty(str) if(*str == '\00') { printf(ASSERT_FAILED_ERR(assert_str_not_empty)); _Exit(1); }
-#define assert_non_null(str) if(str == null) { printf(ASSERT_FAILED_ERR(assert_str_not_empty)); _Exit(1); }
+#define ASSERT_FAILED_ERR(ASSERT_ID, name) "<" AC_RED  "error" AC_RESET "> assert " AC_BOLD #ASSERT_ID AC_RESET " in " AC_BOLD"%s" AC_RESET" failed (Variable: " AC_MAGENTA name AC_RESET ")\n", __func__
+#define assert_str_not_empty(str) if(*str == '\00') { printf(ASSERT_FAILED_ERR(assert_str_not_empty, #str)); exit(1); }
+#define assert_non_null(str) if(str == null) { printf(ASSERT_FAILED_ERR(assert_non_null, #str)); exit(1); }
 
 /* logger functions */
 #define UTIL_STD 1

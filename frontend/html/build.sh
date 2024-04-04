@@ -20,9 +20,6 @@ gcc  -w -E -x c -P html/pages/chat/chat.js -o assets/scripts/chat.js
 # landing page
 gcc  -w -E -x c -P html/pages/landing/index.html -o assets/landing.nosehad
 
-# frame
-gcc  -w -E -x c -P html/frame.h -o assets/frame.nosehad
-
 # loader 
 gcc  -w -E -x c -P html/loader/index.html -o assets/loader.nosehad
 

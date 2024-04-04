@@ -1,35 +1,13 @@
-#define CLIENT_DEF
-
 #include "SQTree.h"
 #include "NString.h"
 #include "../null.h"
+#include "../String/String.h"
 #include "../debug.h"
-
-struct _qTree
-{
-    char *key;
-    char *value;
-    struct _qNode *ln; /* left node */
-    struct _qNode *rn; /* right node */
-    int free;
-
-    /* tree footer */
-    struct _qNode *branch;
-    NMap *map;
-};
-
-struct _qNode
-{
-    char *key;
-    char *value;
-    struct _qNode *ln; /* left node */
-    struct _qNode *rn; /* right node */
-    int free;
-};
 
 SQTree *sqtr_open(const char *name)
 {
     assert_non_null(name);
+    assert_str_not_empty(name);
 
     /* optain map (file memory allocator) */
     xstrcreateft(_name, (char *)name);
@@ -38,7 +16,38 @@ SQTree *sqtr_open(const char *name)
     free(_name._str);
 
     SQTree *res = (SQTree *)nmap_optainDbDir(tmap, sizeof(SQTree));
-    res->free = 1;
+
+    if (nmap_isNewest(tmap, res)) /* check if database is newly created */
+    {
+        res->free = 1;
+        res->key = "none";
+    }
+
+    res->map = tmap;
+    return res;
+}
+
+SQTree *sqtr_openOnDevice(const char *name, const char *deviceName)
+{
+    assert_non_null(name);
+    assert_non_null(deviceName);
+    assert_str_not_empty(name);
+    assert_str_not_empty(deviceName);
+
+    /* optain map (file memory allocator) */
+    xstrcreateft(_name, (char *)name);
+    xstrappends(&_name, "_sqtr");
+    NMap *tmap = nmap_openStorageOnDevice(xstrserialize(_name), deviceName);
+    free(_name._str);
+
+    SQTree *res = (SQTree *)nmap_optainDbDir(tmap, sizeof(SQTree));
+
+    if (nmap_isNewest(tmap, res)) /* check if database is newly created */
+    {
+        res->free = 1;
+        res->key = "none";
+    }
+
     res->map = tmap;
     return res;
 }
@@ -51,104 +60,148 @@ SQTree *sqtr_open(const char *name)
     new;                                                                                                                              \
 })
 
+#define doTreeInsert(tree, key, onPresentButFreed, onPresentButNotFreed, onFreeSlotOnRight, onFreeSlowOnLeft)                         \
+    assert_non_null(tree);                                                                                                            \
+    assert_non_null(key);                                                                                                             \
+    assert_str_not_empty(key);                                                                                                        \
+                                                                                                                                      \
+    register SQNode *n = (SQNode *)tree;                                                                                              \
+    insert:                                                                                                                           \
+    for (register unsigned int i = 0; key[i] != '\00'; i++)                                                                           \
+    {                                                                                                                                 \
+        /* node is already inserted to tree / free node is on path -> update value */                                                 \
+        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */ \
+        {                                                                                                                             \
+            if (n->free == 1)                                                                                                         \
+                onPresentButFreed                                                                                                     \
+                    onPresentButNotFreed                                                                                              \
+        }                                                                                                                             \
+                                                                                                                                      \
+        /* take right branch */                                                                                                       \
+        if ((key[i / 8] >> (i % 8)) & 1) /* qtree algorithm look github/swiftense/qtree for reference */                              \
+        {                                                                                                                             \
+            if (n->rn != null)                                                                                                        \
+            {                                                                                                                         \
+                n = n->rn;                                                                                                            \
+                continue;                                                                                                             \
+            }                                                                                                                         \
+            onFreeSlotOnRight                                                                                                         \
+        }                                                                                                                             \
+                                                                                                                                      \
+        /* take left branch */                                                                                                        \
+        if (n->ln != null)                                                                                                            \
+        {                                                                                                                             \
+            n = n->ln;                                                                                                                \
+            continue;                                                                                                                 \
+        }                                                                                                                             \
+        onFreeSlowOnLeft                                                                                                              \
+    }                                                                                                                                 \
+    goto insert;
+
+#define doTreeSearch(tree, key, onFound /*<n>*/, onBranchEnd)                                                                  \
+    assert_non_null(tree);                                                                                                     \
+    assert_non_null(key);                                                                                                      \
+    assert_str_not_empty(key);                                                                                                 \
+    register SQNode *n = (SQNode *)tree;                                                                                       \
+    search:                                                                                                                    \
+    for (register unsigned int i = 0; key[i] != '\00'; i++)                                                                    \
+        if (((n->key[i] == key[i]) && strequals(n->key, key))) /*  node is found */                                            \
+            onFound                                            /* take right branch */                                         \
+                else if ((key[i / 8] >> (i % 8)) & 1)          /* qtree algorithm look github/swiftense/qtree for reference */ \
+                if ((n = n->rn) != null) continue;                                                                             \
+        else                                                                                                                   \
+            onBranchEnd /* take left branch */                                                                                 \
+                else if ((n = n->ln) != null) continue;                                                                        \
+    else onBranchEnd goto search;
+
 void sqtr_set(SQTree *tree, char *key, char *value)
 {
-    assert_non_null(tree);
-    assert_non_null(key);
-    assert_str_not_empty(key);
-
-    register SQNode *n = (SQNode *)tree;
-insert:
-    for (register unsigned int i = 0; key[i] != '\00'; i++)
-    {
-        /* node is already inserted to tree / free node is on path -> update value */
-        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
+    assert_non_null(value);
+    doTreeInsert(
+        tree, key,
         {
-            if (n->free == 1)
-            {
-                n->key = nstr_copytomap(key, tree->map);
-                n->free = 0;
-            }
+            n->key = nstr_copytomap(key, tree->map);
+            n->free = 0;
+        },
+        {
             n->value = nstr_copytomap(value, tree->map);
             return;
-        }
-
-        /* take right branch */
-        if ((key[i / 8] >> (i % 8)) & 1) /* qtree algorithm look github/swiftense/qtree for reference */
+        },
         {
-            if (n->rn != null)
-            {
-                n = n->rn;
-                continue;
-            }
             n->rn = sqtr_createNode(
                 nstr_copytomap(key, tree->map),
                 nstr_copytomap(value, tree->map));
             return;
-        }
-
-        /* take left branch */
-        if (n->ln != null)
+        },
         {
-            n = n->ln;
-            continue;
-        }
-        n->ln = sqtr_createNode(
-            nstr_copytomap(key, tree->map),
-            nstr_copytomap(value, tree->map));
-        return;
-    }
-    goto insert;
+            n->ln = sqtr_createNode(
+                nstr_copytomap(key, tree->map),
+                nstr_copytomap(value, tree->map));
+            return;
+        });
+}
+
+tBoolean sqtr_insertIfAvailable(SQTree *tree, char *key, char *value)
+{
+    assert_non_null(value);
+
+    doTreeInsert(
+        tree, key,
+        {
+            n->key = nstr_copytomap(key, tree->map);
+            n->value = nstr_copytomap(value, tree->map);
+            n->free = 0;
+            return tTrue;
+        },
+        {
+            return tFalse;
+        },
+        {
+            n->rn = sqtr_createNode(
+                nstr_copytomap(key, tree->map),
+                nstr_copytomap(value, tree->map));
+            return tTrue;
+        },
+        {
+            n->ln = sqtr_createNode(
+                nstr_copytomap(key, tree->map),
+                nstr_copytomap(value, tree->map));
+            return tTrue;
+        });
 }
 
 void sqtr_sets(SQTree *tree, char *key, char *value, int value_size)
 {
-    assert_non_null(tree);
-    assert_non_null(key);
-    assert_str_not_empty(key);
+    assert_non_null(value);
 
-    register SQNode *n = (SQNode *)tree;
-insert:
-    for (register unsigned int i = 0; key[i] != '\00'; i++)
-    {
-        /* node is already inserted to tree / free node is on path -> update value */
-        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */
+    // printf("Sets key: %s (%lx)\n", key, key);
+
+    doTreeInsert(
+        tree, key, {
+            n->key = nstr_copytomap(key, tree->map);
+            n->free = 0;
+            // printf("Sets no insert done...\n");
+        },
         {
-            if (n->free == 1)
-            {
-                n->key = nstr_copytomap(key, tree->map);
-                n->free = 0;
-            }
             n->value = nstr_copytomapws(value, value_size, tree->map);
             return;
-        }
-
-        /* take right branch */
-        if ((key[i / 8] >> (i % 8)) & 1) /* qtree algorithm look github/swiftense/qtree for reference */
+        },
         {
-            if (n->rn != null)
-            {
-                n = n->rn;
-                continue;
-            }
             n->rn = sqtr_createNode(
                 nstr_copytomap(key, tree->map),
                 nstr_copytomapws(value, value_size, tree->map));
-            return;
-        }
 
-        /* take left branch */
-        if (n->ln != null)
+            // printf("Sets key (after insert): %s (%lx)\n", n->rn->key, n->rn->key);
+            return;
+        },
         {
-            n = n->ln;
-            continue;
-        }
-        n->ln = sqtr_createNode(
-            nstr_copytomap(key, tree->map),
-            nstr_copytomapws(value, value_size, tree->map));
-        return;
-    }
-    goto insert;
+            n->ln = sqtr_createNode(
+                nstr_copytomap(key, tree->map),
+                nstr_copytomapws(value, value_size, tree->map));
+
+            // printf("Sets key (after insert): %s (%lx)\n", n->ln->key, n->ln->key);
+            return;
+        });
 }
 
 struct _nmap
@@ -164,36 +217,48 @@ struct _nmap
 
 SQNode *sqtr_optain(SQTree *tree, char *key)
 {
-    assert_non_null(tree);
-    assert_non_null(key);
-    assert_str_not_empty(key);
+    doTreeSearch(tree, key, return n;, return null;);
+}
 
-    register SQNode *n = (SQNode *)tree;
-    // printf("map start: 0x%lx, map end: 0x%lx\n", ((struct _nmap *)tree->map)->map_addr, ((struct _nmap *)tree->map)->map_addr + ((struct _nmap *)tree->map)->dbsize);
-    // printf("true 1\n");
-    for (register unsigned int i = 0;; i++)
-        // printf("true 1.5\n");
-        // printf("n->key: 0x%lx, key: 0x%lx\n", n->key, key);
-        if (((n->key[i] == key[i]) && strequals(n->key, key))) /*  node is found -> return  */
+void sqtr_concat(SQTree *tree, char *key, char *c)
+{
+    doTreeSearch(
+        tree, key,
+        {
+            n->value = nstr_copytomapptr(c, tree->map, n->value);
+            return;
+        },
+        return;);
+}
+
+SQNode *sqtr_pop(SQTree *tree, char *key)
+{
+    doTreeSearch(
+        tree, key, {
+            n->free = 1; /* mark as freed */
             return n;
+        },
+        return null;);
+}
 
-        /* take right branch */
-        else if ((key[i / 8] >> (i % 8)) & 1) /* qtree algorithm look github/swiftense/qtree for reference */
-            if ((n = n->rn) != null)
-                continue;
-            else
-                return null;
+void sqtr_remove(SQTree *tree, char *key)
+{
+    doTreeSearch(
+        tree, key, {
+            n->free = 1; /* mark as freed */
+            return;
+        },
+        return;);
+}
 
-        /* take left branch */
-        else if ((n = n->ln) != null)
-            continue;
-        else
-            return null;
+tBoolean sqtr_available(SQTree *tree, char *key)
+{
+    doTreeSearch(tree, key, return tFalse;, return tTrue;);
 }
 
 void sqtr_foreach(SQNode *branch, void (*itr)(SQNode *node))
 {
-    assert_non_null(tree);
+    assert_non_null(branch);
     assert_non_null(itr);
 
     if (branch == null)
@@ -219,7 +284,7 @@ debug int sqtr_longbr(SQTree *tree)
 
     for (; n != null; i++)
     {
-        printf("%d\n", i);
+        // printf("%d\n", i);
         if (sqtr_size(n->rn, 0) > sqtr_size(n->ln, 0))
             n = n->rn;
         else
@@ -241,3 +306,4 @@ debug int sqtr_size(SQNode *branch, int size)
 }
 
 #undef sqtr_createNode
+#undef doTreeSearch

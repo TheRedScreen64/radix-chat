@@ -7,6 +7,8 @@ extern "C"
 {
 #endif
 
+#include "../boolean.h"
+
 #define __NMAP_DEFAULT_PAGESIZE (sizeof(void *) * 3) /* this needs to be in an between of not to small to make the free list \
                                          insufficient to not too large for slowing down cache speeds (24 is a good in between), it should also be 64 bit aligned */
 
@@ -84,6 +86,13 @@ extern "C"
      * @return addr of grown block
      */
     extern void *nmap_seek(NMap *map, void *addr, _nmap_size size);
+
+    /**
+     * @brief checks if address is the most recently allocated block on map
+     * @param map
+     * @param addr
+     */
+    extern tBoolean nmap_isNewest(NMap *map, void *addr);
 
     /**
      * @brief realloc equivalent of nmap allocator in most cases nmap_seek offers better performance, just use on very small buffers

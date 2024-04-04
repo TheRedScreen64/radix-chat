@@ -4,6 +4,8 @@ corec=(utils/SHashmap.c
        utils/Convert.c
        utils/SString.c
        utils/String/String.c
+       utils/SQTree/NMap.c
+       utils/SQTree/SQTree.c
        utils/SQTree/SQTreeSlowLocal.c
        utils/StringIterator/StringIterator.c
        utils/debug.c

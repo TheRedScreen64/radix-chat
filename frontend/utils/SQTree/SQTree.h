@@ -1,4 +1,5 @@
 /// @author Noah Nagel
+/// Simple Database Interface built on NMap System
 
 #ifndef SQTREE_H /* just little different to bs tree */
 #define SQTREE_H
@@ -7,42 +8,121 @@
 extern "C"
 {
 #endif
-
-#include <sys/ioctl.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-
-#include "../String/String.h"
+#include "NMap.h"
+#include "../boolean.h"
 #include "../debug.h"
 
-#ifndef CLIENT_DEF
-    struct _qNode
+    typedef struct _qNode
     {
         char *key;
         char *value;
-    };
-#endif
+        struct _qNode *ln; /* left node */
+        struct _qNode *rn; /* right node */
+        int free;
+    } SQNode;
 
-    typedef struct _qNode SQNode;
-    typedef struct _qTree SQTree; /* Root node */
+    typedef struct _qTree
+    {
+        char *key;
+        char *value;
+        struct _qNode *ln; /* left node */
+        struct _qNode *rn; /* right node */
+        int free;
 
-    SQTree *sqtr_open(const char *name);
+        /* tree footer */
+        struct _qNode *branch;
+        NMap *map;
+    } SQTree;
 
-    void sqtr_foreach(SQNode *branch, void (*itr)(SQNode *node));
+    typedef struct _qPair
+    {
+        char *key;
+        char *value;
+    } SQPair;
 
-    void sqtr_set(SQTree *tree, char *key, char *value);
+    extern SQTree *sqtr_open(const char *name);
 
-    void sqtr_sets(SQTree *tree, char* key, char *value, int value_size);
+    extern SQTree *sqtr_openOnDevice(const char *name, const char *deviceName);
 
-    SQNode *sqtr_optain(SQTree *tree, char *key);
+    extern void sqtr_foreach(SQNode *branch, void (*itr)(SQNode *node));
 
-    void sqtr_close(SQTree *tree);
+    extern void sqtr_set(SQTree *tree, char *key, char *value);
 
-    debug int sqtr_size(SQNode *branch, int size);
-    
-    debug int sqtr_longbr(SQTree *tree);
+    /**
+     * @brief appends <c> to the value corresponding to <key> (only works with null terminated strings)
+     * @param tree
+     * @param key
+     */
+    extern void sqtr_concat(SQTree *tree, char *key, char *c);
+
+    /**
+     * @brief deletes an element
+     * @param tree
+     * @param key
+     * @return temporary node pointer persistent till the next tree operation or null if node wasn't present in tree
+     */
+    extern SQNode *sqtr_pop(SQTree *tree, char *key);
+
+    /**
+     * @brief deletes an element
+     * @param tree
+     * @param key
+     */
+    extern void sqtr_remove(SQTree *tree, char *key);
+
+    /**
+     * @param tree
+     * @param key
+     * @return false if key is already present in tree, otherwise true
+     */
+    extern tBoolean sqtr_available(SQTree *tree, char *key);
+
+    /**
+     * @brief inserts a pair into the tree if the key isn't present currently
+     * @param tree
+     * @param key
+     * @param value
+     * @return false if key is already present in tree, otherwise true
+     */
+    extern tBoolean sqtr_insertIfAvailable(SQTree *tree, char *key, char *value);
+
+    /**
+     * @brief insert for values that aren't \00 terminated, used for structs or binary file data
+     * @param tree
+     * @param key
+     * @param value
+     * @param value_size
+     */
+    extern void sqtr_sets(SQTree *tree, char *key, char *value, int value_size);
+
+    extern SQNode *sqtr_optain(SQTree *tree, char *key);
+
+    extern void sqtr_close(SQTree *tree);
+
+    extern debug int sqtr_size(SQNode *branch, int size);
+
+    extern debug int sqtr_longbr(SQTree *tree);
+
+    /**
+     * @brief foreach method that does not depend on recursion
+     */
+#define sqtr_foreach_nr(tree, itr_func, itr_node_name)              \
+    Vector(SQNode *) itr_node_name##_stack = vect_create(SQNode *); \
+    register SQNode *itr_node_name = (SQNode *)tree;                \
+    while (itr_node_name != 0 || itr_node_name##_stack._size != 0)  \
+    {                                                               \
+        while (itr_node_name != 0)                                  \
+        {                                                           \
+            vect_pushback(itr_node_name##_stack, itr_node_name);    \
+            itr_node_name = itr_node_name->ln;                      \
+        }                                                           \
+        itr_node_name = vect_pop(itr_node_name##_stack);            \
+        if (!itr_node_name->free)                                   \
+        {                                                           \
+            itr_func;                                               \
+        }                                                           \
+        itr_node_name = itr_node_name->rn;                          \
+    }
 
 #ifdef __cplusplus
 }

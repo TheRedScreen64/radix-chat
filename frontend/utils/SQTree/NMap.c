@@ -28,6 +28,7 @@
 #define __NMAP_DIR /*HOME_DIR*/ "/.nmdb"
 #define __NMAP_INF /*__NMAP_DIR*/ "/inf.dat"
 #define __NMAP_DBDIR /*__NMAP_DIR*/ "/db"
+#define __NMAP_FD_BOUND 600
 
 #ifndef __USE_XOPEN2K8 /* for use of pread/pwrite functions in vscode */
 #define __USE_XOPEN2K8
@@ -79,7 +80,7 @@ struct _nmap *nmap_openStorage(const char *name)
     if (t == null)
     {
         printf("nmap_openStorage getenv: HOME env not set\n");
-        return null;
+        _Exit(1);
     }
     xstrcreateft(str, t);
 
@@ -104,7 +105,7 @@ struct _nmap *nmap_openStorage(const char *name)
     if (db_shm == -1)
     {
         perror("nmap_openStorage shm_open");
-        return null;
+        _Exit(1);
     }
     lseek(db_shm, SEEK_SET, sizeof(struct _nmap));
     write(db_shm, t, 1); /* write dummy byte, variable wouldn't matter */
@@ -114,7 +115,7 @@ struct _nmap *nmap_openStorage(const char *name)
     if ((map = (struct _nmap *)mmap(null, sizeof(struct _nmap), PROT_READ | PROT_WRITE, MAP_SHARED, db_shm, 0)) == MAP_FAILED)
     {
         perror("nmap_openStorage mmap 1");
-        return null;
+        _Exit(1);
     }
 
     /* load database file */
@@ -125,7 +126,7 @@ struct _nmap *nmap_openStorage(const char *name)
         if ((dbfd = open(str._str, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)) == -1)
         {
             perror("nmap_openStorage open 1");
-            return null;
+            _Exit(1);
         }
 
         /* collect address info */
@@ -137,14 +138,14 @@ struct _nmap *nmap_openStorage(const char *name)
         if (((info = open(xstrserialize(str), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR))) == -1)
         {
             perror("nmap_openStorage open 2");
-            return null;
+            _Exit(1);
         }
         free(str._str);
         read(info, &map->map_addr, sizeof(void *));
 
         map->map_addr += __NMAP_DB_CAP;
 
-        map->dbfd = (int)6000 + (((unsigned long long)map->map_addr) / __NMAP_DB_CAP); /* creates a unique fd if __NMAP_DB_CAP is significantly larger than 2¹⁶ */
+        map->dbfd = (int)__NMAP_FD_BOUND + (((unsigned long long)map->map_addr) / __NMAP_DB_CAP); /* creates a unique fd if __NMAP_DB_CAP is significantly larger than 2¹⁶ */
         lseek(info, 0, SEEK_SET);                                                      /* needed because open for some reason doesn't open the file with offset set to 0 */
         write(info, &map->map_addr, sizeof(void *));
         close(info);
@@ -159,12 +160,13 @@ struct _nmap *nmap_openStorage(const char *name)
         if (mmap(map->map_addr, map->dbcapacity, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED_NOREPLACE, dbfd, 0) != map->map_addr)
         {
             printf("nmap_openStorage database limit reached\n");
-            return null;
+            _Exit(1);
         }
         if (dup2(dbfd, map->dbfd) == -1) /* should work in most cases to produce an unique descriptor by shifting the map address 16 bytes and casting it to int */
         {
             perror("nmap_openStorage dup2");
-            return null;
+            printf("Terminal file descriptor boundary exceeded. Try increasing or decreasing the __NMAP_FD_BOUND constant.\n");
+            _Exit(1);
         }
 
         /* write database name to map */
@@ -181,13 +183,14 @@ struct _nmap *nmap_openStorage(const char *name)
     if (mmap(map->map_addr, map->dbcapacity, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED_NOREPLACE, dbfd, 0) == MAP_FAILED)
     {
         perror("nmap_openStorage mmap 2");
-        return null;
+        _Exit(1);
     }
 
     if (dup2(dbfd, map->dbfd) == -1) /* should work in most cases to produce an unique descriptor by shifting the map address 16 bytes and casting it to int */
     {
         perror("nmap_openStorage dup2");
-        return null;
+        printf("Terminal file descriptor boundary exceeded. Try increasing or decreasing the __NMAP_FD_BOUND constant.\n");
+        _Exit(1);
     }
 
     return (void *)map;
@@ -207,7 +210,7 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
     if (db_shm == -1)
     {
         perror("nmap_openStorage shm_open");
-        return null;
+        _Exit(1);
     }
     lseek(db_shm, SEEK_SET, sizeof(struct _nmap));
     write(db_shm, &db_shm, 1); /* dummy byte */
@@ -217,7 +220,7 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
     if ((map = (struct _nmap *)mmap(null, sizeof(struct _nmap), PROT_READ | PROT_WRITE, MAP_SHARED, db_shm, 0)) == MAP_FAILED)
     {
         perror("nmap_openStorage mmap 1");
-        return null;
+        _Exit(1);
     }
 
     /* load database file */
@@ -228,7 +231,7 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
         if ((dbfd = open(deviceId, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)) == -1)
         {
             perror("nmap_openStorage open 1");
-            return null;
+            _Exit(1);
         }
 
         /* create info filepath */
@@ -236,7 +239,7 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
         if (t == null)
         {
             printf("nmap_openStorage getenv: HOME env not set\n");
-            return null;
+            _Exit(1);
         }
         xstrcreateft(str, t);
 
@@ -256,14 +259,14 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
         if (((info = open(xstrserialize(str), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR))) == -1)
         {
             perror("nmap_openStorage open 2");
-            return null;
+            _Exit(1);
         }
         free(str._str);
         read(info, &map->map_addr, sizeof(void *));
 
         map->map_addr += __NMAP_DB_CAP;
 
-        map->dbfd = (int)6000 + (((unsigned long long)map->map_addr) / __NMAP_DB_CAP); /* creates a unique fd if __NMAP_DB_CAP is significantly larger than 2¹⁶ */
+        map->dbfd = (int)__NMAP_FD_BOUND + (((unsigned long long)map->map_addr) / __NMAP_DB_CAP); /* creates a unique fd if __NMAP_DB_CAP is significantly larger than 2¹⁶ */
         lseek(info, 0, SEEK_SET);                                                      /* needed because open for some reason doesn't open the file with offset set to 0 */
         write(info, &map->map_addr, sizeof(void *));
         close(info);
@@ -278,12 +281,13 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
         if (mmap(map->map_addr, map->dbcapacity, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED_NOREPLACE, dbfd, 0) != map->map_addr)
         {
             printf("nmap_openStorage database limit reached\n");
-            return null;
+            _Exit(1);
         }
         if (dup2(dbfd, map->dbfd) == -1) /* should work in most cases to produce an unique descriptor by shifting the map address 16 bytes and casting it to int */
         {
             perror("nmap_openStorage dup2");
-            return null;
+            printf("Terminal file descriptor boundary exceeded. Try increasing or decreasing the __NMAP_FD_BOUND constant.\n");
+            _Exit(1);
         }
 
         /* write database name to map */
@@ -300,13 +304,14 @@ NMap *nmap_openStorageOnDevice(const char *name, const char *deviceId)
     if (mmap(map->map_addr, map->dbcapacity, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED_NOREPLACE, dbfd, 0) == MAP_FAILED)
     {
         perror("nmap_openStorage mmap 2");
-        return null;
+        _Exit(1);
     }
 
     if (dup2(dbfd, map->dbfd) == -1) /* should work in most cases to produce an unique descriptor by shifting the map address 16 bytes and casting it to int */
     {
         perror("nmap_openStorage dup2");
-        return null;
+        printf("Terminal file descriptor boundary exceeded. Try increasing or decreasing the __NMAP_FD_BOUND constant.\n");
+        _Exit(1);
     }
 
     return (void *)map;
@@ -331,7 +336,8 @@ void *nmap_optainDbDir(NMap *map, _nmap_size size)
     assert_non_null(map);
 
     if ((map->map_addr + map->dbsize) == map->dbdir)
-        nmap_qalloc(map, size);
+        map->dbdir = nmap_qalloc(map, size);
+
     return map->dbdir;
 }
 
@@ -374,6 +380,10 @@ __attribute__((__always_inline__)) void *nmap_qalloc(struct _nmap *map, _nmap_si
         nmap_grow(map);
 
     *ret = size; /* set size header */
+
+    //printf("qalloc size: %lld\n", size);
+    //printf("qalloc addr: %lld\n", ret + 1);
+    //printf("qalloc size usable: %lld\n", _nmap_usableSize((ret + 1)));
 
     return ret + 1;
 }
@@ -445,6 +455,11 @@ void *nmap_seek(NMap *map, void *addr, _nmap_size size)
     nmap_free(map, addr); /* free old buff */
 
     return ret;
+}
+
+tBoolean nmap_isNewest(NMap *map, void *addr)
+{
+    return (addr == ((map->dbsize + map->map_addr) - _nmap_usableSize(addr)));
 }
 
 void *nmap_realloc(NMap *map, void *addr, _nmap_size size)
