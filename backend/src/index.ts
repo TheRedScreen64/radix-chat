@@ -63,15 +63,15 @@ initWebsocket(wss);
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(async (req, res, next) => {
-   const validIps = ["127.0.0.1", "::1"];
+// app.use(async (req, res, next) => {
+//    const validIps = ["127.0.0.1", "::1"];
 
-   if (validIps.includes(req.socket.remoteAddress ? req.socket.remoteAddress : "")) {
-      return next();
-   } else {
-      return next({ msg: `Bad IP: ${req.socket.remoteAddress}`, status: 401 });
-   }
-});
+//    if (validIps.includes(req.socket.remoteAddress ? req.socket.remoteAddress : "")) {
+//       return next();
+//    } else {
+//       return next({ msg: `Bad IP: ${req.socket.remoteAddress}`, status: 401 });
+//    }
+// });
 
 app.use(async (req, res, next) => {
    const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
