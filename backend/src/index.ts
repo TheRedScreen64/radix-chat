@@ -19,7 +19,9 @@ import { voteRouter } from "./routes/topics/vote.js";
 import { existsRouter } from "./routes/user/exists.js";
 import { userRouter } from "./routes/user/user.js";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+   dotenv.config();
+}
 
 const errorHandler = (err: any, req: any, res: any, next: any) => {
    console.error(err);
@@ -52,7 +54,7 @@ const limiter = rateLimit({
 const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
-const PORT = parseInt(process.env.PORT ? process.env.PORT : "3000");
+const PORT = parseInt(process.env.PORT || "3000");
 
 initCronJob();
 initWebsocket(wss);
