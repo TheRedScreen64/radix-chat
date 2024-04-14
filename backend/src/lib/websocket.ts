@@ -51,7 +51,7 @@ function initWebsocket(wss: WebSocketServer) {
 
       const { session, user } = await lucia.validateSession(sessionId);
       if (!session || !user) {
-         ws.close();
+         ws.close(1014, "Unauthorized");
          return;
       }
 
