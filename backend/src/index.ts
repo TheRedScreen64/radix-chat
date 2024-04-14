@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === "production") {
    };
 }
 const app = express();
-const server = process.env.NODE_ENV === "production" ? createHttpsServer(app) : createHttpServer(app);
+const server = process.env.NODE_ENV === "production" ? createHttpsServer(httpsOptions, app) : createHttpServer(app);
 const wss = new WebSocketServer({ server });
 const PORT = parseInt(process.env.PORT || "3000");
 
