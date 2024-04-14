@@ -56,8 +56,8 @@ const limiter = rateLimit({
 let httpsOptions = {};
 if (process.env.NODE_ENV === "production") {
    httpsOptions = {
-      key: fs.readFileSync("/home/node/app/certs/privkey.pem"),
-      cert: fs.readFileSync("/home/node/app/certs/fullchain.pem"),
+      key: fs.readFileSync("/certs/live/radix-api.theredscreen.com/privkey.pem"),
+      cert: fs.readFileSync("/certs/live/radix-api.theredscreen.com/fullchain.pem"),
    };
 }
 const app = express();
