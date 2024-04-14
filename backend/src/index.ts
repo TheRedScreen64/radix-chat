@@ -2,7 +2,9 @@ import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 import express from "express";
 import rateLimit from "express-rate-limit";
-import { createServer } from "http";
+import fs from "fs";
+import { createServer as createHttpServer } from "http";
+import { createServer as createHttpsServer } from "https";
 import { WebSocketServer } from "ws";
 import { lucia } from "./lib/auth.js";
 import { initCronJob } from "./lib/evaluateTopics.js";
@@ -51,8 +53,15 @@ const limiter = rateLimit({
    max: 100,
 });
 
+let httpsOptions = {};
+if (process.env.NODE_ENV === "production") {
+   httpsOptions = {
+      key: fs.readFileSync("../certs/cert.key"),
+      cert: fs.readFileSync("../certs/cert.pem"),
+   };
+}
 const app = express();
-const server = createServer(app);
+const server = process.env.NODE_ENV === "production" ? createHttpsServer(app) : createHttpServer(app);
 const wss = new WebSocketServer({ server });
 const PORT = parseInt(process.env.PORT || "3000");
 
