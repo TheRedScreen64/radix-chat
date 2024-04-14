@@ -27,6 +27,13 @@ Start the dev server
 pnpm dev
 ```
 
+<br>
+
+> [!WARNING]  
+> Documentation is partly outdated from this point on!
+
+<br>
+
 # API
 
 ## Auth - Signup
