@@ -56,8 +56,8 @@ const limiter = rateLimit({
 let httpsOptions = {};
 if (process.env.NODE_ENV === "production") {
    httpsOptions = {
-      key: fs.readFileSync("../certs/cert.key"),
-      cert: fs.readFileSync("../certs/cert.pem"),
+      key: fs.readFileSync("/home/node/app/certs/cert.key"),
+      cert: fs.readFileSync("/home/node/app/certs/cert.pem"),
    };
 }
 const app = express();
