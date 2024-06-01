@@ -1,4 +1,5 @@
 import cookieParser from "cookie-parser";
+import cors, { CorsOptions } from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
 import rateLimit from "express-rate-limit";
@@ -54,6 +55,10 @@ const limiter = rateLimit({
 });
 
 let httpsOptions = {};
+let corsOptions: CorsOptions = {
+   origin: "https://development.nosehad.com",
+   optionsSuccessStatus: 200,
+};
 if (process.env.NODE_ENV === "production") {
    httpsOptions = {
       key: fs.readFileSync("/home/node/app/certs/privkey.pem"),
@@ -68,13 +73,12 @@ const PORT = parseInt(process.env.PORT || "3000");
 initCronJob();
 initWebsocket(wss);
 
-// app.use(cors);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
+const validIps = process.env.VALID_IPS ? process.env.VALID_IPS.split(",") : [];
 app.use(async (req, res, next) => {
-   const validIps = ["127.0.0.1", "::1"];
-
    if (validIps.includes(req.socket.remoteAddress ? req.socket.remoteAddress : "")) {
       return next();
    } else {
