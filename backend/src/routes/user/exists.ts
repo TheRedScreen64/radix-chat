@@ -6,9 +6,9 @@ import { formatPrismaError } from "../../lib/utils.js";
 export const existsRouter = express.Router();
 
 existsRouter.post("/user/exists", async (req, res, next) => {
-   if (!res.locals.user) {
-      return next({ msg: "Not authorized", status: 401 });
-   }
+   // if (!res.locals.user) {
+   //    return next({ msg: "Not authorized", status: 401 });
+   // }
    if (!req.body) {
       return next({ msg: "No input provided", status: 400 });
    }
