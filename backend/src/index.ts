@@ -77,14 +77,14 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-const validIps = process.env.VALID_IPS ? process.env.VALID_IPS.split(",") : [];
-app.use(async (req, res, next) => {
-   if (validIps.includes(req.socket.remoteAddress ? req.socket.remoteAddress : "")) {
-      return next();
-   } else {
-      return next({ msg: `Bad IP: ${req.socket.remoteAddress}`, status: 401 });
-   }
-});
+// const validIps = process.env.VALID_IPS ? process.env.VALID_IPS.split(",") : [];
+// app.use(async (req, res, next) => {
+//    if (validIps.includes(req.socket.remoteAddress ? req.socket.remoteAddress : "")) {
+//       return next();
+//    } else {
+//       return next({ msg: `Bad IP: ${req.socket.remoteAddress}`, status: 401 });
+//    }
+// });
 
 app.use(async (req, res, next) => {
    const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
