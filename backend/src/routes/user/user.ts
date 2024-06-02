@@ -119,7 +119,7 @@ userRouter.delete("/user", async (_, res, next) => {
 
       await lucia.invalidateSession(res.locals.session.id);
       const sessionCookie = lucia.createBlankSessionCookie();
-      return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send();
+      return res.cookie(sessionCookie.name, sessionCookie.value, { sameSite: "none", secure: true }).status(200).send();
    } catch (err) {
       console.error(err);
       const errorMessage = formatPrismaError(err);

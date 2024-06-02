@@ -48,10 +48,16 @@ const errorHandler = (err: any, req: any, res: any, next: any) => {
 const authLimiter = rateLimit({
    windowMs: 60 * 1000,
    max: 5,
+   message: {
+      error: { message: "Too many requests, please try again later." },
+   },
 });
 const limiter = rateLimit({
    windowMs: 60 * 1000,
    max: 100,
+   message: {
+      error: { message: "Too many requests, please try again later." },
+   },
 });
 
 let httpsOptions = {};
@@ -108,7 +114,8 @@ app.use(async (req, res, next) => {
 });
 
 app.use(limiter);
-app.use("/auth/*", authLimiter);
+app.use("/auth/login", authLimiter);
+app.use("/auth/signup", authLimiter);
 
 app.use(
    loginRouter,
