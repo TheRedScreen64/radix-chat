@@ -58,6 +58,7 @@ let httpsOptions = {};
 let corsOptions: CorsOptions = {
    origin: "https://development.nosehad.com",
    optionsSuccessStatus: 200,
+   credentials: true,
 };
 if (process.env.NODE_ENV === "production") {
    httpsOptions = {
