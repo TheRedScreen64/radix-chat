@@ -43,7 +43,7 @@ loginRouter.post("/auth/login", async (req, res, next) => {
       const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
       if (persistent == true) {
-         return res.cookie(sessionCookie.name, sessionCookie.value, { maxAge: 7776000000 }).status(200).send();
+         return res.cookie(sessionCookie.name, sessionCookie.value, { maxAge: 7776000000, sameSite: "none" }).status(200).send();
       } else {
          return res.cookie(sessionCookie.name, sessionCookie.value).status(200).send();
       }
