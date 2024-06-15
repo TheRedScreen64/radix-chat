@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import type { User, Session } from "lucia";
+import "http";
+import type { Session, User } from "lucia";
 
 declare global {
    namespace Express {
@@ -9,6 +10,12 @@ declare global {
       }
    }
    var prisma: PrismaClient;
+}
+
+declare module "http" {
+   interface IncomingMessage {
+      sessionId: string | null;
+   }
 }
 
 export {};

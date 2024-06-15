@@ -1,5 +1,4 @@
 import { User } from "lucia";
-import url from "url";
 import { WebSocket, type WebSocketServer } from "ws";
 import { z } from "zod";
 import { lucia } from "./auth.js";
@@ -43,8 +42,8 @@ function initWebsocket(wss: WebSocketServer) {
          connections.set(ip, connection);
       }
 
-      let sessionId = url.parse(req.url!, true).query.session!;
-      if (!sessionId || Array.isArray(sessionId)) {
+      let sessionId = req.sessionId;
+      if (!sessionId) {
          ws.close();
          return;
       }
@@ -163,10 +162,7 @@ async function handleChatMessage(ws: WebSocket, data: any, user: User) {
    }
 }
 
-async function validateSession(sessionId: string | string[]): Promise<boolean> {
-   if (Array.isArray(sessionId)) {
-      return false;
-   }
+async function validateSession(sessionId: string): Promise<boolean> {
    const { session, user } = await lucia.validateSession(sessionId);
    if (!session || !user) {
       return false;

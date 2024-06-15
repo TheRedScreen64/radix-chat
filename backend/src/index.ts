@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === "production") {
 }
 const app = express();
 const server = process.env.NODE_ENV === "production" ? createHttpsServer(httpsOptions, app) : createHttpServer(app);
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({ noServer: true });
 const PORT = parseInt(process.env.PORT || "3000");
 
 initCronJob();
@@ -140,4 +140,18 @@ app.use((_, res) => {
 
 server.listen(PORT, () => {
    console.log(`Listening on port ${PORT}`);
+});
+
+server.on("upgrade", async (req, socket, head) => {
+   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
+   if (!sessionId) {
+      socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
+      socket.destroy();
+      return;
+   }
+
+   wss.handleUpgrade(req, socket, head, (ws) => {
+      req.sessionId = sessionId;
+      wss.emit("connection", ws, req);
+   });
 });
