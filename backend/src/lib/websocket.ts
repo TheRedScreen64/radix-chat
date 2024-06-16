@@ -114,7 +114,7 @@ async function handleGlobalMessage(ws: WebSocket, wss: WebSocketServer, data: an
 
    let message = await createMessage(ws, content, user.id);
    if (message) {
-      broadcast(wss, message, ws);
+      broadcast(wss, { type: "globalMessage", message }, ws);
    }
 }
 
