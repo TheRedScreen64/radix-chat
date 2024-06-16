@@ -112,8 +112,10 @@ async function handleGlobalMessage(ws: WebSocket, wss: WebSocketServer, data: an
    }
    const { content } = requestParams.data;
 
-   broadcast(wss, content, ws);
-   await createMessage(ws, content, user.id);
+   let message = await createMessage(ws, content, user.id);
+   if (message) {
+      broadcast(wss, message, ws);
+   }
 }
 
 async function handleChatMessage(ws: WebSocket, data: any, user: User) {
@@ -196,7 +198,6 @@ async function checkRateLimit(connection: any, rateLimit: RateLimit): Promise<bo
 }
 
 function broadcast(wss: WebSocketServer, data: any, skip: WebSocket | null) {
-   wss.clients;
    wss.clients.forEach((client) => {
       if (skip && client == skip) return;
       if (client.readyState === WebSocket.OPEN) {
@@ -207,16 +208,19 @@ function broadcast(wss: WebSocketServer, data: any, skip: WebSocket | null) {
 
 async function createMessage(ws: WebSocket, content: string, userId: string) {
    try {
-      await prisma.globalMessage.create({
-         data: {
-            content,
-            user: {
-               connect: {
-                  id: userId,
+      let message = await prisma.globalMessage
+         .create({
+            data: {
+               content,
+               user: {
+                  connect: {
+                     id: userId,
+                  },
                },
             },
-         },
-      });
+         })
+         .user();
+      return message;
    } catch (err) {
       const errorMessage = formatPrismaError(err);
       return ws.send(JSON.stringify({ error: { message: `Failed to create message: ${errorMessage}` } }));
