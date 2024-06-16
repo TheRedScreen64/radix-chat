@@ -208,18 +208,24 @@ function broadcast(wss: WebSocketServer, data: any, skip: WebSocket | null) {
 
 async function createMessage(ws: WebSocket, content: string, userId: string) {
    try {
-      let message = await prisma.globalMessage
-         .create({
-            data: {
-               content,
-               user: {
-                  connect: {
-                     id: userId,
-                  },
+      let message = await prisma.globalMessage.create({
+         data: {
+            content,
+            user: {
+               connect: {
+                  id: userId,
                },
             },
-         })
-         .user();
+         },
+         include: {
+            user: {
+               select: {
+                  username: true,
+                  avatarUrl: true,
+               },
+            },
+         },
+      });
       return message;
    } catch (err) {
       const errorMessage = formatPrismaError(err);
