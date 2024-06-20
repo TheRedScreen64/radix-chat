@@ -356,7 +356,7 @@ _nmap_size nmap_getPageSize()
     return __NMAP_DEFAULT_PAGESIZE;
 }
 
-static __attribute__((__always_inline__)) void nmap_grow(struct _nmap *map)
+static void nmap_grow(struct _nmap *map)
 {
     munmap(map->map_addr, map->dbcapacity);
     lseek(map->dbfd, map->dbcapacity *= 2, SEEK_SET);
@@ -364,7 +364,7 @@ static __attribute__((__always_inline__)) void nmap_grow(struct _nmap *map)
     mmap(map->map_addr, map->dbcapacity, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED_NOREPLACE, map->dbfd, 0);
 }
 
-__attribute__((__always_inline__)) void *nmap_qalloc(struct _nmap *map, _nmap_size size)
+ void *nmap_qalloc(struct _nmap *map, _nmap_size size)
 {
     assert_non_null(map);
 
@@ -388,7 +388,7 @@ __attribute__((__always_inline__)) void *nmap_qalloc(struct _nmap *map, _nmap_si
     return ret + 1;
 }
 
-__attribute__((__always_inline__)) void *nmap_alloc(struct _nmap *map, _nmap_size size)
+void *nmap_alloc(struct _nmap *map, _nmap_size size)
 {
     assert_non_null(map);
 

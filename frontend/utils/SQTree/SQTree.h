@@ -11,6 +11,8 @@ extern "C"
 #include "NMap.h"
 #include "../boolean.h"
 #include "../debug.h"
+#include "../Vector.h"
+#include "../String/String.h"
 
     typedef struct _qNode
     {
@@ -97,6 +99,8 @@ extern "C"
 
     extern SQNode *sqtr_optain(SQTree *tree, char *key);
 
+    extern void sqtr_walkdir(SQTree *tree, char *dir);
+
     extern void sqtr_close(SQTree *tree);
 
     extern debug int sqtr_size(SQNode *branch, int size);
@@ -123,6 +127,35 @@ extern "C"
         }                                                           \
         itr_node_name = itr_node_name->rn;                          \
     }
+
+    /**
+     * @brief foreach method that only matches nodes which keys start with <dir>
+     */
+#define sqtr_walkdir(tree, dir, itr_func, itr_node_name)        \
+    assert_non_null(tree);                                      \
+    assert_non_null(dir);                                       \
+                                                                \
+    register SQNode *n = (SQNode *)tree;                        \
+    for (register unsigned int i = 0; dir[i / 8] != '\00'; i++) \
+    {                                                           \
+        if (strstartswith(n->key, dir))                         \
+        {                                                       \
+            SQNode *itr_node_name = n;                          \
+            itr_func;                                           \
+        }                                                       \
+        if ((dir[i / 8] >> (i % 8)) & 1)                        \
+            if ((n = n->rn) != 0)                               \
+                continue;                                       \
+            else                                                \
+                break;                                          \
+        else if ((n = n->ln) != 0)                              \
+            continue;                                           \
+        else                                                    \
+            break;                                              \
+    }                                                           \
+    /* after end of directory string just do foreach */         \
+    sqtr_foreach_nr(                                            \
+        n, if (strstartswith(n->key, dir)) {SQNode* itr_node_name = current; itr_func; }, current);
 
 #ifdef __cplusplus
 }

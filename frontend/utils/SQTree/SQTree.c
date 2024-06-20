@@ -67,10 +67,10 @@ SQTree *sqtr_openOnDevice(const char *name, const char *deviceName)
                                                                                                                                       \
     register SQNode *n = (SQNode *)tree;                                                                                              \
     insert:                                                                                                                           \
-    for (register unsigned int i = 0; key[i] != '\00'; i++)                                                                           \
+    for (register unsigned int i = 0; key[i / 8] != '\00'; i++)                                                                           \
     {                                                                                                                                 \
         /* node is already inserted to tree / free node is on path -> update value */                                                 \
-        if (n->free == 1 || ((n->key[i] == key[i]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */ \
+        if (n->free == 1 || ((n->key[i / 8] == key[i / 8]) && strequals(n->key, key))) /* node is already inserted to tree -> update value */ \
         {                                                                                                                             \
             if (n->free == 1)                                                                                                         \
                 onPresentButFreed                                                                                                     \
@@ -104,8 +104,8 @@ SQTree *sqtr_openOnDevice(const char *name, const char *deviceName)
     assert_str_not_empty(key);                                                                                                 \
     register SQNode *n = (SQNode *)tree;                                                                                       \
     search:                                                                                                                    \
-    for (register unsigned int i = 0; key[i] != '\00'; i++)                                                                    \
-        if (((n->key[i] == key[i]) && strequals(n->key, key))) /*  node is found */                                            \
+    for (register unsigned int i = 0; key[i / 8] != '\00'; i++)                                                                    \
+        if (((n->key[i / 8] == key[i / 8]) && strequals(n->key, key))) /*  node is found */                                            \
             onFound                                            /* take right branch */                                         \
                 else if ((key[i / 8] >> (i % 8)) & 1)          /* qtree algorithm look github/swiftense/qtree for reference */ \
                 if ((n = n->rn) != null) continue;                                                                             \

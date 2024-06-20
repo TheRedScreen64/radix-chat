@@ -17,7 +17,7 @@ static void srv_connectToContentDB()
 {
     debga(SRV_PREFIX CONT_PREFIX "%s\n", __func__);
 
-    content = sqtr_openOnDevice("radix_chat_content_db_y7", "/run/media/nosehad/DATA/contentServer.radix_data");
+    content = sqtr_open("radix_chat_content_db_y9");
 }
 
 static tBoolean srv_contentPathAccessible(char *path)
@@ -39,40 +39,25 @@ static tBoolean srv_contentPathAccessible(char *path)
 static tBoolean srv_pushContent(char *path, char *data, _nmap_size data_size)
 {
     debgaa(SRV_PREFIX CONT_PREFIX "%s (Path: '%s') ---------<\n", __func__, path);
-
     SQNode *node;
     struct _srv_content *upload_content;
-
-    // printf(" data: %s\n", data);
-
     if ((node = sqtr_optain(content, path)) == null)
     {
         debga(SRV_PREFIX CONT_PREFIX "Creating content node for '%s'.\n", path);
-
         upload_content = (struct _srv_content *)nmap_alloc(content->map, sizeof(struct _srv_content));
         upload_content->isMutable = tTrue;
         upload_content->content = nstr_copytomapws(data, data_size, content->map);
         upload_content->size = data_size;
-
-        // printf("upload_content=%lx, upload_content->isMutable=%d, upload_content->content=%lx, upload_content->size=%lld\n", upload_content, upload_content->isMutable, upload_content->content, upload_content->size);
-
-        // printf("upload_content->content: %s\n", upload_content->content);
-
         sqtr_sets(content, path, (char *)upload_content, sizeof(struct _srv_content));
         return tTrue;
     }
     else if ((upload_content = ((struct _srv_content *)node->value))->isMutable)
     {
         debga(SRV_PREFIX CONT_PREFIX "Adding content to node of '%s'.\n", path);
-
         upload_content->content = nstr_copytomapptrs(content->map, upload_content->content, upload_content->size, data, data_size);
         upload_content->size += data_size;
-        // printf("upload_content=%lx, upload_content->isMutable=%d, upload_content->content=%lx, upload_content->size=%lld\n", upload_content, upload_content->isMutable, upload_content->content, upload_content->size);
         return tTrue;
     }
-
-    // printf("node's content: %s\n", upload_content->content);
-    // printf("node's size: %lld\n", upload_content->size);
     debga(SRV_PREFIX CONT_PREFIX "Rejecting request on immutable node of '%s'.\n", path);
     return tFalse;
 }

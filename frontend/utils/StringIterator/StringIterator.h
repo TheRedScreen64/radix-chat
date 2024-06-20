@@ -142,7 +142,7 @@ extern "C"
 
     extern void itr_getAbstract(StringIterator *iterator, AbstractValue *value);
     extern void itr_clearAbstract(AbstractValue *value);
-    extern void __attribute__((always_inline)) _itr_skipchars(StringIterator *iterator);
+    extern void _itr_skipchars(StringIterator *iterator);
 
     extern void itr_printObject(AbstractValue *obj);
     /* automatically frees <obj> */

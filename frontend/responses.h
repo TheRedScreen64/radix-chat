@@ -1,0 +1,4 @@
+#define API_WRONG_METHOD 134, "{\"status\":\"err\",\"err_code\":\"invalid_method\",\"description\":\"Check if the query you try to execute requires an GET or an POST request.\"}"
+#define API_SUCCESS 83, "{\"status\":\"ok\",\"description\":\"Your query was executed with no problems whatsoever.\"}"
+#define API_INVALID_PATH 121, "{\"status\":\"err\",\"err_code\":\"invalid_path\",\"description\":\"The accessed content path is already present or doesn't exist.\"}"
+#define API_EMPTY_POST 104, "{\"status\":\"err\",\"err_code\":\"empty_post\",\"description\":\"You've sent an post request with an empty body.\"}"

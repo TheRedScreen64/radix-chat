@@ -7,7 +7,6 @@
 #include <string.h>
 #include <errno.h>
 
-
 #ifdef SRV_USEDEBUGMODE
 
 pthread_t file_check;
@@ -41,7 +40,15 @@ SQLTree *staticFiles;
 XString static404;
 XString staticCMS;
 
-#include "PageData.hpp"
+#if defined(SRV_USE_HTTPS) && SRV_USE_HTTPS == 1
+XString tls_cert;
+XString tls_key;
+#endif
+
+#include "PageData.h"
+#include "Content.h"
+
+#include "responses.h"
 
 static struct MHD_Response *srv_response404()
 {
@@ -50,19 +57,21 @@ static struct MHD_Response *srv_response404()
 
 static struct MHD_Response *srv_responseDef(char *route)
 {
-    PageData* data;
-    if((data = srv_optainDataForRoute(route)) == null)
+    PageData *data;
+    if ((data = srv_optainDataForRoute(route)) == null)
         data = srv_optainDataForRoute("/"); /* use default route */
-        
+
     XString response = data->page_data;
     return MHD_create_response_from_buffer(response._size, (void *)response._str, MHD_RESPMEM_PERSISTENT);
 }
 
 /* simple switch statement to examine content type of static file */
-static inline char *srv_optainct(XString filePath)
+static inline char *srv_optainct(char *str)
 {
-    switch (strequalsmo(xstrgetfileextension(filePath._str), 9,
-                        ".nosehad", ".png", ".jpeg", ".svg", ".ttf", ".json", ".js", ".css", ".mpeg"))
+    switch (strequalsmo(xstrgetfileextension(str), 25,
+                        ".nosehad", ".png", ".jpeg", ".svg", ".ttf", ".json", ".js", ".css", ".mpeg",
+                        ".txt", ".jpg", ".otf", ".woff", ".woff2", ".gif", ".webp", ".xml", ".pdf",
+                        ".zip", ".mp3", ".mp4", ".webm", ".ogg", ".csv", ".exe"))
     {
     case 0:
         return "text/html";
@@ -82,8 +91,40 @@ static inline char *srv_optainct(XString filePath)
         return "text/css";
     case 8:
         return "audio/mpeg";
+    case 9:
+        return "text/plain; charset=utf-8";
+    case 10:
+        return "image/jpeg";
+    case 11:
+        return "font/otf";
+    case 12:
+        return "font/woff";
+    case 13:
+        return "font/woff2";
+    case 14:
+        return "image/gif";
+    case 15:
+        return "image/webp";
+    case 16:
+        return "application/xml";
+    case 17:
+        return "application/pdf";
+    case 18:
+        return "application/zip";
+    case 19:
+        return "audio/mpeg";
+    case 20:
+        return "video/mp4";
+    case 21:
+        return "video/webm";
+    case 22:
+        return "audio/ogg";
+    case 23:
+        return "text/csv";
+    case 24:
+        return "application/octet-stream";
     default:
-        return "text/html";
+        return "text/plain; charset=utf-8";
     }
 }
 
@@ -105,9 +146,74 @@ static enum MHD_Result srv_handleonreq(void *cls,
 
     char *file;
     struct MHD_Response *response;
-    /* only static allowed currently */
-    if ((file = strremoveAdStart(url, "/static/")) == null)
+    register char *content_type = "text/html";
+    /* push/upload content */
+    if ((file = strremoveAdStart(url, "/content/push/")) != null)
     {
+        /* handle content request */
+        if (0 != strcmp(method, "POST"))
+        {
+            response = MHD_create_response_from_buffer(API_WRONG_METHOD, MHD_RESPMEM_PERSISTENT);
+            content_type = "application/json";
+            goto send_response;
+        }
+        if (null == *con_cls)
+        {
+            if (srv_contentPathAccessible(file))
+            {
+                *con_cls = connection;
+                return MHD_YES;
+            }
+            /* on path a file is already present, response with error */
+            struct MHD_Response *response = MHD_create_response_from_buffer(API_INVALID_PATH, MHD_RESPMEM_PERSISTENT);
+            enum MHD_Result ret = MHD_queue_response(connection, MHD_HTTP_BAD_REQUEST, response);
+            MHD_destroy_response(response);
+            return ret;
+        }
+        if (0 != *upload_data_size)
+        {
+            if (!srv_pushContent(file, upload_data, *upload_data_size))
+                return MHD_NO; /* internal error, double access on same path */
+
+            *upload_data_size = 0;
+            return MHD_YES;
+        }
+        /* No more upload data, return success, write content node */
+        if (!srv_writeNode(file))
+        {
+            // exit(0);
+            struct MHD_Response *response = MHD_create_response_from_buffer(API_EMPTY_POST, MHD_RESPMEM_PERSISTENT);
+            enum MHD_Result ret = MHD_queue_response(connection, MHD_HTTP_BAD_REQUEST, response);
+            MHD_destroy_response(response);
+            return ret;
+        }
+        response = MHD_create_response_from_buffer(API_SUCCESS, MHD_RESPMEM_PERSISTENT);
+        content_type = "application/json";
+        goto send_response;
+    }
+    /* optain content */
+    else if ((file = strremoveAdStart(url, "/content/get/")) != null)
+    {
+        /* handle content request */
+        struct _srv_content *contentNode = srv_optainContent(file);
+        if (contentNode == null)
+        {
+            response = MHD_create_response_from_buffer(API_INVALID_PATH, MHD_RESPMEM_PERSISTENT);
+            content_type = "application/json";
+            goto send_response;
+        }
+
+        // printf("%lld\n", contentNode);
+        // printf("%lld\n", contentNode->content);
+        response = MHD_create_response_from_buffer(contentNode->size, contentNode->content, MHD_RESPMEM_PERSISTENT);
+        content_type = srv_optainct(file);
+        goto send_response;
+    }
+
+    /* invalid request */
+    else if ((file = strremoveAdStart(url, "/static/")) == null)
+    {
+
         response = srv_responseDef(url);
 
         int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
@@ -116,9 +222,9 @@ static enum MHD_Result srv_handleonreq(void *cls,
         return ret;
     }
 
-    /* response from static file */
+    // printf("file: %s\n", url);
 
-    register char *content_type = "text/html";
+    /* response from static file */
 
     FileData *dat = sqtr_local_get(staticFiles, file);
     if (dat != null)
@@ -132,7 +238,7 @@ static enum MHD_Result srv_handleonreq(void *cls,
     xstrappends(&filePath, file);
     xstrappendc(&filePath, '\00');
 
-    content_type = srv_optainct(filePath);
+    content_type = srv_optainct(filePath._str);
 
     int fd;
 
@@ -222,15 +328,36 @@ static void _radix_srv_start()
 
     atexit(radix_srv_exit); /* setup destructor */
 
+    srv_connectToContentDB();
+
     /* initialize STATIC_DIR_R, because it is needed in responseFromStaticFile method */
     SRV_STATIC_DIR_R = SRV_STATIC_DIR;
 
     debga(SRV_PREFIX "Starting Daemon on http://localhost:%d\n", SRV_PORT);
+#if defined(SRV_USE_HTTPS) && SRV_USE_HTTPS == 1
+    tls_cert = xstrcreatefromfilename(SRV_TLS_CERT);
+    tls_key = xstrcreatefromfilename(SRV_TLS_KEY);
+    // printf("key: %s\n", (const char *)xstrserialize(tls_key));
+    microhttp_server = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY | MHD_USE_SSL | MHD_USE_DEBUG,
+                                        SRV_PORT, NULL, NULL,
+                                        &srv_handleonreq, NULL,
+                                        MHD_OPTION_HTTPS_MEM_KEY, xstrserialize(tls_key),
+                                        MHD_OPTION_HTTPS_MEM_CERT, xstrserialize(tls_cert),
+                                        MHD_OPTION_END);
+    debgaa(SRV_PREFIX "Daemon setup on https://%s"
+#if defined(SRV_PORT) && SRV_PORT != 443
+                      ":%d"
+#endif
+                      "\n",
+           SRV_URL, SRV_PORT);
+#else
     microhttp_server = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, SRV_PORT, NULL, NULL,
                                         &srv_handleonreq, NULL, MHD_OPTION_END);
+#endif
     if (microhttp_server == null)
     {
         debga(SRV_PREFIX "\e[31mMHD_start_daemon failed: %s\e[0m\n", strerror(errno));
+        // printf("Are you missing needed priviliges? Rerun as root user.\n");
         exit(1);
     }
 
@@ -301,6 +428,8 @@ void radix_srv_exit()
 {
     debga(SRV_PREFIX "%s\n", __func__);
 
+    srv_disconnectFromContentDB();
+
     if (pthread_detach(file_check) != 0) /* detach pthread */
     {
         debg(SRV_PREFIX);
@@ -309,5 +438,12 @@ void radix_srv_exit()
 
     MHD_stop_daemon(microhttp_server); /* stop server daemon */
     srv_unloadFiles();                 /* free file data */
+
+#if defined(SRV_USE_HTTPS) && SRV_USE_HTTPS == 1
+    assert_non_null(tls_cert._str);
+    free(tls_cert._str);
+    assert_non_null(tls_key._str);
+    free(tls_key._str);
+#endif
 }
 /* public functions - end */

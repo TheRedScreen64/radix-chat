@@ -134,7 +134,7 @@ unsigned int itr_getline(StringIterator *iterator)
 #define __str__ (iterator->str)
 #define __line__ (iterator->line)
 
-static inline __attribute__((__always_inline__)) void itr_skipcomments(struct _StringIterator *iterator)
+static inline void itr_skipcomments(struct _StringIterator *iterator)
 {
     for (;; ++__str__)
     {
@@ -221,7 +221,7 @@ char *itr_state(struct _StringIterator *iterator)
         return ITR_NO_MATCH;                 \
     }
 
-void __attribute__((always_inline)) _itr_skipchars(StringIterator *iterator)
+void _itr_skipchars(StringIterator *iterator)
 {
 skip:
     switch (*__str__)
@@ -262,8 +262,9 @@ JsonObject *_itr_collectJsonMap(StringIterator *iterator)
     if (itr_char(iterator, '}') == ITR_MATCH)
         return obj;
 
-collect_entry:
-    AbstractValue *value = (AbstractValue *)malloc(sizeof(AbstractValue));
+    AbstractValue *value;
+collect_entry_4:
+    value = (AbstractValue *)malloc(sizeof(AbstractValue));
     {
         /* get key */
         if ((key = itr_getstr(iterator)) == ITR_NO_MATCH)
@@ -304,7 +305,7 @@ collect_entry:
         shm_set(obj, key, value);
 
         if (itr_char(iterator, ',') == ITR_MATCH)
-            goto collect_entry;
+            goto collect_entry_4;
         if (itr_char(iterator, '}') == ITR_MATCH)
             pushandreturn(obj);
         popandreturn("missing object terminator '}'");

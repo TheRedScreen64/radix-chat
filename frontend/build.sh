@@ -1,5 +1,4 @@
 # /usr/bin/bash 
-
 corec=(utils/SHashmap.c
        utils/Convert.c
        utils/SString.c
@@ -15,7 +14,7 @@ corec=(utils/SHashmap.c
        Main.c)
 
 os=$(grep -oP '(?<=PRETTY_NAME=").*(?=")' /etc/os-release)
-coreoptions=(-D_VERSION='"'"$version_full"'"' -D_OS='"'"$os"'"' -lmicrohttpd) # -D_VERSION="0.1"
+coreoptions=(-D_OS='"'"$os"'"' -lmicrohttpd -pthread -fPIE -lrt) # -D_VERSION="0.1"
 arguments=()
 
 mkdir -p out
@@ -34,6 +33,7 @@ for arg in "$@"; do
    fi 
 done
 
+echo gcc "${corec[@]}" "$@" "${coreoptions[@]}" -DUTIL_DEBUG_CMPL -o out/core
 gcc "${corec[@]}" "$@" "${coreoptions[@]}" -DUTIL_DEBUG_CMPL -o out/core
 
 # assemble html code
