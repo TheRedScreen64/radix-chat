@@ -41,7 +41,7 @@
   left: 0;
   height: 20px;
   width: 20px;
-  border: 2px solid SECONDARY_BG;
+  border: 2px solid PRIMARY_BG_2_DARK;
   background: PRIMARY_BG_1;
   margin-top: 3px;
   border-radius: 3px;
@@ -97,7 +97,7 @@ input[type]:not([type="checkbox"]) {
 }
 
 input[type]:not([type="checkbox"]):not(.invalid) {
-  border: 2px solid SECONDARY_BG;
+  border: 2px solid PRIMARY_BG_2_DARK;
 }
 
 input.invalid {
@@ -121,19 +121,52 @@ input[type]:not([type="checkbox"]):hover {
   outline: none; /* Remove default outline */
   /*box-shadow: 0 0 20px PRIMARY_BG_1;  Add a subtle shadow on focus */
 
-  color: PRIMARY_BG_1;
-  border: 2px solid SECONDARY_BG;
+  /* color: PRIMARY_BG_1; */
+  /* border: 2px solid PRIMARY_BG_2; */
   background: SECONDARY_BG;
 }
 
 input:focus::placeholder,
 input:hover::placeholder {
-  color: PRIMARY_BG_1;
+  color: FONT_COLOR;
 }
 
 input[type="file"]:hover {
   outline: none; /* Remove default outline */
-  box-shadow: 0 0 5px PRIMARY_BUTTON_BG; /* Add a subtle shadow on focus */
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.upload-label {
+  display: block;
+  padding: 10px;
+  color: #0d1317;
+  background: #e4dfda;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  transition: all 0.3s;
+  border: 2px solid #847f7b;
+  cursor: pointer;
+}
+
+.upload-wrap {
+  margin: 5px;
+}
+
+.upload-label:hover,
+.upload-label:focus {
+  outline: none; /* Remove default outline */
+  /*box-shadow: 0 0 20px PRIMARY_BG_1;  Add a subtle shadow on focus */
+
+  /* color: PRIMARY_BG_1; */
+  /* border: 2px solid PRIMARY_BG_2; */
+  background: SECONDARY_BG;
 }
 
 input[type="checkbox"]::after {
@@ -158,4 +191,8 @@ input[type="checkbox"]::after {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+textarea::placeholder {
+  color: FONT_COLOR;
 }

@@ -16,19 +16,43 @@
         "author": "Noah Nagel"
     },
     {
-        "route":"/about",
-        "static": "/static/login.nosehad",
+        "route":"/app/chat",
+        "static": "/static/chat.nosehad",
         "title": "Radix Chat",
         "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
         "keywords": ["Radix", "Chat", "App", "Innovative"],
         "author": "Noah Nagel"
     },
     {
-        "route":"/app/chat",
-        "static": "/static/chat.nosehad",
-        "title": "Radix Chat",
-        "description": "The social media chat app with a new innovative concept: Chat with EVERYONE",
-        "keywords": ["Radix", "Chat", "App", "Innovative"],
+        "route":"/privacy",
+        "static": "/static/privacy_policy.nosehad",
+        "title": "Privacy Policy",
+        "description": "Radix Chat Privacy Policy",
+        "keywords": [],
+        "author": "Noah Nagel"
+    },
+    {
+        "route":"/cookies",
+        "static": "/static/cookie_policy.nosehad",
+        "title": "Cookies",
+        "description": "Radix Chat Cookie Policy",
+        "keywords": [],
+        "author": "Noah Nagel"
+    },
+    {
+        "route":"/imprint",
+        "static": "/static/imprint.nosehad",
+        "title": "Imprint",
+        "description": "Radix Chat Imprint",
+        "keywords": [],
+        "author": "Noah Nagel"
+    },
+    {
+        "route":"/about",
+        "static": "/static/about.nosehad",
+        "title": "About",
+        "description": "About Radix Chat",
+        "keywords": [],
         "author": "Noah Nagel"
     }
 ]

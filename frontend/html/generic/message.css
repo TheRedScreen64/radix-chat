@@ -114,25 +114,43 @@ msg {
   padding: 5px;
   animation-name: pop-in;
   animation-duration: 1s;
+  overflow-x: auto;
+}
+msg * {
+   max-width: 272px;
+}
+msg strong, msg a, msg hr {
+   color: #fff !important;
+}
+msg img {
+   max-height: 272px;
 }
 
-msg .grid-wrap {
+.msg-personal msg .grid-wrap {
   justify-content: right;
 }
 
+.msg-recieved msg .grid-wrap {
+  justify-content: left;
+}
+
 msg p {
-  margin: 0px;
+  margin-top: 2px;
+  margin-bottom: 0px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   font-family: "Nunito";
 }
 
 .msg-steve-title,
 .msg-title {
   justify-self: flex-end;
-  font-size: 12px;
-  margin-right: 5px;
+  font-size: 13px;
+  margin-right: 0px;
   user-select: none;
+  background: PRIMARY_BG_1;
+  padding: 0px 4px 0px 4px;
+  border-radius: 5px;
 }
 
 .msg-bot-tag {

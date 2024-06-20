@@ -3,6 +3,8 @@
 /* message sound */
 const audio = new Audio("/static/sounds/new_message.mp3");
 const msg_colors = MSG_RECIEVED_COLORS;
+let range;
+let inbox;
 
 function sendMsgSteve(text) {
     if (inbox.childNodes.length > 5)
@@ -24,6 +26,8 @@ let previous = "";
 
 cms_runOnStartup(() => {
     console.log("cms on startup message");
+    inbox = document.getElementById('inbox');
+    range = document.createRange();
 
     /* animated inbox */
     document.addEventListener('animationend', (event) => {
@@ -53,7 +57,7 @@ cms_runOnStartup(() => {
                 console.log("New color: " + color);
                 previous = color;
 
-                event.target.style.background = color;
+                event.target.style.background = "#ca6d4c";
             }
         }
     });

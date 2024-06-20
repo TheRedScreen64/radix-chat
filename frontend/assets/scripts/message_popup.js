@@ -1,5 +1,7 @@
 const audio = new Audio("/static/sounds/new_message.mp3");
 const msg_colors = ["#FFE74C", "#FCCA46", "#FE7F2D", "#F3C677", "#FFEE88", "#F4D06F", "#FF8811", "#FCD757", "#DF9A57", "#FFBF69", "#ECCE8E"];
+let range;
+let inbox;
 function sendMsgSteve(text) {
     if (inbox.childNodes.length > 5)
         return;
@@ -18,6 +20,8 @@ function sendMsgSteve(text) {
 let previous = "";
 cms_runOnStartup(() => {
     console.log("cms on startup message");
+    inbox = document.getElementById('inbox');
+    range = document.createRange();
     document.addEventListener('animationend', (event) => {
         if (event.animationName == "appear") {
             event.target.remove();
@@ -40,7 +44,7 @@ cms_runOnStartup(() => {
                     color = msg_colors[Math.floor(Math.random() * msg_colors.length)];
                 console.log("New color: " + color);
                 previous = color;
-                event.target.style.background = color;
+                event.target.style.background = "#ca6d4c";
             }
         }
     });

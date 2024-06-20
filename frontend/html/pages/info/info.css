@@ -1,0 +1,37 @@
+#include "../../colortheme.h"
+
+body {
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
+    max-width: 800px;
+}
+
+ strong {
+    margin-top: 0px;
+    color:PRIMARY_BUTTON_BG;
+}
+
+ h1 {
+    margin-bottom: 0px;
+}
+
+.container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.content {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+:root::-webkit-scrollbar, ::-webkit-scrollbar {
+    display: none;
+  }
+
+  :root, html, bodyi {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-x: hidden;
+  }

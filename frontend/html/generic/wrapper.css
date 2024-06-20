@@ -2,7 +2,7 @@
 #include "fonts.css"
 #include "message.css"
 
-  @keyframes
+@keyframes
   body-fade {
   0% {
     transform: translateX(-100%);
@@ -34,10 +34,12 @@ html {
   font-family: "Changa", sans-serif, "Noto Color Emoji", "Twemoji",
     "Apple Color Emoji";
   font-optical-sizing: auto;
-  font-weight: 200;
+  font-weight: 300;
   font-style: normal;
   margin: 0;
   padding: 0;
+
+  scroll-behavior: smooth;
 }
 
 ::selection {
@@ -48,6 +50,7 @@ html {
 
 p {
   line-height: 18px;
+  overflow-wrap: anywhere;
 }
 
 h1 {
@@ -58,6 +61,37 @@ h1 {
 footer {
   text-align: center;
   display: block;
+}
+
+:root {
+  scroll-behavior: smooth;
+
+  scrollbar-color: FONT_COLOR transparent;
+  scrollbar-track-color: transparent;
+  scrollbar-highlight-color: PRIMARY_BUTTON_BG;
+  scrollbar-3dlight-color: PRIMARY_BUTTON_BG;
+  scrollbar-arrow-color: PRIMARY_BUTTON_BG;
+  scrollbar-base-color: PRIMARY_BUTTON_BG;
+  scrollbar-darkshadow-color: PRIMARY_BUTTON_BG;
+  scrollbar-face-color: PRIMARY_BUTTON_BG;
+  scrollbar-shadow-color: PRIMARY_BUTTON_BG;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: PRIMARY_BUTTON_BG;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: PRIMARY_BUTTON_BG;
 }
 
 .content-wrap {
@@ -79,6 +113,12 @@ logo {
 }
 
 .grid-wrap {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+.sep-wrap {
   display: grid;
   grid-auto-flow: column;
 }
@@ -133,7 +173,7 @@ button {
   padding: 10px;
   margin: 5px;
   color: FONT_COLOR;
-  border: 2px solid SECONDARY_BG;
+  border: 2px solid PRIMARY_BG_2_DARK;
   background: PRIMARY_BG_1;
   border-radius: 5px;
   cursor: pointer;
@@ -169,24 +209,12 @@ button:hover {
   outline: none; /* Remove default outline */
   /*box-shadow: 0 0 20px PRIMARY_BG_1;*/ /* Add a subtle shadow on focus */
 
-  color: PRIMARY_BG_1;
-  border: 2px solid SECONDARY_BG;
   background: SECONDARY_BG;
 }
 
 .file-input-wrap {
   position: relative;
   overflow: hidden;
-}
-
-input[type="file"] {
-  position: absolute;
-  font-size: 10px;
-  right: 0;
-  top: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: -1;
 }
 
 .file-input-wrap label {

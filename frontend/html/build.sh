@@ -9,6 +9,9 @@
 mkdir -p assets
 mkdir -p assets/scripts
 
+# api functions 
+gcc  -w -E -x c -P html/generic/api-generic.js -o assets/scripts/api-generic.js
+
 # login screen
 gcc  -w -E -x c -P html/pages/login/index.html -o assets/login.nosehad
 gcc  -w -E -x c -P html/pages/login/login.js -o assets/scripts/login.js
@@ -16,6 +19,12 @@ gcc  -w -E -x c -P html/pages/login/login.js -o assets/scripts/login.js
 # chat page
 gcc  -w -E -x c -P html/pages/chat/index.html -o assets/chat.nosehad
 gcc  -w -E -x c -P html/pages/chat/chat.js -o assets/scripts/chat.js
+
+# legal fun pages
+gcc  -w -E -x c -P html/pages/info/about.html -o assets/about.nosehad
+gcc  -w -E -x c -P html/pages/info/cookie_policy.html -o assets/cookie_policy.nosehad
+gcc  -w -E -x c -P html/pages/info/imprint.html -o assets/imprint.nosehad
+gcc  -w -E -x c -P html/pages/info/privacy_policy.html -o assets/privacy_policy.nosehad
 
 # landing page
 gcc  -w -E -x c -P html/pages/landing/index.html -o assets/landing.nosehad

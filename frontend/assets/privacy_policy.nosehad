@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Radix Chat</title>
     <style>
 @font-face {
   font-family: "Changa";
@@ -536,135 +537,68 @@ button:hover {
   }
 }
 body {
-  background-color: #E4DFDA;
-  justify-content: space-between;
-  flex-direction: column;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
+    max-width: 800px;
 }
-button {
-  background-color: transparent;
+ strong {
+    margin-top: 0px;
+    color:#2d6954;
 }
-.landing-wrap {
-  background-color: #e4dfda;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
+ h1 {
+    margin-bottom: 0px;
 }
-header h1 {
-  margin-bottom: 3px;
-  margin-top: 0px;
+.container {
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
-header p {
-  margin-bottom: 0px;
-  margin-top: 0px;
+.content {
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
-footer a {
-  color: #E4DFDA;
-}
-header logo {
-  color: #2d6954;
-}
-footer {
-  background: #3f3b38;
-  bottom: 0px;
-  backdrop-filter: invert(1);
-  width: 100%;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-}
-.footer-wrap {
-  margin: 15px;
-}
-.footer-inner-wrap {
-  display: grid;
-  grid-auto-flow: column;
-}
-@media only screen and (min-width: 600px) {
-  .landing-header {
-    border: 2px solid #a29d99;
-    border-radius: 5px;
-    padding: 90px;
+:root::-webkit-scrollbar, ::-webkit-scrollbar {
+    display: none;
   }
-}
-@media only screen and (max-width: 600px) {
-  .footer-inner-wrap a {
-    margin: 0px 10px 0px 10px;
+  :root, html, bodyi {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-x: hidden;
   }
-  .footer-inner-wrap {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  logo {
-    display: block;
-    margin-left: -3px;
-    margin-bottom: 20px;
-  }
-}
     </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div class="landing-wrap">
-        <header class="landing-header">
-            <p>Where Conversations Flourish!</p>
-            <h1>Welcome to <logo>RAdiXcHAt</logo>
-            </h1>
-            <div class="input-wrap">
-                <button style="margin-left:0px">Download</button>
-                <button style="margin-right: 0px;" onclick="redirect('/login', true);">Open in Web</button>
-            </div>
+    <div class="container">
+        <header>
+            <h1>Privacy Policy</h1>
+            <strong>(AI-Generated)</strong>
         </header>
+        <p>Radix Chat ("we", "our", "us") values your privacy. This Privacy Policy explains how we collect, use, and
+            protect your personal information when you use our site and services.</p>
+        <h2>1. Information We Collect</h2>
+        <p>We collect the following types of information:</p>
+        <ul>
+            <li><strong>Personal Information:</strong> Information you provide directly to us, such as your name, email
+                address, and contact details when you sign up or contact us.</li>
+            <li><strong>Usage Data:</strong> Information about how you interact with our site and app, such as your IP
+                address, browser type, and pages visited.</li>
+        </ul>
+        <h2>2. How We Use Your Information</h2>
+        <p>We use your information to:</p>
+        <ul>
+            <li>Provide, operate, and improve our services.</li>
+            <li>Communicate with you about updates, promotions, and support.</li>
+            <li>Analyze usage to improve user experience.</li>
+        </ul>
+        <h2>3. Data Protection and Security</h2>
+        <p>We are committed to protecting your personal information. We use various security measures to safeguard your
+            data against unauthorized access, alteration, or disclosure.</p>
+        <h2>4. User Responsibilities</h2>
+        <p>As a user, you are responsible for maintaining the confidentiality of your account and personal information.
+            Please ensure your actions on Radix Chat comply with our policies and terms of service.</p>
     </div>
     <footer>
-        <div class="footer-wrap">
-            <div class="footer-inner-wrap">
-                <a onclick="redirect('/imprint')">
-                    Imprint
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-printer" viewBox="0 0 16 16">
-                        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
-                        <path
-                            d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1" />
-                    </svg>
-                </a>
-                <a onclick="redirect('/cookies')">
-                    Cookie Policy
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-cookie" viewBox="0 0 16 16">
-                        <path
-                            d="M6 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m4.5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m-.5 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                        <path
-                            d="M8 0a7.96 7.96 0 0 0-4.075 1.114q-.245.102-.437.28A8 8 0 1 0 8 0m3.25 14.201a1.5 1.5 0 0 0-2.13.71A7 7 0 0 1 8 15a6.97 6.97 0 0 1-3.845-1.15 1.5 1.5 0 1 0-2.005-2.005A6.97 6.97 0 0 1 1 8c0-1.953.8-3.719 2.09-4.989a1.5 1.5 0 1 0 2.469-1.574A7 7 0 0 1 8 1c1.42 0 2.742.423 3.845 1.15a1.5 1.5 0 1 0 2.005 2.005A6.97 6.97 0 0 1 15 8c0 .596-.074 1.174-.214 1.727a1.5 1.5 0 1 0-1.025 2.25 7 7 0 0 1-2.51 2.224Z" />
-                    </svg>
-                </a>
-                <a onclick="redirect('/privacy')">
-                    Privacy Policy
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-shield-fill-check" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793z" />
-                    </svg></a>
-                <a href="https://github.com/TheRedScreen64/radix-chat" location="_blank">
-                    Github
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-github" viewBox="0 0 16 16">
-                        <path
-                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
-                    </svg>
-                </a>
-                <a onclick="redirect('/about')">
-                    About
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-book-half" viewBox="0 0 16 16">
-                        <path
-                            d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783" />
-                    </svg>
-                </a>
-            </div>
-        </div>
+        <p>&copy; 2024 Radix Chat. All rights reserved.</p>
     </footer>
-    <script>
-    </script>
 </body>
 </html>

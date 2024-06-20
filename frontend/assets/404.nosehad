@@ -34,12 +34,12 @@
   justify-self: left;
 }
 .msg-personal msg {
-  background: #508CA4;
+  background: #598fc6;
   border-radius: 5px 0px 5px 5px;
   margin-right: 10px;
 }
 .msg-recieved msg {
-  background-color: #FFE74C;
+  background-color: #ca6d4c;
   border-radius: 0px 5px 5px 5px;
   margin-left: 10px;
 }
@@ -61,7 +61,7 @@
   min-width: 50px;
   border-radius: 25px;
   user-select: none;
-  background: #fff;
+  background: #a29d99;
   overflow: hidden;
 }
 .msg-sender img {
@@ -116,25 +116,42 @@ msg {
   padding: 5px;
   animation-name: pop-in;
   animation-duration: 1s;
+  overflow-x: auto;
 }
-msg .grid-wrap {
+msg * {
+   max-width: 272px;
+}
+msg strong, msg a, msg hr {
+   color: #fff !important;
+}
+msg img {
+   max-height: 272px;
+}
+.msg-personal msg .grid-wrap {
   justify-content: right;
 }
+.msg-recieved msg .grid-wrap {
+  justify-content: left;
+}
 msg p {
-  margin: 0px;
+  margin-top: 2px;
+  margin-bottom: 0px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   font-family: "Nunito";
 }
 .msg-steve-title,
 .msg-title {
   justify-self: flex-end;
-  font-size: 12px;
-  margin-right: 5px;
+  font-size: 13px;
+  margin-right: 0px;
   user-select: none;
+  background: #E4DFDA;
+  padding: 0px 4px 0px 4px;
+  border-radius: 5px;
 }
 .msg-bot-tag {
-  background: #508CA4;
+  background: #598fc6;
   line-height: 10px;
   font-size: 12px;
   padding: 5px;
@@ -142,7 +159,7 @@ msg p {
   margin-right: 10px;
   user-select: none;
 }
-  @keyframes
+@keyframes
   body-fade {
   0% {
     transform: translateX(-100%);
@@ -154,7 +171,7 @@ msg p {
 body,
 html {
   overflow-x: hidden;
-  background-color: #fff;
+  background-color: #a29d99;
   animation-name: body-fade;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
@@ -169,18 +186,20 @@ html {
   font-family: "Changa", sans-serif, "Noto Color Emoji", "Twemoji",
     "Apple Color Emoji";
   font-optical-sizing: auto;
-  font-weight: 200;
+  font-weight: 300;
   font-style: normal;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 ::selection {
   color: #0D1317;
-  background: #E63946;
+  background: #2d6954;
   height: 10px;
 }
 p {
   line-height: 18px;
+  overflow-wrap: anywhere;
 }
 h1 {
   font-weight: 400;
@@ -189,6 +208,31 @@ h1 {
 footer {
   text-align: center;
   display: block;
+}
+:root {
+  scroll-behavior: smooth;
+  scrollbar-color: #0D1317 transparent;
+  scrollbar-track-color: transparent;
+  scrollbar-highlight-color: #2d6954;
+  scrollbar-3dlight-color: #2d6954;
+  scrollbar-arrow-color: #2d6954;
+  scrollbar-base-color: #2d6954;
+  scrollbar-darkshadow-color: #2d6954;
+  scrollbar-face-color: #2d6954;
+  scrollbar-shadow-color: #2d6954;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d6954;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d6954;
 }
 .content-wrap {
   display: block;
@@ -208,6 +252,11 @@ logo {
 .grid-wrap {
   display: grid;
   grid-auto-flow: column;
+  justify-content: space-between;
+}
+.sep-wrap {
+  display: grid;
+  grid-auto-flow: column;
 }
 .align-center {
   text-align: center;
@@ -216,7 +265,7 @@ logo {
 a {
   text-decoration: none;
   cursor: pointer;
-  color: #E63946;
+  color: #2d6954;
   user-select: none;
 }
 .grid {
@@ -278,18 +327,18 @@ a {
   left: 0;
   height: 20px;
   width: 20px;
-  border: 2px solid #252627;
+  border: 2px solid #847f7b;
   background: #E4DFDA;
   margin-top: 3px;
   border-radius: 3px;
   transition: all 0.3s;
 }
 .checkbox:hover input ~ .checkmark {
-  background: #252627;
+  background: #c2bdb8;
 }
 .checkbox input:checked ~ .checkmark {
   color: #E4DFDA;
-  background: #252627;
+  background: #c2bdb8;
 }
 .checkmark::after {
   content: "";
@@ -324,7 +373,7 @@ input[type]:not([type="checkbox"]) {
   transition: all 0.3s;
 }
 input[type]:not([type="checkbox"]):not(.invalid) {
-  border: 2px solid #252627;
+  border: 2px solid #847f7b;
 }
 input.invalid {
   border: 2px solid #E63946;
@@ -341,17 +390,40 @@ input::placeholder {
 input[type]:not([type="checkbox"]):focus,
 input[type]:not([type="checkbox"]):hover {
   outline: none;
-  color: #E4DFDA;
-  border: 2px solid #252627;
-  background: #252627;
+  background: #c2bdb8;
 }
 input:focus::placeholder,
 input:hover::placeholder {
-  color: #E4DFDA;
+  color: #0D1317;
 }
 input[type="file"]:hover {
   outline: none;
-  box-shadow: 0 0 5px #E63946;
+}
+input[type="file"] {
+  display: none;
+}
+.upload-label {
+  display: block;
+  padding: 10px;
+  color: #0d1317;
+  background: #e4dfda;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  transition: all 0.3s;
+  border: 2px solid #847f7b;
+  cursor: pointer;
+}
+.upload-wrap {
+  margin: 5px;
+}
+.upload-label:hover,
+.upload-label:focus {
+  outline: none;
+  background: #c2bdb8;
 }
 input[type="checkbox"]::after {
   content: "";
@@ -372,11 +444,14 @@ input[type="checkbox"]::after {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+textarea::placeholder {
+  color: #0D1317;
+}
 button {
   padding: 10px;
   margin: 5px;
   color: #0D1317;
-  border: 2px solid #252627;
+  border: 2px solid #847f7b;
   background: #E4DFDA;
   border-radius: 5px;
   cursor: pointer;
@@ -403,26 +478,15 @@ a svg {
 }
 button:hover {
   outline: none;
-  color: #E4DFDA;
-  border: 2px solid #252627;
-  background: #252627;
+  background: #c2bdb8;
 }
 .file-input-wrap {
   position: relative;
   overflow: hidden;
 }
-input[type="file"] {
-  position: absolute;
-  font-size: 10px;
-  right: 0;
-  top: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: -1;
-}
 .file-input-wrap label {
   display: block;
-  background-color: #fff;
+  background-color: #a29d99;
   color: #F2EFE9;
   border-radius: 5px;
   cursor: pointer;
@@ -433,7 +497,7 @@ input[type="file"] {
 }
 .file-input-wrap label:hover {
   outline: none;
-  box-shadow: 0 0 5px #E63946;
+  box-shadow: 0 0 5px #2d6954;
 }
 .hidden {
   display: none;
@@ -443,11 +507,11 @@ input[type="file"] {
   animation: label 1s ease-out 0s 1;
   padding: 10px;
   background: #E4DFDA;
-  border: 2px solid #fff;
+  border: 2px solid #a29d99;
   border-radius: 5px;
   line-height: 12px;
   transform: translateX(calc(-50%));
-  color: #E63946;
+  color: #2d6954;
   font-weight: 600;
 }
 .hover-label:after {
@@ -457,7 +521,7 @@ input[type="file"] {
   left: calc(50% - 7.5px);
   border-left: 15px solid transparent;
   border-right: 0px solid transparent;
-  border-top: 10px solid #fff;
+  border-top: 10px solid #a29d99;
 }
 @keyframes label {
   0% {
@@ -478,7 +542,7 @@ input[type="file"] {
         }
         @media only screen and (min-width: 500px) {
             .wrap-404 {
-                border: 2px solid #fff;
+                border: 2px solid #a29d99;
                 padding: 90px;
             }
         }
@@ -503,7 +567,7 @@ input[type="file"] {
             margin-bottom: 3px;
         }
         ._404 {
-            color: #E63946;
+            color: #2d6954;
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">

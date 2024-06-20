@@ -29,20 +29,23 @@ header p {
 }
 
 footer a {
-  color: FONT_COLOR;
+  color: PRIMARY_BG_1;
 }
+/* footer a:hover, footer a:active {
+   color: FONT_COLOR_2;
+} */
 
 header logo {
   color: PRIMARY_BUTTON_BG;
 }
 
 footer {
-  background: PRIMARY_BG_2;
+  background: #3f3b38;
   bottom: 0px;
   backdrop-filter: invert(1);
   width: 100%;
 
-  border-top: 2px solid PRIMARY_BG_2;
+  /* border-top: 2px solid PRIMARY_BG_2; */
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 }
@@ -51,9 +54,14 @@ footer {
   margin: 15px;
 }
 
+.footer-inner-wrap {
+  display: grid;
+  grid-auto-flow: column;
+}
+
 @media only screen and (min-width: 600px) {
   .landing-header {
-    border: 2px solid #fff;
+    border: 2px solid PRIMARY_BG_2;
     border-radius: 5px;
     padding: 90px;
   }

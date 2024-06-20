@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Radix Chat - Login</title>
     <style>
 @font-face {
   font-family: "Changa";
@@ -34,12 +33,12 @@
   justify-self: left;
 }
 .msg-personal msg {
-  background: #508CA4;
+  background: #598fc6;
   border-radius: 5px 0px 5px 5px;
   margin-right: 10px;
 }
 .msg-recieved msg {
-  background-color: #FFE74C;
+  background-color: #ca6d4c;
   border-radius: 0px 5px 5px 5px;
   margin-left: 10px;
 }
@@ -61,7 +60,7 @@
   min-width: 50px;
   border-radius: 25px;
   user-select: none;
-  background: #fff;
+  background: #a29d99;
   overflow: hidden;
 }
 .msg-sender img {
@@ -116,25 +115,42 @@ msg {
   padding: 5px;
   animation-name: pop-in;
   animation-duration: 1s;
+  overflow-x: auto;
 }
-msg .grid-wrap {
+msg * {
+   max-width: 272px;
+}
+msg strong, msg a, msg hr {
+   color: #fff !important;
+}
+msg img {
+   max-height: 272px;
+}
+.msg-personal msg .grid-wrap {
   justify-content: right;
 }
+.msg-recieved msg .grid-wrap {
+  justify-content: left;
+}
 msg p {
-  margin: 0px;
+  margin-top: 2px;
+  margin-bottom: 0px;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   font-family: "Nunito";
 }
 .msg-steve-title,
 .msg-title {
   justify-self: flex-end;
-  font-size: 12px;
-  margin-right: 5px;
+  font-size: 13px;
+  margin-right: 0px;
   user-select: none;
+  background: #E4DFDA;
+  padding: 0px 4px 0px 4px;
+  border-radius: 5px;
 }
 .msg-bot-tag {
-  background: #508CA4;
+  background: #598fc6;
   line-height: 10px;
   font-size: 12px;
   padding: 5px;
@@ -142,7 +158,7 @@ msg p {
   margin-right: 10px;
   user-select: none;
 }
-  @keyframes
+@keyframes
   body-fade {
   0% {
     transform: translateX(-100%);
@@ -154,7 +170,7 @@ msg p {
 body,
 html {
   overflow-x: hidden;
-  background-color: #fff;
+  background-color: #a29d99;
   animation-name: body-fade;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
@@ -169,18 +185,20 @@ html {
   font-family: "Changa", sans-serif, "Noto Color Emoji", "Twemoji",
     "Apple Color Emoji";
   font-optical-sizing: auto;
-  font-weight: 200;
+  font-weight: 300;
   font-style: normal;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 ::selection {
   color: #0D1317;
-  background: #E63946;
+  background: #2d6954;
   height: 10px;
 }
 p {
   line-height: 18px;
+  overflow-wrap: anywhere;
 }
 h1 {
   font-weight: 400;
@@ -189,6 +207,31 @@ h1 {
 footer {
   text-align: center;
   display: block;
+}
+:root {
+  scroll-behavior: smooth;
+  scrollbar-color: #0D1317 transparent;
+  scrollbar-track-color: transparent;
+  scrollbar-highlight-color: #2d6954;
+  scrollbar-3dlight-color: #2d6954;
+  scrollbar-arrow-color: #2d6954;
+  scrollbar-base-color: #2d6954;
+  scrollbar-darkshadow-color: #2d6954;
+  scrollbar-face-color: #2d6954;
+  scrollbar-shadow-color: #2d6954;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d6954;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d6954;
 }
 .content-wrap {
   display: block;
@@ -208,6 +251,11 @@ logo {
 .grid-wrap {
   display: grid;
   grid-auto-flow: column;
+  justify-content: space-between;
+}
+.sep-wrap {
+  display: grid;
+  grid-auto-flow: column;
 }
 .align-center {
   text-align: center;
@@ -216,7 +264,7 @@ logo {
 a {
   text-decoration: none;
   cursor: pointer;
-  color: #E63946;
+  color: #2d6954;
   user-select: none;
 }
 .grid {
@@ -278,18 +326,18 @@ a {
   left: 0;
   height: 20px;
   width: 20px;
-  border: 2px solid #252627;
+  border: 2px solid #847f7b;
   background: #E4DFDA;
   margin-top: 3px;
   border-radius: 3px;
   transition: all 0.3s;
 }
 .checkbox:hover input ~ .checkmark {
-  background: #252627;
+  background: #c2bdb8;
 }
 .checkbox input:checked ~ .checkmark {
   color: #E4DFDA;
-  background: #252627;
+  background: #c2bdb8;
 }
 .checkmark::after {
   content: "";
@@ -324,7 +372,7 @@ input[type]:not([type="checkbox"]) {
   transition: all 0.3s;
 }
 input[type]:not([type="checkbox"]):not(.invalid) {
-  border: 2px solid #252627;
+  border: 2px solid #847f7b;
 }
 input.invalid {
   border: 2px solid #E63946;
@@ -341,17 +389,40 @@ input::placeholder {
 input[type]:not([type="checkbox"]):focus,
 input[type]:not([type="checkbox"]):hover {
   outline: none;
-  color: #E4DFDA;
-  border: 2px solid #252627;
-  background: #252627;
+  background: #c2bdb8;
 }
 input:focus::placeholder,
 input:hover::placeholder {
-  color: #E4DFDA;
+  color: #0D1317;
 }
 input[type="file"]:hover {
   outline: none;
-  box-shadow: 0 0 5px #E63946;
+}
+input[type="file"] {
+  display: none;
+}
+.upload-label {
+  display: block;
+  padding: 10px;
+  color: #0d1317;
+  background: #e4dfda;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  transition: all 0.3s;
+  border: 2px solid #847f7b;
+  cursor: pointer;
+}
+.upload-wrap {
+  margin: 5px;
+}
+.upload-label:hover,
+.upload-label:focus {
+  outline: none;
+  background: #c2bdb8;
 }
 input[type="checkbox"]::after {
   content: "";
@@ -372,11 +443,14 @@ input[type="checkbox"]::after {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+textarea::placeholder {
+  color: #0D1317;
+}
 button {
   padding: 10px;
   margin: 5px;
   color: #0D1317;
-  border: 2px solid #252627;
+  border: 2px solid #847f7b;
   background: #E4DFDA;
   border-radius: 5px;
   cursor: pointer;
@@ -403,26 +477,15 @@ a svg {
 }
 button:hover {
   outline: none;
-  color: #E4DFDA;
-  border: 2px solid #252627;
-  background: #252627;
+  background: #c2bdb8;
 }
 .file-input-wrap {
   position: relative;
   overflow: hidden;
 }
-input[type="file"] {
-  position: absolute;
-  font-size: 10px;
-  right: 0;
-  top: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: -1;
-}
 .file-input-wrap label {
   display: block;
-  background-color: #fff;
+  background-color: #a29d99;
   color: #F2EFE9;
   border-radius: 5px;
   cursor: pointer;
@@ -433,7 +496,7 @@ input[type="file"] {
 }
 .file-input-wrap label:hover {
   outline: none;
-  box-shadow: 0 0 5px #E63946;
+  box-shadow: 0 0 5px #2d6954;
 }
 .hidden {
   display: none;
@@ -443,11 +506,11 @@ input[type="file"] {
   animation: label 1s ease-out 0s 1;
   padding: 10px;
   background: #E4DFDA;
-  border: 2px solid #fff;
+  border: 2px solid #a29d99;
   border-radius: 5px;
   line-height: 12px;
   transform: translateX(calc(-50%));
-  color: #E63946;
+  color: #2d6954;
   font-weight: 600;
 }
 .hover-label:after {
@@ -457,7 +520,7 @@ input[type="file"] {
   left: calc(50% - 7.5px);
   border-left: 15px solid transparent;
   border-right: 0px solid transparent;
-  border-top: 10px solid #fff;
+  border-top: 10px solid #a29d99;
 }
 @keyframes label {
   0% {
@@ -471,31 +534,67 @@ input[type="file"] {
   }
 }
 strong {
-  color: #E63946;
+  color: #2d6954;
 }
 body {
-  justify-content: space-between;
+  justify-content: center;
   flex-direction: column;
+}
+section {
+  transition: all 0.3s;
+  height: 0%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+@media only screen and (min-width: 600px) {
+  section {
+    width: 600px;
+    }
+}
+@media only screen and (max-width: 600px) {
+  section {
+    width: 100%;
+    }
+}
+section.active {
+  height: 80%;
 }
 nav {
   text-align: center;
-  margin-top: 20px;
-  border: 2px solid #fff;
+  border: 2px solid #a29d99;
   max-width: 600px;
   border-radius: 5px;
-  display: grid;
   grid-auto-flow: column;
   align-content: space-between;
   width: 100%;
+  margin-bottom: 20px;
+}
+@media only screen and (min-width: 600px) {
+  nav {
+    display: grid;
+    }
+    nav a {
+      padding: 10px;
+    }
+}
+@media only screen and (max-width: 600px) {
+  nav {
+    display: block;
+    }
+    nav a {
+      padding: 0px 5px 0px 5px;
+    }
 }
 nav a {
-  padding: 10px;
   color: #0D1317;
+  text-wrap: nowrap;
+  font-weight: 400;
 }
 nav a.active {
-  background-color: #252627;
-  color: #E63946;
-  border-radius: 5px;
+  background-color: #a29d99;
+  border-radius: 3.5px;
 }
 .chat-content-wrap {
   align-self: center;
@@ -510,7 +609,7 @@ nav a.active {
   max-width: 600px;
 }
 .chat-header {
-  border: 2px solid #fff;
+  border: 2px solid #a29d99;
   padding: 10px;
   border-radius: 5px 5px 0px 0px;
 }
@@ -526,8 +625,9 @@ nav a.active {
 }
 .chat {
   height: 100%;
-  border-left: 2px solid #fff;
-  border-right: 2px solid #fff;
+  border-left: 2px solid #a29d99;
+  border-right: 2px solid #a29d99;
+  overflow-y: scroll;
 }
 .chat-info {
   text-align: center;
@@ -535,7 +635,7 @@ nav a.active {
 }
 .desc {
   padding-left: 5px;
-  border-left: 2px solid #252627;
+  border-left: 2px solid #c2bdb8;
   margin-left: 3px;
 }
 .chat-content {
@@ -548,19 +648,17 @@ nav a.active {
   max-width: 600px;
 }
 .chat-input {
-  text-align: center;
-  display: grid;
-  grid-auto-flow: column;
+  display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
-  position: relative;
 }
 .msg-input-buttons {
+  justify-content: center;
   position: absolute;
-  bottom: 0;
+  gap: 5px;
   right: 0;
-  margin: 0px 20px 7px 0px;
-  border-radius: 5px;
+  margin-right: 10px;
   display: none;
 }
 .msg-input-buttons svg {
@@ -568,20 +666,17 @@ nav a.active {
   width: 20px;
   height: 20px;
   transition: all 0.3s ease-out;
-  color: #252627;
   cursor: pointer;
 }
 .msg-input-buttons svg:hover {
   transform: rotate3d(1, 1, 1, 10deg);
 }
 .chat-input textarea:focus ~ .msg-input-buttons svg {
-  color: #E4DFDA;
 }
 .chat-input textarea:hover ~ .msg-input-buttons svg {
-  color: #E4DFDA;
 }
 .chat-input-inner-wrap {
-  border: 2px solid #fff;
+  border: 2px solid #a29d99;
   border-radius: 0px 0px 5px 5px;
   padding: 10px;
 }
@@ -617,15 +712,14 @@ nav a.active {
 }
 .chat-input > svg {
   cursor: pointer;
-  border: 2px solid #252627;
+  border: 2px solid #a29d99;
   transition: all 0.3s;
 }
 .chat-input > svg:hover {
   outline: none;
-  color: #E4DFDA;
-  background: #252627;
+  background: #c2bdb8;
 }
-.chat-input textarea {
+textarea#desc {
   outline: none;
   resize: none;
   padding: 10px;
@@ -639,14 +733,34 @@ nav a.active {
   font-style: normal;
   transition: all 0.3s;
   min-width: 180px;
-  text-align: center;
-  border-top: 2px solid #252627;
-  border-bottom: 2px solid #252627;
+  border: 2px solid #847f7b;
+  border-radius: 5px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+textarea#desc:hover {
+  outline: none;
+  background: #c2bdb8;
+}
+.chat-input textarea {
+  flex: 1;
+  outline: none;
+  resize: none;
+  padding: 10px;
+  color: #0D1317;
+  background: #E4DFDA;
+  font-size: 15px;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  transition: all 0.3s;
+  min-width: 180px;
+  border-top: 2px solid #a29d99;
+  border-bottom: 2px solid #a29d99;
   border-left: none;
   border-right: none;
   border-radius: 0px;
-  margin-left: 0px;
-  margin-right: 0px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -655,8 +769,7 @@ nav a.active {
 }
 .chat-input textarea:focus,
 .chat-input textarea:hover {
-  color: #E4DFDA;
-  background: #252627;
+  background: #c2bdb8;
   outline: none;
 }
 .chat-input textarea::placeholder {
@@ -664,16 +777,11 @@ nav a.active {
 }
 .chat-input textarea:focus::placeholder,
 .chat-input textarea:hover::placeholder {
-  color: #E4DFDA;
 }
 .display-inner {
-  border: 2px solid #fff;
+  border: 2px solid #a29d99;
   padding: 10px;
   border-radius: 5px;
-}
-.clock {
-  width: 200px;
-  height: 200px;
 }
 .threads-display {
   width: 25%;
@@ -702,7 +810,7 @@ nav a.active {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #E63946;
+  background-color: #2d6954;
   animation: border-grow 0.7s ease-out 0s 1;
 }
 @keyframes border-grow {
@@ -747,7 +855,7 @@ q:after {
   display: none;
 }
 q-creator {
-  color: #508CA4;
+  color: #598fc6;
   display: block;
   padding-left: 13px;
   line-height: 12px;
@@ -779,6 +887,114 @@ q-creator:before {
 .msg-storage {
   display: grid;
 }
+.sectionc {
+  border: 2px solid #a29d99;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.sectionc.settings h1 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.sectionc.settings p {
+  margin-bottom: 35px;
+  margin-top: 0px;
+}
+.sectionc-wrap {
+  height: 100%;
+  max-width: 600px;
+}
+.sectionc-wrap h1 {
+  margin-top: 0px;
+}
+.avatar-preview {
+  height: 70px;
+  width: 70px;
+  min-width: 50px;
+  border-radius: 35px;
+  user-select: none;
+  background: #a29d99;
+  overflow: hidden;
+}
+.avatar-preview img {
+  height: 50px;
+  width: auto;
+}
+.avatar-preview name {
+  font-size: 43px;
+  font-family: "Major Mono Display";
+  margin-top: 11px;
+  display: block;
+  margin-left: 9px;
+  letter-spacing: -11px;
+}
+.private-chat-list {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.image-hanger {
+  position: absolute;
+  width: 50px;
+  height: 200px;
+  background: #E4DFDA;
+  left: 440px;
+  border-radius: 5px;
+}
+.private-chat-list img {
+  border-radius: 200px;
+}
+@media only screen and (min-width: 600px) {
+  .private-chat-list img {
+    width: 400px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .private-chat-list img {
+    width: 170px;
+  }
+}
+.proposal-confirmation-wrap {
+  position: absolute;
+  width: inherit;
+  transition: all 0.2s ease-in;
+  opacity: 0;
+  z-index: -1;
+  display: none;
+}
+.proposal-confirmation {
+  border: 2px solid #a29d99;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 3;
+  position: relative;
+}
+.proposal-confirmation-backdrop {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  z-index: 2;
+  transition: all 0.4s ease-out;
+  display: none;
+  backdrop-filter: none;
+}
+@keyframes shake {
+   0% { transform: translateX(0); }
+   10%, 30%, 50%, 70%, 90% { transform: translateY(-3px) rotate(3deg); }
+   20%, 40%, 60%, 80% { transform: translateY(4px) rotate(-2deg); }
+   100% { transform: translateX(0); }
+}
+.topic {
+   animation: shake 0.5s ease-in-out;
+   animation-iteration-count: 1;
+}
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -787,61 +1003,24 @@ q-creator:before {
     <div class="inbox" id="inbox">
     </div>
     <nav>
-        <a class="active">Your Feed</a>
-        <a>Tomorrows's Topic</a>
-        <a>Private Messages</a>
-        <a>Personal Preferences</a>
+        <a id="lt-main-chat" class="active" onclick="switchSection('main-chat')">Your Feed</a>
+        <a id="lt-topic-votes" onclick="switchSection('topic-votes')">Tomorrows's Topic</a>
+        <a id="lt-private-chats" onclick="switchSection('private-chats')">Private Messages</a>
+        <a id="lt-settings" onclick="switchSection('settings')">Personal Preferences</a>
     </nav>
-    <div class="chat-content-wrap">
-        <div class="threads-display">
-            <div class="display-inner">
-                <p class="tda-topic-title"><strong>Recent Threads</strong></p>
-                <div class="grid-wrap align-center margin-top margin-bottom">
-                    <span class="sep"></span>
-                </div>
-                <ul>
-                    <li><span>What happened to Obama</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16"><path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/></svg> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16"><path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1"/></svg></li>
-                    <li><span>Best way to earn money</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16"><path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/></svg> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16"><path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1"/></svg></li>
-                    <li><span>How are rich people able to avoid taxes?</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16"><path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/></svg> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16"><path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1"/></svg></li>
-                    <li><span>Should assets be limited?</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16"><path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/></svg> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16"><path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1"/></svg></li>
-                    <li><span>Fortnite vs. Minecraft</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16"><path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/></svg> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16"><path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1"/></svg></li>
-                    <li><span>Can someone help with programming</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16"><path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/></svg> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down" viewBox="0 0 16 16"><path d="M8.864 15.674c-.956.24-1.843-.484-1.908-1.42-.072-1.05-.23-2.015-.428-2.59-.125-.36-.479-1.012-1.04-1.638-.557-.624-1.282-1.179-2.131-1.41C2.685 8.432 2 7.85 2 7V3c0-.845.682-1.464 1.448-1.546 1.07-.113 1.564-.415 2.068-.723l.048-.029c.272-.166.578-.349.97-.484C6.931.08 7.395 0 8 0h3.5c.937 0 1.599.478 1.934 1.064.164.287.254.607.254.913 0 .152-.023.312-.077.464.201.262.38.577.488.9.11.33.172.762.004 1.15.069.13.12.268.159.403.077.27.113.567.113.856s-.036.586-.113.856c-.035.12-.08.244-.138.363.394.571.418 1.2.234 1.733-.206.592-.682 1.1-1.2 1.272-.847.283-1.803.276-2.516.211a10 10 0 0 1-.443-.05 9.36 9.36 0 0 1-.062 4.51c-.138.508-.55.848-1.012.964zM11.5 1H8c-.51 0-.863.068-1.14.163-.281.097-.506.229-.776.393l-.04.025c-.555.338-1.198.73-2.49.868-.333.035-.554.29-.554.55V7c0 .255.226.543.62.65 1.095.3 1.977.997 2.614 1.709.635.71 1.064 1.475 1.238 1.977.243.7.407 1.768.482 2.85.025.362.36.595.667.518l.262-.065c.16-.04.258-.144.288-.255a8.34 8.34 0 0 0-.145-4.726.5.5 0 0 1 .595-.643h.003l.014.004.058.013a9 9 0 0 0 1.036.157c.663.06 1.457.054 2.11-.163.175-.059.45-.301.57-.651.107-.308.087-.67-.266-1.021L12.793 7l.353-.354c.043-.042.105-.14.154-.315.048-.167.075-.37.075-.581s-.027-.414-.075-.581c-.05-.174-.111-.273-.154-.315l-.353-.354.353-.354c.047-.047.109-.176.005-.488a2.2 2.2 0 0 0-.505-.804l-.353-.354.353-.354c.006-.005.041-.05.041-.17a.9.9 0 0 0-.121-.415C12.4 1.272 12.063 1 11.5 1"/></svg></li>
-                </ul>
-                <div class="grid-wrap align-center margin-top margin-bottom">
-                    <span class="sep"></span>
-                </div>
-                <div class="input-wrap">
-                    <button><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                            <path
-                                d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-                        </svg></button>
-                    <button><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                            <path
-                                d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                        </svg></button>
-                </div>
+    <section id="main-chat" class="active">
+        <div class="chat-header-wrap">
+            <div class="chat-header" id="chat-header">
+                <p class="tda-topic-title"><strong>Today's Topic</strong></p>
+                <h1 id="topic-title">Should the European Union ban palm oil?</h1>
+                <p class="desc" id="topic-desc">A new regulation aims to rid the palm oil supply chain of imports that come from
+                    former
+                    forestland. Southeast Asian countries say it threatens livelihoods. <a>Learn more...</a></p>
             </div>
         </div>
-        <div class="chat-content">
-            <div class="chat-header-wrap">
-                <div class="chat-header">
-                    <p class="tda-topic-title"><strong>Today's Topic</strong></p>
-                    <h1>Should the European Union ban palm oil?</h1>
-                    <p class="desc">A new regulation aims to rid the palm oil supply chain of imports that come from
-                        former
-                        forestland. Southeast Asian countries say it threatens livelihoods. <a>Learn more...</a></p>
-                </div>
-            </div>
-            <div class="chat">
-                <div class="chat-info">
-                    <p>
-                        14th March 2024
-                    </p>
-                </div>
-                <div class="msg-storage">
-                    <div class="msg-wrap msg-recieved">
+        <div class="chat" id="chat-wrap">
+            <div class="msg-storage" id="msg-storage">
+                <!--<div class="msg-wrap msg-recieved">
                         <img class="msg-sender" src="/static/images/steve_profile.jpeg">
                         <msg class="msg-content">
                             <div class="grid-wrap">
@@ -886,69 +1065,232 @@ q-creator:before {
                         <div class="msg-sender">
                             <img src="https://th.bing.com/th/id/OIP.zOyuCbk2TDOfovH-MDkQmAHaF7?rs=1&pid=ImgDetMain">
                         </div>
+                    </div>-->
+            </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="chat-input-wrap">
+            <div class="chat-input-inner-wrap">
+                <div class="chat-input" id="chat-input">
+                    <svg class="svg-l" id="svg-l" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        hover-label="Upload File" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z" />
+                    </svg>
+                    <textarea id="msg-input" rows="1" type="text" placeholder="Tell the world..."></textarea>
+                    <svg class="svg-r" id="svg-r" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        hover-label="Record Voice Message" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+                        <path
+                            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+                    </svg>
+                    <div class="msg-input-buttons" id="msg-input-buttons">
+                        <svg onclick="sendMessage()" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" hover-label="Send Message" class="bi bi-send-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" hover-label="Attach Content">
+                            <path
+                                d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0" />
+                        </svg>
                     </div>
                 </div>
             </div>
-            <!-- Chat Input -->
-            <div class="chat-input-wrap">
-                <div class="chat-input-inner-wrap">
-                    <div class="chat-input" id="chat-input">
-                        <svg class="svg-l" id="svg-l" xmlns="http://www.w3.org/2000/svg" width="16" height="16" hover-label="Upload File"
-                            fill="currentColor" viewBox="0 0 16 16">
-                            <path
-                                d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z" />
-                        </svg>
-                        <textarea id="msg-input" rows="1" type="text" placeholder="Tell the world..."></textarea>
-                        <svg class="svg-r" id="svg-r" xmlns="http://www.w3.org/2000/svg" width="16" height="16" hover-label="Record Voice Message"
-                            fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
-                            <path
-                                d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
-                        </svg>
-                        <div class="msg-input-buttons" id="msg-input-buttons">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" hover-label="Send Message"
-                                class="bi bi-send-fill" viewBox="0 0 16 16">
-                                <path
-                                    d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" hover-label="Attach Content">
-  <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0"/>
-</svg>
+        </div>
+        </div>
+    </section>
+    <section id="topic-votes">
+<div class="sectionc-wrap">
+    <div class="sectionc topics">
+        <h1>Propose Topic</h1>
+        <div>
+            <label for="question">Question</label>
+        </div>
+        <div>
+            <input type="text" id="question" placeholder="Should the European Union ban palm oil?">
+        </div>
+        <div>
+            <label for="desc">Description</label>
+        </div>
+        <div>
+            <textarea type="text" id="desc" rows="5"
+                placeholder="A new regulation aims to rid the palm oil supply chain of imports that come from former forestland. Southeast Asian countries say it threatens livelihoods."></textarea>
+        </div>
+        <!-- <div>
+            <label for="rescource">Resource</label>
+        </div>
+        <div>
+            <input id="rescource" type="url"
+                placeholder="https://www.nytimes.com/2024/03/26/climate/why-palm-oil-is-still-a-big-problem.html">
+        </div> -->
+        <div class="input-wrap margin-top ">
+            <button onclick="submitTopic()" class="submit">Submit</button>
+        </div>
+        <div class="sep-wrap align-center margin-top margin-bottom ">
+            <span class="sep-left"></span>
+            <span class="sep"></span>
+            <span class="sep"></span>
+            <span class="sep"></span>
+            <span class="sep-right"></span>
+        </div>
+        <h1>Vote Topic</h1>
+        <ul class="topic-list">
+        </ul>
+            <!-- <button onclick="displayRandomTopic()">Next Topic <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dice-6-fill" viewBox="0 0 16 16">
+                <path d="M3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3zm1 5.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m8 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m1.5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M12 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M4 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+              </svg></button> -->
+    </div>
+</div>
+<div class="proposal-confirmation-backdrop"></div>
+<div class="proposal-confirmation-wrap">
+    <div class="proposal-confirmation">
+        <h1>Confirm Proposal</h1>
+        <p>Your proposed <strong>Topic</strong> will be publicaly visible and votable by anyone on this platform.
+            Don't publish any inappropriate or private information here.</p>
+        <div class="sep-wrap align-center margin-top margin-bottom ">
+            <span class="sep"></span>
+            <span class="sep"></span>
+            <span class="sep"></span>
+        </div>
+        <p id="proposal-recap"></p>
+        <div class="sep-wrap align-center margin-top margin-bottom ">
+            <span class="sep"></span>
+            <span class="sep"></span>
+            <span class="sep"></span>
+        </div>
+        <div class="input-wrap margin-top">
+            <button onclick="cancelProposal()">Cancel</button><button onclick="makeProposal()"><strong>Propose
+                    Topic</strong></button>
+        </div>
+    </div>
+</div>
+<style>
+   .topics {
+      height: 80%;
+      overflow-y: auto;
+   }
+    .topics input,
+    .topics textarea,
+    .topics .submit {
+        margin: 0 !important;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      list-style: none;
+      gap: 0.5em;
+    }
+    .topic-list li {
+      display: flex;
+      flex-direction: column;
+    }
+    .topic-list hr {
+      width: 100%;
+    }
+    .topic-list li .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topic-list li button {
+      color: #2d6954;
+    }
+</style>
+    </section>
+    <section id="private-chats">
+        <div class="sectionc-wrap">
+            <div class="sectionc">
+                <div class="private-chat-list">
+                    <h1>Don't end like Steve Jr.</h1>
+                    <div class="image-hanger"></div>
+                    <img src="/static/images/sad_robot.png">
+                </div>
+                <button onclick="sendMsgSteve(`You don't any have friends🤫`)">Create Chat with a friend</button>
+            </div>
+        </div>
+    </section>
+    <section id="settings">
+        <div class="sectionc-wrap">
+            <div class="sectionc settings">
+                <div class="grid-wrap">
+                    <div>
+                        <h1>Settings</h1>
+                        <p><strong>Personal Information</strong></p>
+                    </div>
+                    <div>
+                        <div id="avatar-wrap">
+                            <div class="avatar-preview">
+                                <name>KA</name>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="statements-display">
-            <div class="display-inner">
-                <p class="tda-topic-title"><strong>Your Account</strong></p>
                 <div class="grid-wrap">
-                    <div class="uname-inf">
-                        <h1>kaisserx45</h1>
-                        <p>James Brown</p>
+                    <div>
+                        <label for="real_name">Real Name</label>
                     </div>
-                    <div class="account-image">
-                        <img src="https://th.bing.com/th/id/OIP.zOyuCbk2TDOfovH-MDkQmAHaF7?rs=1&pid=ImgDetMain">
+                    <div>
+                        <input type="text" id="real_name" placeholder="Real Name">
                     </div>
                 </div>
-            </div>
-            <div class="display-inner">
-                <p class="tda-topic-title"><strong>Controversial Statements</strong></p>
-                <ul>
-                    <li><q>Tesla stock price is too high imo</q>
-                        <q-creator>Mark</q-creator>
-                    </li>
-                    <li><q>FREE AMERICA NOW</q>
-                        <q-creator>kaisserx45</q-creator>
-                    </li>
-                    <li><q>I'm against vaccinations for your children</q>
-                        <q-creator>Itznosehad</q-creator>
-                    </li>
-                </ul>
+                <div class="grid-wrap">
+                    <div>
+                        <label for="mail">E-Mail</label>
+                    </div>
+                    <div>
+                        <input type="email" id="mail" placeholder="Your Mail Address">
+                    </div>
+                </div>
+                <div class="sep-wrap align-center margin-top margin-bottom ">
+                    <span class="sep-left"></span>
+                    <span class="sep"></span>
+                    <span class="sep"></span>
+                    <span class="sep"></span>
+                    <span class="sep-right"></span>
+                </div>
+                <div class="grid-wrap">
+                    <div>
+                        <p><strong>Fun Stuff</strong></p>
+                    </div>
+                </div>
+                <div class="grid-wrap">
+                    <div>
+                        <label for="uname">Username</label>
+                    </div>
+                    <div>
+                        <input type="text" id="uname" placeholder="Username">
+                    </div>
+                </div>
+                <div class="grid-wrap">
+                    <div>
+                        <label for="avatar">Avatar</label>
+                    </div>
+                    <div class="upload-wrap">
+                        <label for="avatar" class="upload-label">Upload Image</label>
+                        <input type="file" id="avatar">
+                    </div>
+                </div>
+                <div class="sep-wrap align-center margin-top margin-bottom ">
+                    <span class="sep-left"></span>
+                    <span class="sep"></span>
+                    <span class="sep"></span>
+                    <span class="sep"></span>
+                    <span class="sep-right"></span>
+                </div>
+                <div class="input-wrap margin-top ">
+                    <button onclick="saveChanges()">Save Changes</button>
+                    <button onclick="logout()"><strong>Logout</strong></button>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </body>
+<script src="/static/scripts/lib/showdown.min.js"></script>
 <script type="text/javascript">
     cms_loadScript("/static/scripts/message_popup.js");
     cms_loadScript("/static/scripts/label.js");

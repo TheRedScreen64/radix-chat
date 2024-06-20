@@ -3,14 +3,13 @@
 #include "../../colortheme.h"
 
 const bg_color = `PRIMARY_BG_1`;
-const range = document.createRange();
 const email_regex = /[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/;
 const user_regex = /([A-Za-z0-9]+(_[A-Za-z0-9]+)+)/
 
-let inbox, emailInp, passwdInp, confirmPasswdInp,
+let emailInp, passwdInp, confirmPasswdInp,
     rememberUser, usernameInp, realnameInp, cookieInp, signUpStage;
 
-function signUp() {
+async function signUp() {
     switch (signUpStage) {
         case 0:
             signUp_doStage1();
@@ -38,7 +37,7 @@ function signUp() {
     }
 }
 
-function signUp_doStage1() { /// TODO: check if email was already taken
+async function signUp_doStage1() { /// TODO: check if email was already taken
     if (emailInp.value == "" || !email_regex.test(emailInp.value) /* validate email */) {
         emailInp.classList.add("invalid");
         sendMsgSteve("Please enter a correct email address😉");
@@ -49,17 +48,20 @@ function signUp_doStage1() { /// TODO: check if email was already taken
         sendMsgSteve("Enter a password with at least 10 characters😉");
         return;
     }
-    sendMsgSteve("Oh I didn't notice you are new here😅<br> Please confirm your password.");
 
-    if (api_email_present(emailInp.value)) /* if user is already in system login */ {
-        if (api_login_user(emailInp.value, passwdInp.value, rememberUser.checked)) {
-            redirect('/');
+    const email_present = await api_email_present(emailInp.value);
+    if (email_present) /* if user is already in system login */ {
+        const login_successful = await api_login_user(emailInp.value, passwdInp.value, rememberUser.checked);
+        if (login_successful) {
+            redirect('/app/chat');
         } else {
             passwdInp.classList.add("invalid");
-            sendMsgSteve("The password is incorrect🤔");
+            sendMsgSteve("Are you sure, that's the correct password? 🤔");
         }
         return;
     }
+
+    sendMsgSteve("Oh I didn't notice you are new here😅<br> Please confirm your password.");
 
     /* increase stage */
     signUpStage++;
@@ -81,7 +83,7 @@ function signUp_doStage1() { /// TODO: check if email was already taken
     document.getElementById('signup-text').innerHTML = 'Next →';
 }
 
-function signUp_doStage2() {
+async function signUp_doStage2() {
     if (passwdInp.value != confirmPasswdInp.value) {
         confirmPasswdInp.classList.add("invalid");
         sendMsgSteve("Are you sure? For me it looks like that wasn't the password you previously entered😉");
@@ -106,7 +108,7 @@ function signUp_doStage2() {
     sendMsgSteve("You are almost done, just give me some info about you🤏");
 }
 
-function signUp_doStage3() { /// TODO: check if username is taken already
+async function signUp_doStage3() { /// TODO: check if username is taken already
     /* check usernameInp */
     if (usernameInp.value == "") {
         usernameInp.classList.add("invalid");
@@ -118,7 +120,9 @@ function signUp_doStage3() { /// TODO: check if username is taken already
         sendMsgSteve("Bro just use lower case number and letters💀 or <a onclick='generateRandomUname()'>create one Random</a>");
         return;
     }
-    else if (api_uname_present(usernameInp.value)) {
+    
+    const uname_present = await api_uname_present(usernameInp.value);
+    if (uname_present) {
         usernameInp.classList.add("invalid");
         sendMsgSteve("Oh seems like this usernameInp is already taken🫤<br> Think of something else, or<br><a onclick='generateRandomUname()'>create one Random</a>");
         return;
@@ -160,7 +164,7 @@ function signUp_doStage3() { /// TODO: check if username is taken already
     sendMsgSteve("I need to ask you something about cookies.. 🍪");
 }
 
-function signUp_doStage4() { /// TODO: check if username is taken already
+async function signUp_doStage4() { /// TODO: check if username is taken already
     /* check usernameInp */
     if (!cookieInp.checked) {
         sendMsgSteve("I am sorry, but it's not possible to consume the platform without eating some of those delicious cookies😋");
@@ -168,8 +172,8 @@ function signUp_doStage4() { /// TODO: check if username is taken already
     }
 
     /* send data stage */
-    api_register_user(emailInp.value, passwdInp.value, usernameInp.value, realnameInp.value, rememberUser.value);
-    redirect('/');
+    await api_register_user(emailInp.value, passwdInp.value, usernameInp.value, realnameInp.value, rememberUser.checked);
+    redirect('/app/chat');
 }
 
 function hideAdditional() {
@@ -178,12 +182,12 @@ function hideAdditional() {
     });
 }
 
-function generateRandomUname() {
+async function generateRandomUname() {
     if (usernameInp.classList.contains("invalid"))
         usernameInp.classList.remove("invalid")
 
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
+    xhttp.onreadystatechange = async function () {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             //console.log(xhttp.responseText);
             let names = JSON.parse(xhttp.responseText);
@@ -198,8 +202,16 @@ function generateRandomUname() {
     xhttp.send();
 }
 
+async function grabUserdata() {
+    const userdata = await api_instanceLoggedIn();
+    if(userdata['error'] == undefined)
+        redirect('/app/chat');
+    console.log("logged in: " + JSON.stringify(userdata));
+}
+
 cms_runOnStartup(() => {
-    inbox = document.getElementById('inbox');
+    grabUserdata();
+
     emailInp = document.getElementById("email");
     passwdInp = document.getElementById("password");
     confirmPasswdInp = document.getElementById("confirm_password");

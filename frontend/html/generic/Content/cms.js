@@ -9,6 +9,7 @@ let cms_current_location;
 let cms_document_cache = new Map();
 let cms_startup_cache = new Map();
 let cms_loaded_scripts = new Map();
+let cms_queries;
 
 /* basically used to optaion the static path for a dynamic styled route */
 function cms_getPageFile(route) {
@@ -74,12 +75,22 @@ function cms_pushContent() {
         cms_ov_modifyer();
 }
 
-function redirect(rlocation, r = true, ps = true) {
+function cms_getAndPopQueryValue(queryKey) {
+    const value = cms_queries.get(queryKey)
+    if(value != undefined)
+        cms_queries.delete(queryKey);
+    
+    return value;
+}
+
+function redirect(rlocation, r = true /* reset document */, ps = true /* push to history stack */, params/*=[key, value]*/) {
     if (r)
         document.documentElement.replaceWith(cms_init_body);
 
     if (ps)
         history.pushState(null, '', rlocation);
+    if(params != undefined) 
+        cms_queries.set(params[0], params[1])
 
     cms_current_location = rlocation;
 
@@ -106,5 +117,10 @@ function redirect(rlocation, r = true, ps = true) {
     xhttp.open("GET", cms_getPageFile(rlocation), true);
     xhttp.send();
 }
+
+/* optain extern queries */
+const queryString = window.location.search;
+if(cms_queries == undefined)
+    cms_queries = new URLSearchParams(queryString);
 
 redirect(window.location.pathname, false);
