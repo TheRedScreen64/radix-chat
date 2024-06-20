@@ -325,3 +325,60 @@ chatRouter.get("/chats/:id/messages", async (req, res, next) => {
       return next({ msg: `Failed to get chat messages: ${errorMessage}`, status: 500 });
    }
 });
+
+chatRouter.post("/chats/:id/messages", async (req, res, next) => {
+   if (!res.locals.user) {
+      return next({ msg: "Not authorized", status: 401 });
+   }
+   if (!req.body) {
+      return next({ msg: "No input provided", status: 400 });
+   }
+
+   const data = { ...req.params, ...req.body };
+
+   const requestSchema = z.object({
+      id: z.string().uuid(),
+      content: z.string().trim().min(1).max(2000),
+   });
+
+   const requestParams = requestSchema.safeParse(data);
+   if (!requestParams.success) {
+      const validationErrors = requestParams.error.flatten().fieldErrors;
+      return next({ msg: "Wrong input or parameters", status: 400, errors: validationErrors });
+   }
+   const { id, content } = requestParams.data;
+
+   try {
+      await prisma.chat.update({
+         where: {
+            id,
+            participants: {
+               some: {
+                  id: res.locals.user.id,
+               },
+            },
+         },
+         data: {
+            lastMessageAt: new Date(),
+            messages: {
+               create: {
+                  content,
+                  user: {
+                     connect: {
+                        id: res.locals.user.id,
+                     },
+                  },
+               },
+            },
+         },
+      });
+
+      return res.status(200).send();
+   } catch (err) {
+      const errorMessage = formatPrismaError(err);
+      if (errorMessage.includes("No 'Chat' record (needed to inline the relation on 'ChatMessage' record) was found")) {
+         return next({ msg: "Chat not found", status: 404 });
+      }
+      return next({ msg: `Failed to create message: ${errorMessage}`, status: 500 });
+   }
+});
