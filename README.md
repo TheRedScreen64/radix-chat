@@ -1,6 +1,6 @@
 # Radix Chat
 
-Welcome to Radix Chat, the chat app that almost was the new era of social media. If you’ve ever dreamed of a global chat experience where you can debate hot topics of the day, vote on future discussions, and maybe even chat privately with friends, you’ve come to the right place. Or, rather, you would have if this project had ever been finished. Think of it as a prototype in the museum of code, a digital fossil in the landscape of programming. Here’s the story of Radix Chat, in all its glory (or lack thereof).
+Welcome to Radix Chat, the chat app that almost was the new era of social media. If you’ve ever dreamed of a global chat experience where you can debate hot topics of the day, vote on future discussions, and maybe even chat privately with friends, you’ve come to the right place. Or, rather, you would have if this project had ever been finished. Think of it as a prototype in the museum of code, a digital fossil in the landscape of programming.
 
 ## 🌐 What is Radix Chat?
 
